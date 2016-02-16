@@ -5,7 +5,7 @@ angular.module('tasks', [])
     $scope.consulTasks = [];
 
     ConsulTasks.query({recurse: 1}, function (d) {
-      for (var i = 0; i < d.length; i++) {
+      for (var i = d.length - 1; i >= 0; i--) {
         var item = d[i];  
         var values = [];
         values = JSON.parse(atob(item.Value));
