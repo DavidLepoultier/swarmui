@@ -35,6 +35,28 @@ angular.module('swarmui.services', ['ngResource'])
           setalarm: {method: 'PUT', params: {action: 'json'}}
       });
   }])
+  .factory('ConsulSwarmManager', ['$resource', 'SettingsConsul', function ContainerFactory($resource, Settings) {
+      'use strict';
+      // Resource for interacting with the docker containers
+      // http://docs.docker.com/reference/api/docker_remote_api_<%= remoteApiVersion %>/#2-1-containers
+      return $resource(Settings.url + '/v1/kv/docker/swarm-ui/swarm-manager/:node', {
+          node: '@nodeName'
+      }, {
+          query: {method: 'GET', params: {recurse: 0}, isArray: true},
+          get: {method: 'GET', params: {action: 'json'}}
+      });
+  }])
+  .factory('ConsulSwarmAgent', ['$resource', 'SettingsConsul', function ContainerFactory($resource, Settings) {
+      'use strict';
+      // Resource for interacting with the docker containers
+      // http://docs.docker.com/reference/api/docker_remote_api_<%= remoteApiVersion %>/#2-1-containers
+      return $resource(Settings.url + '/v1/kv/docker/swarm-ui/swarm-agent/:node', {
+          node: '@nodeName'
+      }, {
+          query: {method: 'GET', params: {recurse: 0}, isArray: true},
+          get: {method: 'GET', params: {action: 'json'}}
+      });
+  }])
   .factory('Container', ['$resource', 'Settings', function ContainerFactory($resource, Settings) {
       'use strict';
       // Resource for interacting with the docker containers
