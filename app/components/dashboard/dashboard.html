@@ -20,19 +20,19 @@
                 <div class="panel-heading">
                   <h3 class="panel-title">Total</h3>
                 </div>
-                <span class="text-muted font-db font-db-default">0</span>
+                <span class="text-muted font-db font-db-default">{{ consulContainers.total }}</span>
               </div>
               <div class="col-xs-4 col-xs-offset-1 col-sm-2 panel panel-default" style='padding-left: 0px; padding-right: 0px;'>
                 <div class="panel-heading">
                   <h3 class="panel-title">Running</h3>
                 </div>
-                <span class="text-muted font-db font-db-success">0</span>
+                <span class="text-muted font-db font-db-success">{{ consulContainers.running }}</span>
               </div>
               <div class="col-xs-4 col-xs-offset-1 col-sm-2 panel panel-default" style='padding-left: 0px; padding-right: 0px;'>
                 <div class="panel-heading">
                   <h3 class="panel-title">Stopped</h3>
                 </div>
-                <span class="text-muted font-db font-db-warning">0</span>
+                <span class="text-muted font-db font-db-warning">{{ consulContainers.stopped }}</span>
               </div>
             </div>
           </div>
@@ -51,19 +51,19 @@
                     <div class="panel-heading">
                       <h3 class="panel-title">Total</h3>
                     </div>
-                    <span class="text-muted font-db font-db-default">0</span>
+                    <span class="text-muted font-db font-db-default">{{ consulNodes.total }}</span>
                   </div>
                   <div class="col-xs-4 col-xs-offset-1 col-sm-2 panel panel-default" style='padding-left: 0px; padding-right: 0px;'>
                     <div class="panel-heading">
                       <h3 class="panel-title">Running</h3>
                     </div>
-                    <span class="text-muted font-db font-db-success">0</span>
+                    <span class="text-muted font-db font-db-success">{{ consulNodes.running }}</span>
                   </div>
                   <div class="col-xs-4 col-xs-offset-1 col-sm-2 panel panel-default" style='padding-left: 0px; padding-right: 0px;'>
                     <div class="panel-heading">
                       <h3 class="panel-title">Offline</h3>
                     </div>
-                    <span class="text-muted font-db font-db-danger">0</span>
+                    <span class="text-muted font-db font-db-danger">{{ consulNodes.stopped }}</span>
                   </div>
                 </div>
               </div>
@@ -79,19 +79,19 @@
                     <div class="panel-heading">
                       <h3 class="panel-title">Total</h3>
                     </div>
-                    <span class="text-muted font-db font-db-default">0</span>
+                    <span class="text-muted font-db font-db-default">{{ consulSwarmManager.total }}</span>
                   </div>
                   <div class="col-xs-4 col-xs-offset-1 col-sm-2 panel panel-default" style='padding-left: 0px; padding-right: 0px;'>
                     <div class="panel-heading">
                       <h3 class="panel-title">Running</h3>
                     </div>
-                    <span class="text-muted font-db font-db-success">0</span>
+                    <span class="text-muted font-db font-db-success">{{ consulSwarmManager.running }}</span>
                   </div>
                   <div class="col-xs-4 col-xs-offset-1 col-sm-2 panel panel-default" style='padding-left: 0px; padding-right: 0px;'>
                     <div class="panel-heading">
                       <h3 class="panel-title">Stopped</h3>
                     </div>
-                    <span class="text-muted font-db font-db-danger">0</span>
+                    <span class="text-muted font-db font-db-danger">{{ consulSwarmManager.stopped }}</span>
                   </div>
                 </div>
               </div>
@@ -107,19 +107,19 @@
                     <div class="panel-heading">
                       <h3 class="panel-title">Total</h3>
                     </div>
-                    <span class="text-muted font-db font-db-default">0</span>
+                    <span class="text-muted font-db font-db-default">{{ consulSwarmAgent.total }}</span>
                   </div>
                   <div class="col-xs-4 col-xs-offset-1 col-sm-2 panel panel-default" style='padding-left: 0px; padding-right: 0px;'>
                     <div class="panel-heading">
                       <h3 class="panel-title">Running</h3>
                     </div>
-                    <span class="text-muted font-db font-db-success">0</span>
+                    <span class="text-muted font-db font-db-success">{{ consulSwarmAgent.running }}</span>
                   </div>
                   <div class="col-xs-4 col-xs-offset-1 col-sm-2 panel panel-default" style='padding-left: 0px; padding-right: 0px;'>
                     <div class="panel-heading">
                       <h3 class="panel-title">Stopped</h3>
                     </div>
-                    <span class="text-muted font-db font-db-danger">0</span>
+                    <span class="text-muted font-db font-db-danger">{{ consulSwarmAgent.stopped }}</span>
                   </div>
                 </div>
               </div>
