@@ -86,7 +86,7 @@ module.exports = function (grunt) {
         },
         clean: {
             all: ['<%= distdir %>/*'],
-            app: ['<%= distdir %>/*', '!<%= distdir %>/swarmui'],
+            app: ['<%= distdir %>/*', '!<%= distdir %>/swarmui*'],
             tmpl: ['<%= distdir %>/templates']
         },
         copy: {

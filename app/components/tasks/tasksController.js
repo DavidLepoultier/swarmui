@@ -1,6 +1,6 @@
 angular.module('tasks', [])
-.controller('TasksController', ['$scope', '$routeParams', '$location', 'ConsulTasks', 'Settings', 'Messages', '$timeout',
-  function ($scope, $routeParams, $location, ConsulTasks, Settings, Messages, $timeout) {
+.controller('TasksController', ['$scope', '$routeParams', '$location', 'ConsulTasks', 'SettingsConsul', 'Messages', '$timeout',
+  function ($scope, $routeParams, $location, ConsulTasks, SettingsConsul, Messages, $timeout) {
     $scope.template = 'app/components/tasks/tasks.html';
     $scope.consulTasks = [];
 

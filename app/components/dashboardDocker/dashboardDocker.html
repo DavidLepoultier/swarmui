@@ -28,7 +28,7 @@
                 <td></td>
                 <td><a href="#/hosts/{{ node.name }}/">{{ node.name }}</a></td>
                 <td>{{ node.version }}</td>
-                <td><span class="label label-{{ node.status|statusbadgeNode }}">{{ node.status }}</span></td>
+                <td><span class="label label-{{ node.status|statusbadgeNode }}" style="font-size: 95%">{{ node.status }}</span></td>
                 <td>
                   <div class="btn-group" data-toggle="buttons" ng-click="setAlarm(node.name, node, node.warning)">
                     <label class="btn btn-xs {{ node.warning|statusbadgeOnAlarm}}">
@@ -46,4 +46,5 @@
       </div>
     </div>
   </div>
+  <!-- Main component for a primary marketing message or call to action -->
 </div>

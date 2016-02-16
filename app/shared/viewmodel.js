@@ -28,6 +28,17 @@ function ConsulNodesModel(data) {
     this.checked = false;
 }
 
+function ConsulContainersModel(data) {
+    this.idConsul = data.idConsul;
+    this.nodeName = data.nodeName;
+    this.id = data.id;
+    this.image = data.image;
+    this.serviceName = data.serviceName;
+    this.status = data.status;
+    this.warning = data.warning;
+    this.checked = false;
+}
+
 function ConsulTasksModel(data) {
     this.nodeName = data.nodeName;
     this.containerID = data.containerID;

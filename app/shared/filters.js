@@ -143,11 +143,11 @@ angular.module('swarmui.filters', [])
     .filter('getdate', function () {
         'use strict';
         return function (data) {
-            var option = {timeZoneName: "short"};
+            var options = { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit' };
             var language = window.navigator.userLanguage || window.navigator.language;
             //Multiply by 1000 for the unix format
             var date = new Date(data * 1000);
-            return date.toLocaleDateString(language, option);
+            return date.toLocaleDateString(language, options);
         };
     })
     .filter('errorMsg', function () {

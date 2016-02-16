@@ -1,6 +1,6 @@
 angular.module('dashboardDocker', [])
-.controller('DashboardDockerController', ['$scope', '$routeParams', '$location', 'ConsulNodes', 'Settings', 'Messages', '$timeout', 
-  function ($scope, $routeParams, $location, ConsulNodes, Settings, Messages, $timeout) {
+.controller('DashboardDockerController', ['$scope', '$routeParams', '$location', 'ConsulNodes', 'SettingsConsul', 'Messages', '$timeout', 
+  function ($scope, $routeParams, $location, ConsulNodes, SettingsConsul, Messages, $timeout) {
     $scope.predicate = '-Created';
     $scope.consulNodes = [];
     $scope.changes = [];
@@ -29,5 +29,4 @@ angular.module('dashboardDocker', [])
         $scope.consulNodes.push(new ConsulNodesModel(values));
       }
     });
-
-}]);
+  }]);

@@ -9,21 +9,14 @@ import (
 	"net/http/httputil"
 	"net/url"
 	"os"
-	"strings"
 )
 
-var (
-	endpoint = flag.String("e", "http://192.168.99.106:8500", "Dockerd endpoint")
-	addr     = flag.String("p", ":9000", "Address and port to serve dockerui")
-	assets   = flag.String("a", ".", "Path to the assets")
-)
-
-type UnixHandler struct {
+type ConsulHandler struct {
 	path string
 }
 
-func (h *UnixHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	conn, err := net.Dial("unix", h.path)
+func (h *ConsulHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+	conn, err := net.Dial("tcp", h.path)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		log.Println(err)
@@ -62,39 +55,39 @@ func createTcpHandler(e string) http.Handler {
 	return httputil.NewSingleHostReverseProxy(u)
 }
 
-func createUnixHandler(e string) http.Handler {
-	return &UnixHandler{e}
-}
-
-func createHandler(dir string, e string) http.Handler {
+func createHandler(dir string, e string, e2 string) http.Handler {
 	var (
 		mux         = http.NewServeMux()
 		fileHandler = http.FileServer(http.Dir(dir))
+		dockerHandler http.Handler
 		h           http.Handler
 	)
 
-	if strings.Contains(e, "http") {
-		h = createTcpHandler(e)
-	} else {
-		if _, err := os.Stat(e); err != nil {
-			if os.IsNotExist(err) {
-				log.Fatalf("unix socket %s does not exist", e)
-			}
-			log.Fatal(err)
-		}
-		h = createUnixHandler(e)
-	}
+	h = createTcpHandler(e)
+	dockerHandler = createTcpHandler(e2)
 
-	mux.Handle("/swarmuiapi/", http.StripPrefix("/swarmuiapi", h))
+	mux.Handle("/consulapi/", http.StripPrefix("/consulapi", h))
+	mux.Handle("/swarmuiapi/", http.StripPrefix("/swarmuiapi", dockerHandler))
 	mux.Handle("/", fileHandler)
 	return mux
 }
 
 func main() {
+
+	consul := os.Args[1]
+
+	var (
+		endpoint = flag.String("e", consul, "Consul endpoint")
+		endpoint2 = flag.String("e2", "http://localhost:9001", "Dockers endpoint")
+		addr     = flag.String("p", ":9000", "Address and port to serve dockerui")
+		assets   = flag.String("a", ".", "Path to the assets")
+	)
+
 	flag.Parse()
 
-	handler := createHandler(*assets, *endpoint)
+	handler := createHandler(*assets, *endpoint, *endpoint2)
 	if err := http.ListenAndServe(*addr, handler); err != nil {
+		log.Println(handler)
 		log.Fatal(err)
 	}
 }

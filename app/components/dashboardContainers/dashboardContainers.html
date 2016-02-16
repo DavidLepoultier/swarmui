@@ -1,0 +1,54 @@
+<div id="wrapper">     
+  <!-- Include Sidebar -->
+  <div ng-include="template" ng-controller="WrapperDashboardController" onload="updateDash(3);"></div>
+  <!-- Main component for a primary marketing message or call to action -->
+  <div class="container-fluid">
+    <div class="row">
+      <!-- Middle Container -->
+      <div class="col-xs-12" id="body-middle-container">
+        <h1 class="page-header">Containers Docker</h1>
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <h3 class="panel-title">Containers's List</h3>
+          </div>
+          <div class="panel-body">
+            Place informations here and action button ...
+            <br/>
+          </div>
+          <!-- Table -->
+          <table class="table table-striped">
+            <tr>
+              <th>Hostname</th>
+              <th>Container ID</th>
+              <th>Name</th>
+              <th>Image</th>
+              <th>Container Status</th>
+              <th>Actions</th>
+              <th>Alarms</th>
+            </tr>
+            <tr ng-repeat="container in consulContainers">
+              <td>{{ container.nodeName }}</td>
+              <td><a href="#/hosts/{{ container.nodeName }}/{{ container.id }}">{{ container.id }}</a></td>
+              <td>{{ container.serviceName }}</td>
+              <td>{{ container.image }}</td>
+              <td><span class="label label-{{ container.status|statusbadge }}" style="font-size: 95%">{{ container.status }}</span></td>
+              <td>action ...</td>
+              <td>
+                <div class="btn-group" data-toggle="buttons" ng-click="setAlarm(container.id, container, container.warning)">
+                  <label class="btn btn-xs {{ container.warning|statusbadgeOnAlarm}}">
+                    <input type="radio" name='alarmSet' autocomplete="off" /> On
+                  </label>
+                  <label class="btn btn-xs {{ container.warning|statusbadgeOffAlarm}}">
+                    <input type='radio' name='alarmSet' autocomplete="off" /> Off
+                  </label>
+                </div>
+              </td>
+            </tr>
+          </table>
+        </div>
+        <!-- Middle Container -->   
+      </div>
+    </div>
+  </div>
+  <!-- Main component for a primary marketing message or call to action -->
+</div>

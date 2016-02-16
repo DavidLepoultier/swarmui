@@ -1,26 +1,38 @@
 angular.module('swarmui.services', ['ngResource'])
-  .factory('ConsulNodes', ['$resource', 'Settings', function ContainerFactory($resource, Settings) {
+  .factory('ConsulContainers', ['$resource', 'SettingsConsul', function ContainerFactory($resource, Settings) {
       'use strict';
       // Resource for interacting with the docker containers
       // http://docs.docker.com/reference/api/docker_remote_api_<%= remoteApiVersion %>/#2-1-containers
-      return $resource(Settings.url + '/v1/kv/docker/swarm-ui/nodes/:node', {
-          node: '@name'
+      return $resource(Settings.url + '/v1/kv/docker/swarm-ui/containers/:idContainer', {
+          idContainer: '@idConsul'
       }, {
-          query: {method: 'GET', params: {recurse: 0, action: 'json'}, isArray: true},
+          query: {method: 'GET', params: {recurse: 0}, isArray: true},
           get: {method: 'GET', params: {action: 'json'}},
           setalarm: {method: 'PUT', params: {action: 'json'}}
       });
   }])
-  .factory('ConsulTasks', ['$resource', 'Settings', function ContainerFactory($resource, Settings) {
+  .factory('ConsulTasks', ['$resource', 'SettingsConsul', function ContainerFactory($resource, Settings) {
       'use strict';
       // Resource for interacting with the docker containers
       // http://docs.docker.com/reference/api/docker_remote_api_<%= remoteApiVersion %>/#2-1-containers
       return $resource(Settings.url + '/v1/kv/docker/swarm-ui/tasks/:id', {
           task: '@id'
       }, {
-          query: {method: 'GET', params: {recurse: 0, action: 'json'}, isArray: true},
+          query: {method: 'GET', params: {recurse: 0}, isArray: true},
           get: {method: 'GET', params: {action: 'json'}},
           updateTask: {method: 'PUT', params: {action: 'json'}}
+      });
+  }])
+  .factory('ConsulNodes', ['$resource', 'SettingsConsul', function ContainerFactory($resource, Settings) {
+      'use strict';
+      // Resource for interacting with the docker containers
+      // http://docs.docker.com/reference/api/docker_remote_api_<%= remoteApiVersion %>/#2-1-containers
+      return $resource(Settings.url + '/v1/kv/docker/swarm-ui/nodes/:node', {
+          node: '@name'
+      }, {
+          query: {method: 'GET', params: {recurse: 0}, isArray: true},
+          get: {method: 'GET', params: {action: 'json'}},
+          setalarm: {method: 'PUT', params: {action: 'json'}}
       });
   }])
   .factory('Container', ['$resource', 'Settings', function ContainerFactory($resource, Settings) {
@@ -162,6 +174,21 @@ angular.module('swarmui.services', ['ngResource'])
           create: {method: 'POST', params: {action: 'create'}},
           remove: {method: 'DELETE'}
       });
+  }])
+  .factory('SettingsConsul', ['CONSUL_ENDPOINT', 'DOCKER_PORT', 'UI_VERSION', function SettingsFactory(CONSUL_ENDPOINT, DOCKER_PORT, UI_VERSION) {
+      'use strict';
+      var url = CONSUL_ENDPOINT;
+      if (DOCKER_PORT) {
+          url = url + DOCKER_PORT + '\\' + DOCKER_PORT;
+      }
+      var firstLoad = (localStorage.getItem('firstLoad') || 'true') === 'true';
+      return {
+          displayAll: false,
+          endpoint: CONSUL_ENDPOINT,
+          uiVersion: UI_VERSION,
+          url: url,
+          firstLoad: firstLoad
+      };
   }])
   .factory('Settings', ['DOCKER_ENDPOINT', 'DOCKER_PORT', 'UI_VERSION', function SettingsFactory(DOCKER_ENDPOINT, DOCKER_PORT, UI_VERSION) {
       'use strict';
