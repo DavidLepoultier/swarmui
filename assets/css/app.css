@@ -242,6 +242,7 @@
 #main_icon
 {
    float: right;
+   font-size: 18px;
    padding-right: 15px;
    padding-top: 10px;
    padding-bottom: 15px;
@@ -250,6 +251,7 @@
 #main_icon_dash
 {
    float: right;
+   font-size: 18px;
    padding-right: 15px;
    margin-top: -40px;
    padding-top: 10px;
@@ -259,6 +261,7 @@
 #main_icon_alarm
 {
    float: right;
+   font-size: 18px;
    margin-right: -12px;
    margin-top: -40px;
    padding-top: 10px;
