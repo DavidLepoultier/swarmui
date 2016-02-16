@@ -1,6 +1,7 @@
 angular.module('dashboardContainers', [])
-.controller('DashboardContainersController', ['$scope', '$routeParams', 'ConsulContainers', 'Container', 'SettingsConsul', 'Settings', 'Messages', 'ViewSpinner', '$timeout',
-  function ($scope, $routeParams, ConsulContainers, Container, SettingsConsul, Settings, Messages, ViewSpinner, $timeout) {
+.controller('DashboardContainersController', ['$scope', '$routeParams', 'ConsulContainers', 'Container', 
+  'SettingsConsul', 'Settings', 'Messages', 'ViewSpinner',
+  function ($scope, $routeParams, ConsulContainers, Container, SettingsConsul, Settings, Messages, ViewSpinner) {
     $scope.predicate = '-Created';
     $scope.toggle = false;
     $scope.displayAll = Settings.displayAll;

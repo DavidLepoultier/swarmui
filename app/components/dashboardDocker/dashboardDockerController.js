@@ -1,6 +1,6 @@
 angular.module('dashboardDocker', [])
-.controller('DashboardDockerController', ['$scope', '$routeParams', '$location', 'ConsulNodes', 'SettingsConsul', 'Messages', '$timeout', 
-  function ($scope, $routeParams, $location, ConsulNodes, SettingsConsul, Messages, $timeout) {
+.controller('DashboardDockerController', ['$scope', '$routeParams', 'ConsulNodes', 'SettingsConsul', 'Messages', '$timeout', 
+  function ($scope, $routeParams, ConsulNodes, SettingsConsul, Messages, $timeout) {
     $scope.predicate = '-Created';
     $scope.consulNodes = [];
     $scope.changes = [];
