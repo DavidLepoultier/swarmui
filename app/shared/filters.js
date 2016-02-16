@@ -35,7 +35,7 @@ angular.module('swarmui.filters', [])
             }
         };
     })
-    .filter('statusbadge', function () {
+    .filter('statusBadge', function () {
         'use strict';
         return function (text) {
             if (text === 'Ghost') {
@@ -44,6 +44,37 @@ angular.module('swarmui.filters', [])
                 return 'warning';
             }
             return 'success';
+        };
+    })
+    .filter('statusInverseBadge', function () {
+        'use strict';
+        return function (text) {
+            if (text === 'Ghost') {
+                return 'important';
+            } else if (text.indexOf('Exit') !== -1 && text !== 'Exit 0') {
+                return 'success';
+            }
+            return 'danger';
+        };
+    })
+    .filter('statusIconsStartStop', function () {
+        'use strict';
+        return function (text) {
+            if (text === 'Ghost') {
+                return 'glyphicon glyphicon-off';
+            } else if (text.indexOf('Exit') !== -1 && text !== 'Exit 0') {
+                return 'glyphicon glyphicon-play';
+            }
+            return 'glyphicon glyphicon-off';
+        };
+    })
+    .filter('statusButtonActive', function () {
+        'use strict';
+        return function (text) {
+            if (text === 'unknown') {
+                return 'disabled';
+            } 
+            return '';
         };
     })
     .filter('statusbadgeNode', function () {
@@ -143,8 +174,8 @@ angular.module('swarmui.filters', [])
     .filter('getdate', function () {
         'use strict';
         return function (data) {
-            var options = { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit' };
-            var language = window.navigator.userLanguage || window.navigator.language;
+            var options = { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit' };
+            var language = navigator.browserLanguage;
             //Multiply by 1000 for the unix format
             var date = new Date(data * 1000);
             return date.toLocaleDateString(language, options);
