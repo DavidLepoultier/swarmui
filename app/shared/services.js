@@ -31,7 +31,7 @@ angular.module('swarmui.services', ['ngResource'])
           node: '@name'
       }, {
           query: {method: 'GET', params: {recurse: 0}, isArray: true},
-          get: {method: 'GET', params: {action: 'json'}},
+          get: {method: 'GET', params: {action: 'json'}, isArray: true},
           setalarm: {method: 'PUT', params: {action: 'json'}}
       });
   }])
@@ -61,13 +61,13 @@ angular.module('swarmui.services', ['ngResource'])
       'use strict';
       // Resource for interacting with the docker containers
       // http://docs.docker.com/reference/api/docker_remote_api_<%= remoteApiVersion %>/#2-1-containers
-      return $resource(Settings.url + ':node/containers/:id/:action', {
+      return $resource(Settings.url + '/:node/containers/:id/:action', {
           name: '@name'
       }, {
           query: {method: 'GET', params: {all: 0, action: 'json'}, isArray: true},
           get: {method: 'GET', params: {action: 'json'}},
           start: {method: 'POST', params: {id: '@id', action: 'start'}},
-          stop: {method: 'POST', params: {id: '@id', t: 5, action: 'stop'}},
+          stop: {method: 'POST', params: {id: '@id', node: '@node', t: 5, action: 'stop'}},
           restart: {method: 'POST', params: {id: '@id', t: 5, action: 'restart'}},
           kill: {method: 'POST', params: {id: '@id', action: 'kill'}},
           pause: {method: 'POST', params: {id: '@id', action: 'pause'}},

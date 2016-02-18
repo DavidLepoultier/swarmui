@@ -32,8 +32,7 @@ angular.module('dashboardContainers', [])
         addrNode = ConsulNodes.get({node: node});
         containerStart(id);
       } else {
-        addrNode = ConsulNodes.get({node: node});
-        containetStop(id, addrNode);
+         containetStop(id, node);
       }
       
     };
@@ -48,18 +47,21 @@ angular.module('dashboardContainers', [])
         ViewSpinner.stop();
     };
 
-    var containetStop = function (id, name) {
+    var containetStop = function (id, node) {
         ViewSpinner.spin();
 
-        Messages.send("Container stopping", id);
-        Messages.send("Container stopping", name);
-        /*Container.stop({id: id}, function (d) {
-          update();
-          Messages.send("Container stopped", $routeParams.id);
-        }, function (e) {
-          update();
-          Messages.error("Failure", "Container failed to stop." + $routeParams.id);
-        });*/
+        ConsulNodes.get({node: node}, function (d) {
+          var values = JSON.parse(atob(d[0].Value));
+          Messages.send("Addr stopping", values.url);
+          Messages.send("Container stopping", id);
+          Container.stop({id: id, node: values.url}, function (d) {
+            update();
+            Messages.send("Container stopped on " + node, id);
+          }, function (e) {
+            update();
+            Messages.error("Failure", "Container failed to stop." + $routeParams.id);
+          });
+        });
         ViewSpinner.stop();
     };    
 
