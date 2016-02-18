@@ -33,7 +33,7 @@
               <td>{{ container.image }}</td>
               <td><span class="label label-{{ container.status|statusBadge }}" style="font-size: 95%">{{ container.status }}</span></td>
               <td>
-                <button type="button" id="button_agent_action" ng-click="actionContainer(container.id, conainter, container.status)" class="btn btn-sm btn-default {{ container.status|statusButtonActive }}" style="padding: 4px;" autocomplete="off">
+                <button type="button" id="button_agent_action" ng-click="actionContainer(container.id, container.nodeName, container.status)" class="btn btn-sm btn-default {{ container.status|statusButtonActive }}" style="padding: 4px;" autocomplete="off">
                   <span class="label label-{{ container.status|statusInverseBadge }} {{ container.status|statusIconsStartStop }}" style="font-size: 100%;top: 1.5px;"> </span>
                 </button>
               </td>

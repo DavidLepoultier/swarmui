@@ -55,19 +55,22 @@ func createTcpHandler(e string) http.Handler {
 	return httputil.NewSingleHostReverseProxy(u)
 }
 
-func createHandler(dir string, e string, e2 string) http.Handler {
+func createHandler(dir string, e string, e2 string, e3 string) http.Handler {
 	var (
 		mux         = http.NewServeMux()
 		fileHandler = http.FileServer(http.Dir(dir))
 		dockerHandler http.Handler
+		dockerHandlerTls http.Handler
 		h           http.Handler
 	)
 
 	h = createTcpHandler(e)
 	dockerHandler = createTcpHandler(e2)
+	dockerHandlerTls = createTcpHandler(e3)
 
 	mux.Handle("/consulapi/", http.StripPrefix("/consulapi", h))
 	mux.Handle("/swarmuiapi/", http.StripPrefix("/swarmuiapi", dockerHandler))
+	mux.Handle("/swarmuiapitls/", http.StripPrefix("/swarmuiapitls", dockerHandlerTls))
 	mux.Handle("/", fileHandler)
 	return mux
 }
@@ -79,13 +82,14 @@ func main() {
 	var (
 		endpoint = flag.String("e", consul, "Consul endpoint")
 		endpoint2 = flag.String("e2", "http://localhost:9001", "Dockers endpoint")
+		endpoint3 = flag.String("e3", "http://localhost:9002", "Dockers TLS endpoint")
 		addr     = flag.String("p", ":9000", "Address and port to serve dockerui")
 		assets   = flag.String("a", ".", "Path to the assets")
 	)
 
 	flag.Parse()
 
-	handler := createHandler(*assets, *endpoint, *endpoint2)
+	handler := createHandler(*assets, *endpoint, *endpoint2, *endpoint3)
 	if err := http.ListenAndServe(*addr, handler); err != nil {
 		log.Println(handler)
 		log.Fatal(err)

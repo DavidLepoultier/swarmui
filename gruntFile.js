@@ -93,6 +93,7 @@ module.exports = function (grunt) {
             assets: {
                 files: [
                     {dest: '<%= distdir %>/fonts/', src: '**', expand: true, cwd: 'bower_components/bootstrap/fonts/'},
+                    {dest: '<%= distdir %>/certs/', src: '**', expand: true, cwd: 'certs/'},
                     {
                         dest: '<%= distdir %>/images/',
                         src: ['**', '!trees.jpg'],

@@ -61,7 +61,7 @@ angular.module('swarmui.services', ['ngResource'])
       'use strict';
       // Resource for interacting with the docker containers
       // http://docs.docker.com/reference/api/docker_remote_api_<%= remoteApiVersion %>/#2-1-containers
-      return $resource(Settings.url + '/containers/:id/:action', {
+      return $resource(Settings.url + ':node/containers/:id/:action', {
           name: '@name'
       }, {
           query: {method: 'GET', params: {all: 0, action: 'json'}, isArray: true},

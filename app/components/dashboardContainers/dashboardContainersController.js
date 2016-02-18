@@ -1,11 +1,12 @@
 angular.module('dashboardContainers', [])
-.controller('DashboardContainersController', ['$scope', '$routeParams', 'ConsulContainers', 'Container', 
+.controller('DashboardContainersController', ['$scope', '$routeParams', 'ConsulContainers', 'ConsulNodes', 'Container', 
   'SettingsConsul', 'Settings', 'Messages', 'ViewSpinner',
-  function ($scope, $routeParams, ConsulContainers, Container, SettingsConsul, Settings, Messages, ViewSpinner) {
+  function ($scope, $routeParams, ConsulContainers, ConsulNodes, Container, SettingsConsul, Settings, Messages, ViewSpinner) {
     $scope.predicate = '-Created';
     $scope.toggle = false;
     $scope.displayAll = Settings.displayAll;
     $scope.consulContainers = [];
+
 
     $scope.setAlarm = function (container,entry,warning) {
       var setAlarmTo = "";
@@ -22,6 +23,45 @@ angular.module('dashboardContainers', [])
         Messages.error("Update alarm failed for " + container, setAlarmTo);
       });
     };
+
+    $scope.actionContainer = function (id, node, status){
+      var addrNode = [];
+      if (status === 'Ghost') {
+          return;
+      } else if (status.indexOf('Exit') !== -1 && status !== 'Exit 0') {
+        addrNode = ConsulNodes.get({node: node});
+        containerStart(id);
+      } else {
+        addrNode = ConsulNodes.get({node: node});
+        containetStop(id, addrNode);
+      }
+      
+    };
+
+    var containerStart = function (id) {
+        ViewSpinner.spin();
+        Container.start({id: id}, function (d) {
+          Messages.send("Container started", $routeParams.id);
+        }, function (e) {
+          Messages.error("Failure", "Container failed to start." + e.data);
+        });
+        ViewSpinner.stop();
+    };
+
+    var containetStop = function (id, name) {
+        ViewSpinner.spin();
+
+        Messages.send("Container stopping", id);
+        Messages.send("Container stopping", name);
+        /*Container.stop({id: id}, function (d) {
+          update();
+          Messages.send("Container stopped", $routeParams.id);
+        }, function (e) {
+          update();
+          Messages.error("Failure", "Container failed to stop." + $routeParams.id);
+        });*/
+        ViewSpinner.stop();
+    };    
 
     ConsulContainers.query({recurse: 1}, function (d) {
       for (var i = 0; i < d.length; i++) {
