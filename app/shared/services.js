@@ -8,6 +8,7 @@ angular.module('swarmui.services', ['ngResource'])
       }, {
           query: {method: 'GET', params: {recurse: 0}, isArray: true},
           get: {method: 'GET', params: {action: 'json'}},
+          update: {method: 'PUT', params: {action: 'json'}},
           setalarm: {method: 'PUT', params: {action: 'json'}}
       });
   }])
@@ -33,6 +34,16 @@ angular.module('swarmui.services', ['ngResource'])
           query: {method: 'GET', params: {recurse: 0}, isArray: true},
           get: {method: 'GET', params: {action: 'json'}, isArray: true},
           setalarm: {method: 'PUT', params: {action: 'json'}}
+      });
+  }])
+  .factory('ConsulPrimarySwarm', ['$resource', 'SettingsConsul', function ContainerFactory($resource, Settings) {
+      'use strict';
+      // Resource for interacting with the docker containers
+      // http://docs.docker.com/reference/api/docker_remote_api_<%= remoteApiVersion %>/#2-1-containers
+      return $resource(Settings.url + '/v1/kv/docker/swarm/leader', {
+          node: '@name'
+      }, {
+          get: {method: 'GET', isArray: true}
       });
   }])
   .factory('ConsulSwarmManager', ['$resource', 'SettingsConsul', function ContainerFactory($resource, Settings) {

@@ -1,11 +1,12 @@
 angular.module('dashboardContainers', [])
-.controller('DashboardContainersController', ['$scope', '$routeParams', 'ConsulContainers', 'ConsulNodes', 'Container', 
+.controller('DashboardContainersController', ['$scope', '$routeParams', 'ConsulContainers', 'ConsulNodes', 'Container', 'ConsulPrimarySwarm', 
   'SettingsConsul', 'Settings', 'Messages', 'ViewSpinner',
-  function ($scope, $routeParams, ConsulContainers, ConsulNodes, Container, SettingsConsul, Settings, Messages, ViewSpinner) {
+  function ($scope, $routeParams, ConsulContainers, ConsulNodes, Container, ConsulPrimarySwarm, SettingsConsul, Settings, Messages, ViewSpinner) {
     $scope.predicate = '-Created';
     $scope.toggle = false;
     $scope.displayAll = Settings.displayAll;
     $scope.consulContainers = [];
+    $scope.setContainer = [];
 
 
     $scope.setAlarm = function (container,entry,warning) {
@@ -24,41 +25,42 @@ angular.module('dashboardContainers', [])
       });
     };
 
-    $scope.actionContainer = function (id, node, status){
+    $scope.actionContainer = function (id,node,status){
       var addrNode = [];
       if (status === 'Ghost') {
           return;
       } else if (status.indexOf('Exit') !== -1 && status !== 'Exit 0') {
-        addrNode = ConsulNodes.get({node: node});
-        containerStart(id);
+        containerStart(id, node);
       } else {
-         containetStop(id, node);
+        containerStop(id, node);
       }
       
     };
 
     var containerStart = function (id) {
         ViewSpinner.spin();
-        Container.start({id: id}, function (d) {
-          Messages.send("Container started", $routeParams.id);
-        }, function (e) {
-          Messages.error("Failure", "Container failed to start." + e.data);
+        ConsulNodes.get({node: node}, function (d) {
+          var values = JSON.parse(atob(d[0].Value));
+          Container.start({id: id, node: values.url}, function (d) {
+            Container.get({id: id, node: values.url});
+            update(values.url);
+            Messages.send("Container stopped on " + node, id);
+          }, function (e) {
+            Messages.error("Failure", "Container failed to stop." + $routeParams.id);
+          });
         });
         ViewSpinner.stop();
     };
 
-    var containetStop = function (id, node) {
+    var containerStop = function (id, node) {
         ViewSpinner.spin();
-
         ConsulNodes.get({node: node}, function (d) {
           var values = JSON.parse(atob(d[0].Value));
-          Messages.send("Addr stopping", values.url);
-          Messages.send("Container stopping", id);
           Container.stop({id: id, node: values.url}, function (d) {
+            Container.get({id: id, node: values.url});
             update();
             Messages.send("Container stopped on " + node, id);
           }, function (e) {
-            update();
             Messages.error("Failure", "Container failed to stop." + $routeParams.id);
           });
         });
@@ -75,13 +77,28 @@ angular.module('dashboardContainers', [])
     });
 
     var update = function (data) {
-      ViewSpinner.spin();
-      ConsulContainers.query(data, function (d) {
-        $scope.containers = d.map(function (item) {
-          return new ContainerViewModel(item);
+      ViewSpinner.spin(); 
+      ConsulPrimarySwarm.get({}, function (d){
+        var url = atob(d[0].Value); 
+        Container.query({all:1, node: url}, function (d) {
+          for (var i = 0; i < d.length; i++) {
+            var item = d[i];
+            var setContainer = [];
+            $scope.setContainer.push(new ContainersUpdateModel(item));
+            var itemNames = item.Names[0].split("/");
+            $scope.setContainer[i].nodeName = itemNames[1];
+            $scope.setContainer[i].serviceName = itemNames[2];
+            $scope.setContainer[i].idConsul = itemNames[1] + "-" + item.Id.substr(0, 12);
+            ConsulContainers.update($scope.setContainer[i]);
+          }
+          ConsulContainers.query(data, function (d) {
+            $scope.containers = d.map(function (item) {
+              return new ContainerViewModel(item);
+            });
+            ViewSpinner.stop();
+          });
         });
-        ViewSpinner.stop();
-      });
+      });    
     };
 
     var batch = function (items, action, msg) {

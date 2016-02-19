@@ -19,6 +19,12 @@ function ContainerViewModel(data) {
     this.Names = data.Names;
 }
 
+function ContainersUpdateModel(data) {
+    this.id = data.Id;
+    this.image = data.Image;
+    this.status = data.Status;
+}
+
 function ConsulNodesModel(data) {
     this.name = data.name;
     this.version = data.version;
