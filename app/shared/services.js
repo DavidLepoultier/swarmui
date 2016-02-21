@@ -21,7 +21,7 @@ angular.module('swarmui.services', ['ngResource'])
       }, {
           query: {method: 'GET', params: {recurse: 0}, isArray: true},
           get: {method: 'GET', params: {action: 'json'}},
-          updateTask: {method: 'PUT', params: {action: 'json'}}
+          createTask: {method: 'PUT', params: {id: '@id', action: 'json'}}
       });
   }])
   .factory('ConsulNodes', ['$resource', 'SettingsConsul', function ContainerFactory($resource, Settings) {
@@ -68,6 +68,16 @@ angular.module('swarmui.services', ['ngResource'])
           get: {method: 'GET', params: {action: 'json'}}
       });
   }])
+  .factory('Swarm', ['$resource', 'Settings', function ContainerFactory($resource, Settings) {
+      'use strict';
+      // Resource for interacting with the docker containers
+      // http://docs.docker.com/reference/api/docker_remote_api_<%= remoteApiVersion %>/#2-1-containers
+      return $resource(Settings.url + '/:node/:action', {
+          name: '@name'
+      }, {
+          info: {method: 'GET', params: {action: 'info'}}
+      });
+  }])
   .factory('Container', ['$resource', 'Settings', function ContainerFactory($resource, Settings) {
       'use strict';
       // Resource for interacting with the docker containers
@@ -77,8 +87,7 @@ angular.module('swarmui.services', ['ngResource'])
       }, {
           query: {method: 'GET', params: {all: 0, action: 'json'}, isArray: true},
           get: {method: 'GET', params: {action: 'json'}},
-          start: {method: 'POST', params: {id: '@id', action: 'start'}},
-          stop: {method: 'POST', params: {id: '@id', node: '@node', t: 5, action: 'stop'}},
+          actionCont: {method: 'POST', params: {id: '@id', node: '@node', t: 5, action: '@action'}},
           restart: {method: 'POST', params: {id: '@id', t: 5, action: 'restart'}},
           kill: {method: 'POST', params: {id: '@id', action: 'kill'}},
           pause: {method: 'POST', params: {id: '@id', action: 'pause'}},
@@ -146,7 +155,7 @@ angular.module('swarmui.services', ['ngResource'])
   .factory('Image', ['$resource', 'Settings', function ImageFactory($resource, Settings) {
       'use strict';
       // http://docs.docker.com/reference/api/docker_remote_api_<%= remoteApiVersion %>/#2-2-images
-      return $resource(Settings.url + '/images/:id/:action', {}, {
+      return $resource(Settings.url + '/:node/images/:id/:action', {}, {
           query: {method: 'GET', params: {all: 0, action: 'json'}, isArray: true},
           get: {method: 'GET', params: {action: 'json'}},
           search: {method: 'GET', params: {action: 'search'}},
@@ -208,17 +217,13 @@ angular.module('swarmui.services', ['ngResource'])
           remove: {method: 'DELETE'}
       });
   }])
-  .factory('SettingsConsul', ['CONSUL_ENDPOINT', 'DOCKER_PORT', 'UI_VERSION', function SettingsFactory(CONSUL_ENDPOINT, DOCKER_PORT, UI_VERSION) {
+  .factory('SettingsConsul', ['CONSUL_ENDPOINT', function SettingsFactory(CONSUL_ENDPOINT) {
       'use strict';
       var url = CONSUL_ENDPOINT;
-      if (DOCKER_PORT) {
-          url = url + DOCKER_PORT + '\\' + DOCKER_PORT;
-      }
       var firstLoad = (localStorage.getItem('firstLoad') || 'true') === 'true';
       return {
           displayAll: false,
           endpoint: CONSUL_ENDPOINT,
-          uiVersion: UI_VERSION,
           url: url,
           firstLoad: firstLoad
       };

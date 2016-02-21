@@ -1,7 +1,7 @@
 angular.module('dashboardContainers', [])
-.controller('DashboardContainersController', ['$scope', '$routeParams', 'ConsulContainers', 'ConsulNodes', 'Container', 'ConsulPrimarySwarm', 
-  'SettingsConsul', 'Settings', 'Messages', 'ViewSpinner',
-  function ($scope, $routeParams, ConsulContainers, ConsulNodes, Container, ConsulPrimarySwarm, SettingsConsul, Settings, Messages, ViewSpinner) {
+.controller('DashboardContainersController', ['$scope', '$routeParams', 'Container', 
+  'ConsulPrimarySwarm', 'SettingsConsul', 'Settings', 'Messages', 'ViewSpinner', 'ConsulTasks',
+  function ($scope, $routeParams, Container, ConsulPrimarySwarm, SettingsConsul, Settings, Messages, ViewSpinner, ConsulTasks) {
     $scope.predicate = '-Created';
     $scope.toggle = false;
     $scope.displayAll = Settings.displayAll;
@@ -25,82 +25,57 @@ angular.module('dashboardContainers', [])
       });
     };
 
-    $scope.actionContainer = function (id,node,status){
-      var addrNode = [];
+    $scope.actionContainer = function (id,container,status){
+      var startDate = new Date().getTime();
+      var actionCont = '';
       if (status === 'Ghost') {
           return;
       } else if (status.indexOf('Exit') !== -1 && status !== 'Exit 0') {
-        containerStart(id, node);
+        actionCont = 'start';
       } else {
-        containerStop(id, node);
+        actionCont = 'stop';
       }
-      
+      ConsulPrimarySwarm.get({}, function (d){
+        var url = atob(d[0].Value);
+        var node = container.Names[0].split("/");
+        containerBatch(id, url, actionCont, node[1], startDate);
+      });
     };
 
-    var containerStart = function (id) {
-        ViewSpinner.spin();
-        ConsulNodes.get({node: node}, function (d) {
-          var values = JSON.parse(atob(d[0].Value));
-          Container.start({id: id, node: values.url}, function (d) {
-            Container.get({id: id, node: values.url});
-            update(values.url);
-            Messages.send("Container stopped on " + node, id);
-          }, function (e) {
-            Messages.error("Failure", "Container failed to stop." + $routeParams.id);
-          });
-        });
-        ViewSpinner.stop();
-    };
-
-    var containerStop = function (id, node) {
-        ViewSpinner.spin();
-        ConsulNodes.get({node: node}, function (d) {
-          var values = JSON.parse(atob(d[0].Value));
-          Container.stop({id: id, node: values.url}, function (d) {
-            Container.get({id: id, node: values.url});
-            update();
-            Messages.send("Container stopped on " + node, id);
-          }, function (e) {
-            Messages.error("Failure", "Container failed to stop." + $routeParams.id);
-          });
-        });
-        ViewSpinner.stop();
+    var containerBatch = function (id, url, actionCont, node, startDate) {
+      ViewSpinner.spin();
+      var actionTask = actionCont[0].toUpperCase() + actionCont.slice(1) + " container";
+      var idShort = id.substring(0, 12);
+      var idConsul = startDate + "-" + idShort;
+      var logs = "";
+      Container.actionCont({id: id, node: url, action: actionCont}, function (d) {
+        update();
+        var stat = "success";
+        var endDate = new Date().getTime();
+        ConsulTasks.createTask({id: idConsul,logs: logs,progress: 100,stat: stat,nodeName: node,action: actionCont,containerID: idShort,describe: actionTask,startDate: startDate,endDate: endDate});
+        Messages.send(actionTask + " on " + node, id);
+      }, function (e) {
+        Messages.error("Failure", "Container failed to " + actionCont + "." + $routeParams.id);
+        var stat = "failed";
+        var endDate = new Date().getTime();
+        ConsulTasks.createTask({id: idConsul,logs: logs,progress: 100,stat: stat,nodeName: node,action: actionCont,containerID: idShort,describe: actionTask,startDate: startDate,endDate: endDate});
+      });
+       ViewSpinner.stop();
     };    
 
-    ConsulContainers.query({recurse: 1}, function (d) {
-      for (var i = 0; i < d.length; i++) {
-        var item = d[i];  
-        var values = [];
-        values = JSON.parse(atob(item.Value));
-        $scope.consulContainers.push(new ConsulContainersModel(values));
-      }
-    });
-
     var update = function (data) {
-      ViewSpinner.spin(); 
+      ViewSpinner.spin();
       ConsulPrimarySwarm.get({}, function (d){
         var url = atob(d[0].Value); 
-        Container.query({all:1, node: url}, function (d) {
-          for (var i = 0; i < d.length; i++) {
-            var item = d[i];
-            var setContainer = [];
-            $scope.setContainer.push(new ContainersUpdateModel(item));
-            var itemNames = item.Names[0].split("/");
-            $scope.setContainer[i].nodeName = itemNames[1];
-            $scope.setContainer[i].serviceName = itemNames[2];
-            $scope.setContainer[i].idConsul = itemNames[1] + "-" + item.Id.substr(0, 12);
-            ConsulContainers.update($scope.setContainer[i]);
-          }
-          ConsulContainers.query(data, function (d) {
-            $scope.containers = d.map(function (item) {
+        Container.query({all: 1, node: url}, function (d) {
+          $scope.containers = d.map(function (item) {
               return new ContainerViewModel(item);
-            });
-            ViewSpinner.stop();
           });
+          ViewSpinner.stop();
         });
-      });    
+      });
     };
-
+    
     var batch = function (items, action, msg) {
       ViewSpinner.spin();
       var counter = 0;
@@ -195,4 +170,5 @@ $scope.removeAction = function () {
 };
 
 //update({all: Settings.displayAll ? 1 : 0});
+update();
 }]);

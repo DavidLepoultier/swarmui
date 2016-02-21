@@ -19,6 +19,13 @@ function ContainerViewModel(data) {
     this.Names = data.Names;
 }
 
+function SwarmViewModel(data) {
+    this.nodename = data.nodename;
+    this.version = data.version;
+    this.health = data.health;
+    this.url = data.url;
+}
+
 function ContainersUpdateModel(data) {
     this.id = data.Id;
     this.image = data.Image;

@@ -1,9 +1,11 @@
 angular.module('dashboardDocker', [])
-.controller('DashboardDockerController', ['$scope', '$routeParams', 'ConsulNodes', 'SettingsConsul', 'Messages', '$timeout', 
-  function ($scope, $routeParams, ConsulNodes, SettingsConsul, Messages, $timeout) {
+.controller('DashboardDockerController', ['$scope', '$routeParams', 'ConsulNodes', 'Swarm', 'Container', 
+  'ConsulPrimarySwarm', 'SettingsConsul', 'Settings', 'Messages', 'ViewSpinner',
+  function ($scope, $routeParams, ConsulNodes, Swarm, Container, ConsulPrimarySwarm, SettingsConsul, Settings, Messages, ViewSpinner) {
     $scope.predicate = '-Created';
     $scope.consulNodes = [];
-    $scope.changes = [];
+    $scope.swarms = [];
+
 
     $scope.setAlarm = function (node,entry,warning) {
       var setAlarmTo = "";
@@ -21,12 +23,33 @@ angular.module('dashboardDocker', [])
       });
     };
 
-    ConsulNodes.query({recurse: 1}, function (d) {
-      for (var i = 0; i < d.length; i++) {
-        var item = d[i];  
-        var values = [];
-        values = JSON.parse(atob(item.Value));
-        $scope.consulNodes.push(new ConsulNodesModel(values));
-      }
-    });
-  }]);
+    var update = function (data) {
+      ViewSpinner.spin();
+      ConsulPrimarySwarm.get({}, function (d){
+        var url = atob(d[0].Value); 
+        Swarm.info({node: url}, function (d) {
+          var k = 5;
+          var l = 9;
+          var j = 0;
+          var values = [];
+          for (var i = 4; i < d['SystemStatus'].length;i += 8){
+            var version = d['SystemStatus'][l][1].split(" ");
+            var nodename = d['SystemStatus'][i][0].split(" ");
+            var value = '{"nodename":"' + nodename[1] + '","url":"' + d['SystemStatus'][i][1] + '","health":"' + d['SystemStatus'][k][1] + '","version":"' + version[3] + '"}';
+            k += 8;
+            l += 8;   
+            values[j] = JSON.parse(value);
+            j++; 
+          }
+          $scope.swarms = values.map(function (item) {
+              return new SwarmViewModel(item);
+          });    
+          console.log($scope.swarms);
+          ViewSpinner.stop();
+        });
+      });
+    };
+    
+  //update({all: Settings.displayAll ? 1 : 0});
+  update();
+}]);

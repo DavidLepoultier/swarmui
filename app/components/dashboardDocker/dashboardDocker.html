@@ -20,25 +20,16 @@
             <tr>
               <th>#</th>
               <th>Hostname</th>
+              <th>Url</th>
               <th>Docker version</th>
               <th>Status</th>
-              <th>Alarms</th>
             </tr>
-            <tr ng-repeat="node in consulNodes">
-                <td></td>
-                <td><a href="#/hosts/{{ node.name }}/">{{ node.name }}</a></td>
-                <td>{{ node.version }}</td>
-                <td><span class="label label-{{ node.status|statusbadgeNode }}" style="font-size: 95%">{{ node.status }}</span></td>
-                <td>
-                  <div class="btn-group" data-toggle="buttons" ng-click="setAlarm(node.name, node, node.warning)">
-                    <label class="btn btn-xs {{ node.warning|statusbadgeOnAlarm}}">
-                      <input type="radio" name='alarmSet' autocomplete="off" /> On
-                    </label>
-                    <label class="btn btn-xs {{ node.warning|statusbadgeOffAlarm}}">
-                      <input type='radio' name='alarmSet' autocomplete="off" /> Off
-                    </label>
-                  </div>
-                </td>
+            <tr ng-repeat="swarm in swarms | filter:filter | orderBy:predicate">
+              <td></td>
+              <td><a href="#/hosts/{{ swarm.nodename }}/">{{ swarm.nodename }}</a></td>
+              <td>{{ swarm.url }}</td>
+              <td>{{ swarm.version }}</td>
+              <td><span class="label label-{{ swarm.health|statusbadgeNode }}" style="font-size: 95%">{{ swarm.health }}</span></td>
             </tr>
           </table>
         </div>

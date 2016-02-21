@@ -24,28 +24,17 @@
               <th>Image</th>
               <th>Container Status</th>
               <th>Actions</th>
-              <th>Alarms</th>
             </tr>
-            <tr ng-repeat="container in consulContainers">
-              <td>{{ container.nodeName }}</td>
-              <td><a href="#/hosts/{{ container.nodeName }}/{{ container.id }}">{{ container.id }}</a></td>
-              <td>{{ container.serviceName }}</td>
-              <td>{{ container.image }}</td>
-              <td><span class="label label-{{ container.status|statusBadge }}" style="font-size: 95%">{{ container.status }}</span></td>
+            <tr ng-repeat="container in containers | filter:filter | orderBy:predicate">
+              <td>{{ container|nodename }}</td>
+              <td><a href="#/hosts/{{ container.nodeName }}/{{ container.Id }}">{{ container.Id|containerShortId }}</a></td>
+              <td>{{ container|containername }}</td>
+              <td>{{ container.Image }}</td>
+              <td><span class="label label-{{ container.Status|statusBadge }}" style="font-size: 95%">{{ container.Status }}</span></td>
               <td>
-                <button type="button" id="button_agent_action" ng-click="actionContainer(container.id, container.nodeName, container.status)" class="btn btn-sm btn-default {{ container.status|statusButtonActive }}" style="padding: 4px;" autocomplete="off">
-                  <span class="label label-{{ container.status|statusInverseBadge }} {{ container.status|statusIconsStartStop }}" style="font-size: 100%;top: 1.5px;"> </span>
-                </button>
-              </td>
-              <td>
-                <div class="btn-group" data-toggle="buttons" ng-click="setAlarm(container.id, container, container.warning)">
-                  <label class="btn btn-xs {{ container.warning|statusbadgeOnAlarm}}">
-                    <input type="radio" name='alarmSet' autocomplete="off" /> On
-                  </label>
-                  <label class="btn btn-xs {{ container.warning|statusbadgeOffAlarm}}">
-                    <input type='radio' name='alarmSet' autocomplete="off" /> Off
-                  </label>
-                </div>
+                <a href="#/dashboard/containers/" type="button" id="button_agent_action" ng-click="actionContainer(container.Id, container, container.Status)" class="btn btn-sm btn-default {{ container.Status|statusButtonActive }}" style="padding: 4px;" autocomplete="off">
+                  <span class="label label-{{ container.Status|statusInverseBadge }} {{ container.Status|statusIconsStartStop }}" style="font-size: 100%;top: 1.5px;"> </span>
+                </a>
               </td>
             </tr>
           </table>

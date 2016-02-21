@@ -151,11 +151,24 @@ angular.module('swarmui.filters', [])
             return value.toFixed(decimalPlaces) + ' ' + sizes[[i]];
         };
     })
+    .filter('containerShortId', function () {
+        'use strict';
+        return function (text) {
+            return text.substring(0, 12) + "...";
+        };
+    })
     .filter('containername', function () {
         'use strict';
         return function (container) {
-            var name = container.Names[0];
-            return name.substring(1, name.length);
+            var name = container.Names[0].split("/");
+            return name[2];
+        };
+    })
+    .filter('nodename', function () {
+        'use strict';
+        return function (container) {
+            var name = container.Names[0].split("/");
+            return name[1];
         };
     })
     .filter('repotag', function () {
@@ -177,7 +190,7 @@ angular.module('swarmui.filters', [])
             var options = { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit' };
             var language = navigator.browserLanguage;
             //Multiply by 1000 for the unix format
-            var date = new Date(data * 1000);
+            var date = new Date(data);
             return date.toLocaleDateString(language, options);
         };
     })

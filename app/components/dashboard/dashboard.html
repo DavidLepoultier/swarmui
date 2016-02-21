@@ -13,120 +13,56 @@
 
           <div class="panel panel-default">
             <div class="panel-heading">
-              <h3 class="panel-title">Containers Docker</h3>
+              <h3 class="panel-title">Docker Informations</h3>
             </div>
-            <div class="panel-body placeholders">
-              <div class="col-xs-4 col-xs-offset-2 col-sm-2 panel panel-default" style='padding-left: 0px; padding-right: 0px;'>
-                <div class="panel-heading">
-                  <h3 class="panel-title">Total</h3>
-                </div>
-                <span class="text-muted font-db font-db-default">{{ consulContainers.total }}</span>
+            <div class="panel-body placeholder-dash">
+              <div class="col-xs-6 col-md-4">
+                <h3>Containers Status </h3>
+                <canvas id="containers-chart">
+                  <p class="browserupgrade">
+                    You are using an <strong>outdated</strong> browser. Please 
+                    <a href="http://browsehappy.com/">upgrade your browser</a> 
+                    to improve your experience.
+                  </p>
+                </canvas>
+                <div id="containers-chart-legend"></div>
               </div>
-              <div class="col-xs-4 col-xs-offset-1 col-sm-2 panel panel-default" style='padding-left: 0px; padding-right: 0px;'>
-                <div class="panel-heading">
-                  <h3 class="panel-title">Running</h3>
-                </div>
-                <span class="text-muted font-db font-db-success">{{ consulContainers.running }}</span>
+              <div class="col-xs-6 col-md-4">
+                <h3>Images Status</h3>
+                <canvas id="images-chart">
+                  <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please 
+                    <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+                </canvas>
+                <div id="images-chart-legend"></div>
               </div>
-              <div class="col-xs-4 col-xs-offset-1 col-sm-2 panel panel-default" style='padding-left: 0px; padding-right: 0px;'>
-                <div class="panel-heading">
-                  <h3 class="panel-title">Stopped</h3>
-                </div>
-                <span class="text-muted font-db font-db-warning">{{ consulContainers.stopped }}</span>
+              <div class="col-xs-6 col-md-4">
+                <h3>Hosts Status</h3>
+                <canvas id="hosts-chart">
+                  <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please 
+                    <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+                </canvas>
+                <div id="hosts-chart-legend"></div>
               </div>
-            </div>
-          </div>
-
-          <div class="panel panel-default">
-            <div class="panel-heading">
-              <h3 class="panel-title">Dockers daemon / Swarm</h3>
-            </div>
-            <div class="panel-body placeholders">
-              <div class="col-xs-12 panel panel-default" style='padding: 0px;'>
-                <div class="panel-heading">
-                  <h3 class="panel-title">Docker daemon</h3>
-                </div>
-                <div class="panel-body placeholders">
-                  <div class="col-xs-4 col-xs-offset-2 col-sm-2 panel panel-default" style='padding-left: 0px; padding-right: 0px;'>
-                    <div class="panel-heading">
-                      <h3 class="panel-title">Total</h3>
-                    </div>
-                    <span class="text-muted font-db font-db-default">{{ consulNodes.total }}</span>
-                  </div>
-                  <div class="col-xs-4 col-xs-offset-1 col-sm-2 panel panel-default" style='padding-left: 0px; padding-right: 0px;'>
-                    <div class="panel-heading">
-                      <h3 class="panel-title">Running</h3>
-                    </div>
-                    <span class="text-muted font-db font-db-success">{{ consulNodes.running }}</span>
-                  </div>
-                  <div class="col-xs-4 col-xs-offset-1 col-sm-2 panel panel-default" style='padding-left: 0px; padding-right: 0px;'>
-                    <div class="panel-heading">
-                      <h3 class="panel-title">Offline</h3>
-                    </div>
-                    <span class="text-muted font-db font-db-danger">{{ consulNodes.stopped }}</span>
-                  </div>
-                </div>
+              <div class="col-xs-6 col-md-4">
+                <h3>Hosts Reserve CPU</h3>
+                <canvas id="hosts-cpu-chart">
+                  <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please 
+                    <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+                </canvas>
+                <div id="hosts-cpu-chart-legend"></div>
               </div>
-            </div>
-
-            <div class="panel-body placeholders">
-              <div class="col-xs-12 panel panel-default" style='padding: 0px;'>
-                <div class="panel-heading">
-                  <h3 class="panel-title">Swarm Manager</h3>
-                </div>
-                <div class="panel-body placeholders">
-                  <div class="col-xs-4 col-xs-offset-2 col-sm-2 panel panel-default" style='padding-left: 0px; padding-right: 0px;'>
-                    <div class="panel-heading">
-                      <h3 class="panel-title">Total</h3>
-                    </div>
-                    <span class="text-muted font-db font-db-default">{{ consulSwarmManager.total }}</span>
-                  </div>
-                  <div class="col-xs-4 col-xs-offset-1 col-sm-2 panel panel-default" style='padding-left: 0px; padding-right: 0px;'>
-                    <div class="panel-heading">
-                      <h3 class="panel-title">Running</h3>
-                    </div>
-                    <span class="text-muted font-db font-db-success">{{ consulSwarmManager.running }}</span>
-                  </div>
-                  <div class="col-xs-4 col-xs-offset-1 col-sm-2 panel panel-default" style='padding-left: 0px; padding-right: 0px;'>
-                    <div class="panel-heading">
-                      <h3 class="panel-title">Stopped</h3>
-                    </div>
-                    <span class="text-muted font-db font-db-danger">{{ consulSwarmManager.stopped }}</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div class="panel-body placeholders">
-              <div class="col-xs-12 panel panel-default" style='padding: 0px;'>
-                <div class="panel-heading">
-                  <h3 class="panel-title">Swarm Agent</h3>
-                </div>
-                <div class="panel-body placeholders">
-                  <div class="col-xs-4 col-xs-offset-2 col-sm-2 panel panel-default" style='padding-left: 0px; padding-right: 0px;'>
-                    <div class="panel-heading">
-                      <h3 class="panel-title">Total</h3>
-                    </div>
-                    <span class="text-muted font-db font-db-default">{{ consulSwarmAgent.total }}</span>
-                  </div>
-                  <div class="col-xs-4 col-xs-offset-1 col-sm-2 panel panel-default" style='padding-left: 0px; padding-right: 0px;'>
-                    <div class="panel-heading">
-                      <h3 class="panel-title">Running</h3>
-                    </div>
-                    <span class="text-muted font-db font-db-success">{{ consulSwarmAgent.running }}</span>
-                  </div>
-                  <div class="col-xs-4 col-xs-offset-1 col-sm-2 panel panel-default" style='padding-left: 0px; padding-right: 0px;'>
-                    <div class="panel-heading">
-                      <h3 class="panel-title">Stopped</h3>
-                    </div>
-                    <span class="text-muted font-db font-db-danger">{{ consulSwarmAgent.stopped }}</span>
-                  </div>
-                </div>
+              <div class="col-xs-6 col-md-4">
+                <h3>Hosts Reserve Memory</h3>
+                <canvas id="hosts-memroy-chart">
+                  <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please 
+                    <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+                </canvas>
+                <div id="hosts-memory-chart-legend"></div>
               </div>
             </div>
           </div>
-
         </div>
+
       </div>
       <!-- Middle Container -->
     </div>

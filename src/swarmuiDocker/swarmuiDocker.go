@@ -22,7 +22,7 @@ func main() {
 
 func send(w http.ResponseWriter, r *http.Request, client *http.Client) {
 
-        req, err := http.NewRequest(r.Method, "http:/" + r.URL.Path, nil)
+        req, err := http.NewRequest(r.Method, "http:/" + r.URL.Path + "?" + r.URL.RawQuery, nil)
         if err != nil {
                 log.Println(err)
         }       

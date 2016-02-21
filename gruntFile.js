@@ -77,7 +77,10 @@ module.exports = function (grunt) {
             scenarios: ['test/**/*.scenario.js'],
             html: ['index.html'],
             tpl: ['app/components/**/*.html'],
-            css: ['assets/css/app.css'],
+            css: [
+                'assets/css/app.css',
+                'assets/css/swarmui.css'
+                ],
             cssVendor: [
                 'bower_components/bootstrap/dist/css/bootstrap.css',
                 'bower_components/jquery.gritter/css/jquery.gritter.css',
