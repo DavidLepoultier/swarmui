@@ -44,7 +44,6 @@ angular.module('dashboardDocker', [])
           $scope.swarms = values.map(function (item) {
               return new SwarmViewModel(item);
           });    
-          console.log($scope.swarms);
           ViewSpinner.stop();
         });
       });

@@ -7,6 +7,9 @@ angular.module('swarmui', [
     'dashboard',
     'dashboardContainers',
     'dashboardDocker',
+    'container',
+    'image',
+    'startContainer',
     'hosts',
     'wrapperHosts',
     'wrapperDashboard',
@@ -26,6 +29,14 @@ angular.module('swarmui', [
         $routeProvider.when('/dashboard/containers/', {
             templateUrl: 'app/components/dashboardContainers/dashboardContainers.html',
             controller: 'DashboardContainersController'
+        });
+        $routeProvider.when('/:from/:node/containers/:id/', {
+            templateUrl: 'app/components/container/container.html',
+            controller: 'ContainerController'
+        });
+        $routeProvider.when('/:from/:node/images/:id/', {
+            templateUrl: 'app/components/image/image.html',
+            controller: 'ImageController'
         });
         $routeProvider.when('/dashboard/tasks/', {
             templateUrl: 'app/components/tasks/tasksDashboard.html',
