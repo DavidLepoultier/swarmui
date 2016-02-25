@@ -157,6 +157,12 @@ angular.module('swarmui.filters', [])
             return text.substring(0, 12) + "...";
         };
     })
+    .filter('imageShortId', function () {
+        'use strict';
+        return function (text) {
+            return text.substring(0, 12) + "...";
+        };
+    })
     .filter('containername', function () {
         'use strict';
         return function (container) {

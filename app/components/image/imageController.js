@@ -25,21 +25,18 @@ angular.module('image', [])
         });
       };
 
-      $scope.getHistory = function () {
-        ConsulPrimarySwarm.get({}, function (d){
-          var url = atob(d[0].Value); 
-          Swarm.info({node: url}, function (d) {
-            var nodeUrl = "";
-            for (var i = 4; i < d['SystemStatus'].length;i += 8){
-              var nodename = d['SystemStatus'][i][0].split(" ");
-              if ( nodename[1] === $routeParams.node ) {
-                nodeUrl = d['SystemStatus'][i][1];
-                break;
-              }
+      $scope.getHistory = function (url) {
+        Swarm.info({node: url}, function (d) {
+          var nodeUrl = "";
+          for (var i = 4; i < d['SystemStatus'].length;i += 8){
+            var nodename = d['SystemStatus'][i][0].split(" ");
+            if ( nodename[1] === $routeParams.node ) {
+              nodeUrl = d['SystemStatus'][i][1];
+              break;
             }
-            Image.history({id: $routeParams.id, node: nodeUrl}, function (d) {
-              $scope.history = d;
-            });
+          }
+          Image.history({id: $routeParams.id, node: nodeUrl}, function (d) {
+            $scope.history = d;
           });
         });
       };
@@ -83,13 +80,13 @@ angular.module('image', [])
        * @param {string} imageId
        */
       function getRepoTags(imageId) {
-          Image.query({}, function (d) {
-              d.forEach(function(image) {
-                  if (image.Id === imageId && image.RepoTags[0] !== '<none>:<none>') {
-                      $scope.RepoTags = image.RepoTags;
-                  }
-              });
-          });
+        Image.query({}, function (d) {
+            d.forEach(function(image) {
+                if (image.Id === imageId && image.RepoTags[0] !== '<none>:<none>') {
+                    $scope.RepoTags = image.RepoTags;
+                }
+            });
+        });
       }
 
       ConsulPrimarySwarm.get({}, function (d){
@@ -126,7 +123,8 @@ angular.module('image', [])
                 $('#error-message').show();
             });
           });
+          $scope.getHistory(url);
         });     
 
-      $scope.getHistory();
+      
   }]);
