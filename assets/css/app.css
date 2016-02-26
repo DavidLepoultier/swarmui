@@ -124,11 +124,11 @@
     margin-bottom: 0px;
 }
 
+.no-margin {
+    margin: 0px;
+}
+
 .middle-container {
     margin-right: 2%;
     margin-left: 4%;
-}
-
-.panel-heading-btn-group {
-    top: -12px;
 }

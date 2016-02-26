@@ -18,6 +18,15 @@ angular.module('swarmui.filters', [])
             }
         };
     })
+    .filter('truncateFirstsCaracts', function () {
+        'use strict';
+        return function (text, length, end) {
+            if (isNaN(length)) {
+                length = 1;
+            }
+            return String(text).substring(length, text.length);
+        };
+    })
     .filter('statusbarTask', function () {
         'use strict';
         return function (text) {
@@ -149,18 +158,6 @@ angular.module('swarmui.filters', [])
             var value = bytes / Math.pow(1024, i);
             var decimalPlaces = (i < 1) ? 0 : (i - 1);
             return value.toFixed(decimalPlaces) + ' ' + sizes[[i]];
-        };
-    })
-    .filter('containerShortId', function () {
-        'use strict';
-        return function (text) {
-            return text.substring(0, 12) + "...";
-        };
-    })
-    .filter('imageShortId', function () {
-        'use strict';
-        return function (text) {
-            return text.substring(0, 12) + "...";
         };
     })
     .filter('containername', function () {

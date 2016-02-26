@@ -7,13 +7,14 @@
       <!-- Middle Container -->
       <div class="col-xs-12">
         <h1 class="page-header">Container information</h1>
-        <a href=""><- Return Host</a><br/><br/>
+        <a href="/#/dashboard/containers/"><- Return</a><br/><br/>
         <div class="panel panel-default">
           <div class="panel-heading">
             <div ng-if="!container.edit">
-              <h3 class="panel-title">Container: {{ container.Name }}
-                <div class="btn-group pull-right panel-heading-btn-group">
-                  <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              <h3 class="panel-title">
+                <span class="col-xs-11" style="margin-top: 5px; font-size: 18px;">{{ container.Name|truncateFirstsCaracts }}</span>
+                <div class="btn-group">
+                  <button type="button" class="btn btn-default dropdown-toggle" style="margin: 0;" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     Action <span class="caret"></span>
                   </button>
                   <ul class="dropdown-menu">
@@ -46,13 +47,13 @@
             </div>
             <div ng-if="container.edit">
               <h3 class="panel-title">
-                Container:
                 <input type="text" ng-model="container.newContainerName">
                 <button class="btn btn-success"
                   ng-click="renameContainer()">Save
                 </button>
                 <button class="btn btn-danger"
                   ng-click="container.edit = false;">&times;</button>
+
               </h3>
             </div>
           </div>
