@@ -2,12 +2,15 @@ angular.module('dashboardContainers', [])
 .controller('DashboardContainersController', ['$scope', '$routeParams', 'Container', 
   'ConsulPrimarySwarm', 'SettingsConsul', 'Settings', 'Messages', 'ViewSpinner', 'ConsulTasks',
   function ($scope, $routeParams, Container, ConsulPrimarySwarm, SettingsConsul, Settings, Messages, ViewSpinner, ConsulTasks) {
-    $scope.predicate = '-Created';
     $scope.toggle = false;
     $scope.displayAll = Settings.displayAll;
-    $scope.consulContainers = [];
-    $scope.setContainer = [];
 
+    $scope.predicate = 'NodeName';
+    $scope.reverse = false;
+    $scope.order = function(predicate) {
+      $scope.reverse = ($scope.predicate === predicate) ? !$scope.reverse : false;
+      $scope.predicate = predicate;
+    };
 
     $scope.setAlarm = function (container,entry,warning) {
       var setAlarmTo = "";
@@ -71,6 +74,11 @@ angular.module('dashboardContainers', [])
           $scope.containers = d.map(function (item) {
               return new ContainerViewModel(item);
           });
+          for (var i = 0; i < $scope.containers.length; i++){
+            var splitedNames = $scope.containers[i].Names[0].split("/");
+            $scope.containers[i].NodeName = splitedNames[1];
+            $scope.containers[i].ContainerName = splitedNames[2];
+          }
           ViewSpinner.stop();
         });
       });

@@ -6,8 +6,7 @@
     <div class="row">
       <!-- Middle Container -->
       <div class="col-xs-12">
-        <h1 class="page-header">Container information</h1>
-        <a href="/#/dashboard/containers/"><- Return</a><br/><br/>
+        <h1 class="page-header">Container information on server {{ container.Node }}</h1>
         <div class="panel panel-default">
           <div class="panel-heading">
             <div ng-if="!container.edit">
@@ -18,36 +17,68 @@
                     Action <span class="caret"></span>
                   </button>
                   <ul class="dropdown-menu">
-                    <li><a ng-click="container.edit = true;">Rename container</a></li>
+                    <li>
+                      <button type="button" class="btn-link btn-block btn-dropdown"
+                        ng-click="container.edit = true;">Rename container
+                      </button>
+                    </li>
                     <li role="separator" class="divider"></li>
-                    <li><a ng-click="start()"
-                          ng-show="!container.State.Running">Start
-                    </a></li>
-                    <li><a ng-click="stop()"
-                          ng-show="container.State.Running && !container.State.Paused">Stop
-                    </a></li>
-                    <li><a ng-click="kill()"
-                          ng-show="container.State.Running && !container.State.Paused">Kill
-                    </a></li>
-                    <li><a ng-click="pause()"
-                          ng-show="container.State.Running && !container.State.Paused">Pause
-                    </a></li>
-                    <li><a ng-click="unpause()"
-                          ng-show="container.State.Running && container.State.Paused">Unpause
-                    </a></li>
-                    <li><a ng-click="restart()"
-                          ng-show="container.State.Running && !container.State.Stopped">Restart
-                    </a></li>
-                    <li><a ng-click="commit()"
-                          ng-show="container.State.Running && !container.State.Paused">Commit
-                    </a></li>
+                    <li>
+                      <button type="button" class="btn-link btn-block btn-dropdown"
+                        ng-click="start()"
+                        ng-show="!container.State.Running">Start
+                      </button>
+                    </li>
+                    <li>
+                      <button type="button" class="btn-link btn-block btn-dropdown"
+                        ng-click="stop()"
+                        ng-show="container.State.Running && !container.State.Paused">Stop
+                      </button>
+                    </li>
+                    <li>
+                      <button type="button" class="btn-link btn-block btn-dropdown"
+                        ng-click="kill()"
+                        ng-show="container.State.Running && !container.State.Paused">Kill
+                      </button>
+                    </li>
+                    <li>
+                      <button type="button" class="btn-link btn-block btn-dropdown"
+                        ng-click="pause()"
+                        ng-show="container.State.Running && !container.State.Paused">Pause
+                      </button>
+                    </li>
+                    <li>
+                      <button type="button" class="btn-link btn-block btn-dropdown"
+                        ng-click="unpause()"
+                        ng-show="container.State.Running && container.State.Paused">Unpause
+                      </button>
+                    </li>
+                    <li>
+                      <button type="button" class="btn-link btn-block btn-dropdown"
+                        ng-click="restart()"
+                        ng-show="container.State.Running && !container.State.Stopped">Restart
+                      </button>
+                    </li>
+                    <li>
+                      <button type="button" class="btn-link btn-block btn-dropdown"
+                        ng-click="commit()"
+                        ng-show="container.State.Running && !container.State.Paused">Commit
+                      </button>
+                    </li>
+                    <li role="separator" ng-show="!container.State.Running" class="divider"></li>
+                    <li>
+                      <button type="button" class="btn-link btn-block btn-dropdown"
+                        ng-click="remove()"
+                        ng-show="!container.State.Running">Remove Container
+                      </button>
+                    </li>
                   </ul>
                 </div>
               </h3>
             </div>
             <div ng-if="container.edit">
               <h3 class="panel-title">
-                <input type="text" ng-model="container.newContainerName">
+                <input type="text" class="input-container" ng-model="container.newContainerName">
                 <button class="btn btn-success"
                   ng-click="renameContainer()">Save
                 </button>
@@ -58,152 +89,177 @@
             </div>
           </div>
           <div class="panel-body">
-            <div class="detail">
-              <table class="table table-striped">
-                  <tbody>
-                  <tr>
-                      <td>Created:</td>
-                      <td>{{ container.Created | date: 'medium' }}</td>
-                  </tr>
-                  <tr>
-                      <td>Path:</td>
-                      <td>{{ container.Path }}</td>
-                  </tr>
-                  <tr>
-                      <td>Args:</td>
-                      <td>
-                          {{ container.Args.join(' ') || 'None' }}
-                      </td>
-                  </tr>
-                  <tr>
-                      <td>Exposed Ports:</td>
-                      <td>
-                          <ul>
-                              <li ng-repeat="(k, v) in container.Config.ExposedPorts">{{ k }}</li>
-                          </ul>
-                      </td>
-                  </tr>
-                  <tr>
-                      <td>Environment:</td>
-                      <td>
-                          <ul>
-                              <li ng-repeat="k in container.Config.Env">{{ k }}</li>
-                          </ul>
-                      </td>
-                  </tr>
-                  <tr>
-                      <td>Labels:</td>
-                      <td>
-                          <table role="table" class="table">
-                              <tr>
-                                  <th>Key</th>
-                                  <th>Value</th>
-                              </tr>
-                              <tr ng-repeat="(k, v) in container.Config.Labels">
-                                  <td>{{ k }}</td>
-                                  <td>{{ v }}</td>
-                              </tr>
-                          </table>
-                      </td>
-                  </tr>
-
-                  <tr>
-                      <td>Publish All:</td>
-                      <td>{{ container.HostConfig.PublishAllPorts }}</td>
-                  </tr>
-                  <tr>
-                      <td>Ports:</td>
-                      <td>
-                          <ul style="display:inline-table">
-                              <li ng-repeat="(containerport, hostports) in container.NetworkSettings.Ports">
-                                  {{ containerport }} => <span class="label label-default" ng-repeat="(k,v) in hostports">{{ v.HostIp }}:{{ v.HostPort }}</span>
-                              </li>
-                          </ul>
-                      </td>
-
-                  </tr>
-                  <tr>
-                      <td>Hostname:</td>
-                      <td>{{ container.Config.Hostname }}</td>
-                  </tr>
-                  <tr>
-                      <td>IPAddress:</td>
-                      <td>{{ container.NetworkSettings.IPAddress }}</td>
-                  </tr>
-                  <tr>
-                      <td>Cmd:</td>
-                      <td>{{ container.Config.Cmd }}</td>
-                  </tr>
-                  <tr>
-                      <td>Entrypoint:</td>
-                      <td>
-                          <pre>{{ container.Config.Entrypoint.join(' ') }}</pre>
-                      </td>
-                  </tr>
-                  <tr>
-                      <td>Volumes:</td>
-                      <td>{{ container.Volumes }}</td>
-                  </tr>
-
-                  <tr>
-                      <td>SysInitpath:</td>
-                      <td>{{ container.SysInitPath }}</td>
-                  </tr>
-                  <tr>
-                      <td>Image:</td>
-                      <td><a href="#/{{ container.From }}/{{ container.Node }}/images/{{ container.Image }}/">{{ container.Config.Image }}</a></td>
-                  </tr>
-                  <tr>
-                      <td>State:</td>
-                      <td>
-                          <accordion close-others="true">
-                              <accordion-group heading="{{ container.State|getstatetext }}">
-                                  <ul>
-                                      <li ng-repeat="(key, val) in container.State">{{key}} : {{ val }}</li>
-                                  </ul>
-                              </accordion-group>
-                          </accordion>
-                      </td>
-                  </tr>
-                  <tr>
-                      <td>Logs:</td>
-                      <td><a href="#/containers/{{ container.Id }}/logs">stdout/stderr</a></td>
-                  </tr>
-                  <tr>
-                      <td>Stats:</td>
-                      <td><a href="#/containers/{{ container.Id }}/stats">stats</a></td>
-                  </tr>
-                  <tr>
-                      <td>Top:</td>
-                      <td><a href="#/containers/{{ container.Id }}/top">Top</a></td>
-                  </tr>
-                  </tbody>
-              </table>
-
-              <div class="row-fluid">
-                  <div class="span1">
-                      Changes:
-                  </div>
-                  <div class="span5">
-                      <i class="icon-refresh" style="width:32px;height:32px;" ng-click="getChanges()"></i>
-                  </div>
-              </div>
-
-              <div class="well well-large">
-                  <ul>
-                      <li ng-repeat="change in changes | filter:hasContent">
-                          <strong>{{ change.Path }}</strong> {{ change.Kind }}
-                      </li>
-                  </ul>
-              </div>
-
-              <hr/>
-
-              <div class="btn-remove">
-                  <button class="btn btn-large btn-block btn-primary btn-danger" ng-click="remove()">Remove Container</button>
-              </div>
+            <a href="/#/dashboard/containers/"><- Return</a><br/><br/>
+            <div class='col-xs-9 well'>
+              <h4>Global</h4>
+              <b>Id : </b>{{ container.Id }}
+              <br/>
+              <b>Created : </b>{{ container.Created | date: 'medium' }}
+              <h4>Network</h4>
+              <b>Swarm-Agent</b>
+              <br/>
+              <b>IP : </b>{{ hostUrl }}
+              <br/>
+              <br/>
+              <b>Container :</B>
+              <br/>
+              <b>IP : </b>{{ container.NetworkSettings.IPAddress }}
+              <br/>
+              <b>Gateway : </b>{{ container.NetworkSettings.Gateway }}
+              <br/>
+              <b>DNS : </b><span ng-repeat="dns in container.HostConfig.Dns"> {{ dns }} </span>
+              <br/>
+              <br/>
+            </div>
+            <div class='col-xs-1'>
+              <br/>
+            </div>
+            <div class='col-xs-2'>
+              <center>
+                <span class="label {{ container.State | getstatelabel }} status-container">
+                  {{ container.State | getstatetext }}
+                </span>
+              </center>
             </div>
           </div>
+          <table class="table table-striped no-margin-bottom">
+            <tbody>
+              <tr>
+                <td>Path:</td>
+                <td>{{ container.Path }}</td>
+              </tr>
+              <tr>
+                <td>Args:</td>
+                <td>
+                  <div class="well well-large no-margin-bottom">
+                    <ul class="deco-none">
+                      <li>{{ container.Args.join(' ') || 'None' }}</li>
+                    </ul>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td>Exposed Ports:</td>
+                <td>
+                  <div class="well well-large no-margin-bottom">
+                    <ul class="deco-none">
+                      <li ng-repeat="(k, v) in container.Config.ExposedPorts">{{ k }}</li>
+                    </ul>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td>Environment:</td>
+                <td>
+                  <ul class="deco-none">
+                    <li ng-repeat="k in container.Config.Env"><b>{{ k }}</b></li>
+                  </ul>
+                </td>
+              </tr>
+              <tr>
+                <td>Labels:</td>
+                <td>
+                  <table role="table" class="table">
+                    <tr>
+                      <th>Key</th>
+                      <th>Value</th>
+                    </tr>
+                    <tr ng-repeat="(k, v) in container.Config.Labels">
+                      <td>{{ k }}</td>
+                      <td>{{ v }}</td>
+                    </tr>
+                  </table>
+                </td>
+              </tr>
+
+              <tr>
+                <td>Publish All:</td>
+                  <td>{{ container.HostConfig.PublishAllPorts }}</td>
+              </tr>
+              <tr>
+                <td>Ports:</td>
+                <td>
+                  <div class="well well-large no-margin-bottom">
+                    <ul class="deco-none">
+                      <li ng-repeat="(containerport, hostports) in container.NetworkSettings.Ports">
+                        {{ containerport }} => <span class="label label-default" ng-repeat="(k,v) in hostports">{{ v.HostIp }}:{{ v.HostPort }}</span>
+                      </li>
+                    </ul>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td>Cmd:</td>
+                <td>
+                  <div class="well well-large no-margin-bottom">
+                    <ul class="deco-none">
+                      <li>{{ container.Config.Cmd }}</li>
+                    </ul>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td>Entrypoint:</td>
+                <td>
+                  <div class="well well-large no-margin-bottom">
+                    <ul class="deco-none">
+                      <li>{{ container.Config.Entrypoint.join(' ') || 'None' }}</li>
+                    </ul>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td>Volumes:</td>
+                <td>{{ container.Volumes }}</td>
+              </tr>
+              <tr>
+                <td>SysInitpath:</td>
+                <td>{{ container.SysInitPath }}</td>
+              </tr>
+              <tr>
+                <td>Image:</td>
+                <td><a href="#/{{ container.From }}/{{ container.Node }}/images/{{ container.Image }}/">{{ container.Config.Image }}</a></td>
+              </tr>
+              <tr>
+                <td>State:</td>
+                <td>
+                  <div class="well well-large no-margin-bottom">
+                    <accordion close-others="true">
+                      <accordion-group heading="{{ container.State|getstatetext }}">
+                        <ul class="deco-none">
+                          <li ng-repeat="(key, val) in container.State">{{key}} : {{ val }}</li>
+                        </ul>
+                      </accordion-group>
+                    </accordion>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td>Logs:</td>
+                <td><a href="#/containers/{{ container.Id }}/logs">stdout/stderr</a></td>
+              </tr>
+              <tr>
+                <td>Stats:</td>
+                <td><a href="#/containers/{{ container.Id }}/stats">stats</a></td>
+              </tr>
+              <tr>
+                <td>Top:</td>
+                <td><a href="#/containers/{{ container.Id }}/top">Top</a></td>
+              </tr>
+              <tr>
+                <td>Changes:</td>
+                <td>
+                  <div class="well well-large no-margin-bottom">
+                    <ul class="deco-none">
+                      <li ng-repeat="change in changes | filter:hasContent">
+                        <strong>{{ change.Path }}</strong> {{ change.Kind }}
+                      </li>
+                    </ul>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
         </div>
         <!-- Middle Container -->   
       </div>

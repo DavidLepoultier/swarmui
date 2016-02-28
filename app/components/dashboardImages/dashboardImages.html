@@ -1,0 +1,70 @@
+<div id="wrapper">     
+  <!-- Include Sidebar -->
+  <div ng-include="template" ng-controller="WrapperDashboardController" onload="updateDash(2);"></div>
+  <!-- Main component for a primary marketing message or call to action -->
+  <div class="container-fluid">
+    <div class="row">
+      <!-- Middle Container -->
+      <div class="col-xs-12" id="body-middle-container">
+        <h1 class="page-header">Images Docker</h1>
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <h3 class="panel-title">Images's List</h3>
+          </div>
+          <!-- Table -->
+          <table class="table table-striped">
+            <tr>
+              <th>
+                <button type="button" class="btn-link btn-block btn-dropdown" ng-click="order('RepoTag')">
+                  Tags
+                  <span class="sortorder" ng-show="predicate === 'RepoTag'" ng-class="{reverse:reverse}"></span>
+                </button>
+                <input class="form-control input-filter" ng-model="search.RepoTag" placeholder="Filter...">
+              </th>
+              <th>
+                <button type="button" class="btn-link btn-block btn-dropdown" ng-click="order('Id')">
+                  Id
+                  <span class="sortorder" ng-show="predicate === 'Id'" ng-class="{reverse:reverse}"></span>
+                </button>
+                <input class="form-control input-filter" ng-model="search.Id" placeholder="Filter...">
+              </th>
+              <th>
+                <button type="button" class="btn-link btn-block btn-dropdown" ng-click="order('Created')">
+                  Created
+                  <span class="sortorder" ng-show="predicate === 'Create'" ng-class="{reverse:reverse}"></span>
+                </button>
+                <input class="form-control input-filter" ng-model="search.Create" placeholder="Filter...">
+              </th>
+              <th>
+                <button type="button" class="btn-link btn-block btn-dropdown" ng-click="order('VirtualSize')">
+                  VirtualSize
+                  <span class="sortorder" ng-show="predicate === 'VirtualSize'" ng-class="{reverse:reverse}"></span>
+                </button>
+                <input class="form-control input-filter" ng-model="search.VirtualSize" placeholder="Filter...">
+              </th>
+            </tr>
+            <tr ng-repeat="image in images | filter:search:strict | orderBy:predicate:reverse">
+              <td>
+                &nbsp;&nbsp;&nbsp;
+                <a href="#/{{ image.From }}/images/{{ image.Id }}">{{ image.RepoTag }}</a>
+              </td>
+              <td>
+                &nbsp;&nbsp;&nbsp;
+                {{ image.Id | truncate:15  }}
+              </td>
+              <td>&nbsp;&nbsp;&nbsp;
+                {{ image.Created | getdate }}
+              </td>
+              <td>
+                &nbsp;&nbsp;&nbsp;
+                {{ image.VirtualSize | humansize }}
+              </td>
+            </tr>
+          </table>
+        </div>
+        <!-- Middle Container --> 
+      </div>
+    </div>
+  </div>
+  <!-- Main component for a primary marketing message or call to action -->
+</div>

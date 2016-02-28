@@ -1,134 +1,184 @@
 /***** SwarmUI *****/
 
 .container > hr {
-    margin: 60px 0;
+  margin: 60px 0;
 }
 
 .jumbotron {
-    margin: 80px 0;
-    text-align: center;
+  margin: 80px 0;
+  text-align: center;
 }
 
 .jumbotron h1 {
-    font-size: 100px;
-    line-height: 1;
+  font-size: 100px;
+  line-height: 1;
 }
 
 .jumbotron .lead {
-    font-size: 24px;
-    line-height: 1.25;
+  font-size: 24px;
+  line-height: 1.25;
 }
 
 .jumbotron .btn {
-    padding: 14px 24px;
-    font-size: 21px;
+  padding: 14px 24px;
+  font-size: 21px;
 }
 
 .marketing {
-    margin: 60px 0;
+  margin: 60px 0;
 }
 
 .marketing p + h4 {
-    margin-top: 28px;
+  margin-top: 28px;
 }
 
 .masthead .nav {
-    margin: 0;
-    margin: 0 0 2em 0;
-    width: 100%;
+  margin: 0;
+  margin: 0 0 2em 0;
+  width: 100%;
 }
 
 .masthead .nav.well {
-    padding: 0;
+  padding: 0;
 }
 
 .masthead .nav li {
-    display: table-cell;
-    float: none;
-    width: 1%;
+  display: table-cell;
+  float: none;
+  width: 1%;
 }
 
 .masthead .nav li a {
-    font-weight: bold;
-    text-align: center;
-    border-right: 1px solid rgba(0,0,0,.1);
-    border-left: 1px solid rgba(255,255,255,.75);
+  font-weight: bold;
+  text-align: center;
+  border-right: 1px solid rgba(0,0,0,.1);
+  border-left: 1px solid rgba(255,255,255,.75);
 }
 
 .masthead .nav li:first-child a {
-    border-left: 0;
-    border-radius: 3px 0 0 3px;
+  border-left: 0;
+  border-radius: 3px 0 0 3px;
 }
 .masthead .nav li:last-child a {
-    border-right: 0;
-    border-radius: 0 3px 3px 0;
+  border-right: 0;
+  border-radius: 0 3px 3px 0;
 }
 
 .btn-group button {
-    margin: 3px;
+  margin: 3px;
 }
 
 .detail {
-    width: 80%;
-    margin: 0 auto;
+  width: 80%;
+  margin: 0 auto;
 }
 
 .center {
-    width: 100%;
-    margin: 0 auto;
+  width: 100%;
+  margin: 0 auto;
 }
 
 .btn-remove {
-    max-width: 70%;
-    margin: 0 auto;
+  max-width: 70%;
+  margin: 0 auto;
 }
 
 .actions {
-    margin: 0 auto;
+  margin: 0 auto;
 }
 
 .container-bottom {
-    height: 50px;
+  height: 50px;
 }
 
 .well {
-    padding: 10px 15px 0 15px;
+  padding: 10px 15px 0 15px;
 }
 
 .messages {
-    max-height: 50px;
-    overflow-x: hidden;
-    overflow-y: scroll;
+  max-height: 50px;
+  overflow-x: hidden;
+  overflow-y: scroll;
 }
 
 .legend .title {
-    padding: 0 0.3em;
-    margin: 0.5em;
-    border-style: solid;
-    border-width: 0 0 0 1em;
+  padding: 0 0.3em;
+  margin: 0.5em;
+  border-style: solid;
+  border-width: 0 0 0 1em;
 }
 
 .inline-four .form-control {
-    max-width: 25%;
+  max-width: 25%;
 }
 
 .dropdown {
-    cursor: pointer;
+  cursor: pointer;
 }
 
 .no-margin-top {
-    margin-top: 0px;
+  margin-top: 0px;
 }
 
 .no-margin-bottom {
-    margin-bottom: 0px;
+  margin-bottom: 0px;
 }
 
 .no-margin {
-    margin: 0px;
+  margin: 0px;
 }
 
 .middle-container {
-    margin-right: 2%;
-    margin-left: 4%;
+  margin-right: 2%;
+  margin-left: 4%;
+}
+
+.deco-none {
+  list-style:none;
+  margin-left: -40px;
+}
+
+.status-container {
+  font-size: 135%;
+  position: relative;
+  top: 10px;
+  left: -10px;
+}
+
+.input-container {
+  padding-top: 1px;
+  padding-bottom: 6px;
+}
+
+.btn-dropdown {
+  padding-left: 16px;
+  color: inherit;
+  margin: 0px !important;
+  text-align: left;
+  text-decoration: none;
+}
+
+.btn-dropdown:hover, 
+.btn-dropdown:active {
+  color: inherit;
+  background-color: #f5f5f5;
+  text-decoration: none;
+}
+
+.btn-dropdown:focus {
+  color: inherit;
+  outline: none;
+  text-decoration: none;
+}
+
+.input-filter {
+  height: 26px;
+  font: menu;
+}
+
+.sortorder:after {
+  content: '\25b2';
+}
+.sortorder.reverse:after {
+  content: '\25bc';
 }

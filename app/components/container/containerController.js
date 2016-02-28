@@ -8,32 +8,32 @@ angular.module('container', [])
       var update = function () {
         ViewSpinner.spin();
         ConsulPrimarySwarm.get({}, function (d){
-          var url = atob(d[0].Value); 
+          var url = atob(d[0].Value);
+          $scope.primarySwarm = url;
           Swarm.info({node: url}, function (d) {
-            var nodeUrl = "";
             for (var i = 4; i < d['SystemStatus'].length;i += 8){
               var nodename = d['SystemStatus'][i][0].split(" ");
               if ( nodename[1] === $routeParams.node ) {
-                nodeUrl = d['SystemStatus'][i][1];
+                $scope.hostUrl = d['SystemStatus'][i][1];
                 break;
               }
             }
-            Container.get({id: $routeParams.id, node: nodeUrl}, function (d) {
-                $scope.container = d;
-                $scope.container.edit = false;
-                $scope.container.Node = $routeParams.node;
-                $scope.container.From = $routeParams.from;
-                $scope.container.newContainerName = d.Name;
-                ViewSpinner.stop();
-            }, function (e) {
-                if (e.status === 404) {
-                    $('.detail').hide();
-                    Messages.error("Not found", "Container not found.");
-                } else {
-                    Messages.error("Failure", e.data);
-                }
-                ViewSpinner.stop();
-            });
+          });
+          Container.get({id: $routeParams.id, node: url}, function (d) {
+            $scope.container = d;
+            $scope.container.edit = false;
+            $scope.container.Node = $routeParams.node;
+            $scope.container.From = $routeParams.from;
+            $scope.container.newContainerName = d.Name;
+            ViewSpinner.stop();
+          }, function (e) {
+            if (e.status === 404) {
+              $('.detail').hide();
+              Messages.error("Not found", "Container not found.");
+            } else {
+              Messages.error("Failure", e.data);
+            }
+            ViewSpinner.stop();
           });
         });
       };
@@ -61,9 +61,11 @@ angular.module('container', [])
 
       $scope.start = function () {
         ViewSpinner.spin();
-        Container.start({
+        Container.actionCont({
             id: $scope.container.Id,
-            HostConfig: $scope.container.HostConfig
+            node: $scope.primarySwarm,
+            HostConfig: $scope.container.HostConfig,
+            action: 'start'
         }, function (d) {
             update();
             Messages.send("Container started", $routeParams.id);
@@ -75,9 +77,13 @@ angular.module('container', [])
 
       $scope.stop = function () {
           ViewSpinner.spin();
-          Container.stop({id: $routeParams.id}, function (d) {
-              update();
-              Messages.send("Container stopped", $routeParams.id);
+          Container.actionCont({
+            id: $routeParams.id, 
+            node: $scope.primarySwarm, 
+            action: 'stop'
+          }, function (d) {
+            update();
+            Messages.send("Container stopped", $routeParams.id);
           }, function (e) {
               update();
               Messages.error("Failure", "Container failed to stop." + e.data);
@@ -86,7 +92,11 @@ angular.module('container', [])
 
       $scope.kill = function () {
           ViewSpinner.spin();
-          Container.kill({id: $routeParams.id}, function (d) {
+          Container.actionCont({
+            id: $routeParams.id,
+            node: $scope.primarySwarm, 
+            action: 'kill'
+          }, function (d) {
               update();
               Messages.send("Container killed", $routeParams.id);
           }, function (e) {
@@ -97,7 +107,11 @@ angular.module('container', [])
 
       $scope.commit = function () {
           ViewSpinner.spin();
-          ContainerCommit.commit({id: $routeParams.id, repo: $scope.container.Config.Image}, function (d) {
+          ContainerCommit.commit({
+            id: $routeParams.id, 
+            repo: $scope.container.Config.Image,
+            node: $scope.primarySwarm
+          }, function (d) {
               update();
               Messages.send("Container commited", $routeParams.id);
           }, function (e) {
@@ -107,7 +121,11 @@ angular.module('container', [])
       };
       $scope.pause = function () {
           ViewSpinner.spin();
-          Container.pause({id: $routeParams.id}, function (d) {
+          Container.actionCont({
+            id: $routeParams.id,
+            node: $scope.primarySwarm, 
+            action: 'pause'
+          }, function (d) {
               update();
               Messages.send("Container paused", $routeParams.id);
           }, function (e) {
@@ -118,7 +136,11 @@ angular.module('container', [])
 
       $scope.unpause = function () {
           ViewSpinner.spin();
-          Container.unpause({id: $routeParams.id}, function (d) {
+          Container.actionCont({
+            id: $routeParams.id,
+            node: $scope.primarySwarm, 
+            action: 'unpause'
+          }, function (d) {
               update();
               Messages.send("Container unpaused", $routeParams.id);
           }, function (e) {
@@ -129,7 +151,10 @@ angular.module('container', [])
 
       $scope.remove = function () {
           ViewSpinner.spin();
-          Container.remove({id: $routeParams.id}, function (d) {
+          Container.remove({
+            id: $routeParams.id,
+            node: $scope.primarySwarm
+          }, function (d) {
               update();
               $location.path('/containers');
               Messages.send("Container removed", $routeParams.id);
@@ -141,7 +166,11 @@ angular.module('container', [])
 
       $scope.restart = function () {
           ViewSpinner.spin();
-          Container.restart({id: $routeParams.id}, function (d) {
+          Container.actionCont({
+            id: $routeParams.id,
+            node: $scope.primarySwarm, 
+            action: 'restart'
+          }, function (d) {
               update();
               Messages.send("Container restarted", $routeParams.id);
           }, function (e) {
@@ -157,7 +186,11 @@ angular.module('container', [])
 
       $scope.renameContainer = function () {
           // #FIXME fix me later to handle http status to show the correct error message
-          Container.rename({id: $routeParams.id, 'name': $scope.container.newContainerName}, function (data) {
+          Container.rename({
+            id: $routeParams.id, 
+            name: $scope.container.newContainerName,
+            node: $scope.primarySwarm
+          }, function (data) {
               if (data.name) {
                   $scope.container.Name = data.name;
                   Messages.send("Container renamed", $routeParams.id);

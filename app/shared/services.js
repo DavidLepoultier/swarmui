@@ -85,18 +85,14 @@ angular.module('swarmui.services', ['ngResource'])
       return $resource(Settings.url + '/:node/containers/:id/:action', {
           name: '@name'
       }, {
-          query: {method: 'GET', params: {all: 0, action: 'json'}, isArray: true},
-          get: {method: 'GET', params: {action: 'json'}},
+          query: {method: 'GET', params: {node: '@node', all: 0, action: 'json'}, isArray: true},
+          get: {method: 'GET', params: {node: '@node', action: 'json'}},
           actionCont: {method: 'POST', params: {id: '@id', node: '@node', t: 5, action: '@action'}},
-          restart: {method: 'POST', params: {id: '@id', t: 5, action: 'restart'}},
-          kill: {method: 'POST', params: {id: '@id', action: 'kill'}},
-          pause: {method: 'POST', params: {id: '@id', action: 'pause'}},
-          unpause: {method: 'POST', params: {id: '@id', action: 'unpause'}},
-          changes: {method: 'GET', params: {action: 'changes'}, isArray: true},
-          create: {method: 'POST', params: {action: 'create'}},
-          remove: {method: 'DELETE', params: {id: '@id', v: 0}},
-          rename: {method: 'POST', params: {id: '@id', action: 'rename'}, isArray: false},
-          stats: {method: 'GET', params: {id: '@id', stream: false, action: 'stats'}, timeout: 5000}
+          changes: {method: 'GET', params: {node: '@node', action: 'changes'}, isArray: true},
+          create: {method: 'POST', params: {node: '@node', action: 'create'}},
+          remove: {method: 'DELETE', params: {id: '@id', node: '@node', v: 0}},
+          rename: {method: 'POST', params: {id: '@id', node: '@node', action: 'rename'}, isArray: false},
+          stats: {method: 'GET', params: {id: '@id', node: '@node', stream: false, action: 'stats'}, timeout: 5000}
       });
   }])
   .factory('ContainerCommit', ['$resource', '$http', 'Settings', function ContainerCommitFactory($resource, $http, Settings) {
@@ -106,7 +102,7 @@ angular.module('swarmui.services', ['ngResource'])
           commit: function (params, callback) {
               $http({
                   method: 'POST',
-                  url: Settings.url + '/commit',
+                  url: Settings.url + '/:node/commit',
                   params: {
                       'container': params.id,
                       'repo': params.repo

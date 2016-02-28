@@ -25,31 +25,20 @@ function SwarmViewModel(data) {
     this.health = data.health;
     this.url = data.url;
 }
+function SwarmHostViewModel(data) {
+    this.nodename = data.nodename;
+    this.version = data.version;
+    this.health = data.health;
+    this.url = data.url;
+    this.contRunning = data.containersRunning;
+    this.contStopped = data.containersStopped;
+    this.contGhost = data.containersGhost;
+}
 
 function ContainersUpdateModel(data) {
     this.id = data.Id;
     this.image = data.Image;
     this.status = data.Status;
-}
-
-function ConsulNodesModel(data) {
-    this.name = data.name;
-    this.version = data.version;
-    this.url = data.url;
-    this.status = data.status;
-    this.warning = data.warning;
-    this.checked = false;
-}
-
-function ConsulContainersModel(data) {
-    this.idConsul = data.idConsul;
-    this.nodeName = data.nodeName;
-    this.id = data.id;
-    this.image = data.image;
-    this.serviceName = data.serviceName;
-    this.status = data.status;
-    this.warning = data.warning;
-    this.checked = false;
 }
 
 function ConsulTasksModel(data) {

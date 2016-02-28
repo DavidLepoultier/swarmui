@@ -25,8 +25,8 @@ angular.module('dashboard', [])
     var canvas = document.getElementById(d);
     var ctx = document.getElementById(d).getContext("2d");
 
-    var cx = canvas.width / 2;
-    var cy = canvas.height / 2;
+    var cx = canvas.width / 4;
+    var cy = canvas.height / 4;
 
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';

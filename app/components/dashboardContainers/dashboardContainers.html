@@ -11,26 +11,71 @@
           <div class="panel-heading">
             <h3 class="panel-title">Containers's List</h3>
           </div>
-          <div class="panel-body">
-            Place informations here and action button ...
-            <br/>
-          </div>
           <!-- Table -->
           <table class="table table-striped">
             <tr>
-              <th>Hostname</th>
-              <th>Container ID</th>
-              <th>Name</th>
-              <th>Image</th>
-              <th>Container Status</th>
+              <th>
+                <button type="button" class="btn-link btn-block btn-dropdown" ng-click="order('NodeName')">
+                  Hostname
+                  <span class="sortorder" ng-show="predicate === 'NodeName'" ng-class="{reverse:reverse}"></span>
+                </button>
+                <input class="form-control input-filter" ng-model="search.NodeName" placeholder="Filter...">
+              </th>
+              <th>
+                <button class="btn-link btn-block btn-dropdown" ng-click="order('Id')">
+                  Container ID
+                  <span class="sortorder" ng-show="predicate === 'Id'" ng-class="{reverse:reverse}"></span>
+                </button>
+                <input class="form-control input-filter" ng-model="search.Id" placeholder="Filter...">
+              </th>
+              <th>
+                <button class="btn-link btn-block btn-dropdown" ng-click="order('ContainerName')">
+                  Name
+                  <span class="sortorder" ng-show="predicate === 'ContainerName'" ng-class="{reverse:reverse}"></span>
+                </button>
+                <input class="form-control input-filter" ng-model="search.ContainerName" placeholder="Filter...">
+              </th>
+              <th>
+                <button class="btn-link btn-block btn-dropdown" ng-click="order('Image')">
+                  Image
+                  <span class="sortorder" ng-show="predicate === 'Image'" ng-class="{reverse:reverse}"></span>
+                </button>
+                <input class="form-control input-filter" ng-model="search.Image" placeholder="Filter...">
+              </th>
+              <th>
+                <button class="btn-link btn-block btn-dropdown" ng-click="order('Status')">
+                  Container Status
+                  <span class="sortorder" ng-show="predicate === 'Status'" ng-class="{reverse:reverse}"></span>
+                </button>
+                <input class="form-control input-filter" ng-model="search.Status" placeholder="Filter...">
+              </th>
               <th>Actions</th>
             </tr>
-            <tr ng-repeat="container in containers | filter:filter | orderBy:predicate">
-              <td>{{ container|nodename }}</td>
-              <td><a href="#/dashboard/{{ container|nodename }}/containers/{{ container.Id }}">{{ container.Id|truncate:15 }}</a></td>
-              <td>{{ container|containername }}</td>
-              <td>{{ container.Image }}</td>
-              <td><span class="label label-{{ container.Status|statusBadge }}" style="font-size: 95%">{{ container.Status }}</span></td>
+            <tr ng-repeat="container in containers | filter:search:strict | orderBy:predicate:reverse">
+              <td>
+                &nbsp;&nbsp;&nbsp;
+                {{ container.NodeName }}
+              </td>
+              <td>
+                &nbsp;&nbsp;&nbsp;
+                <a href="#/dashboard/{{ container.NodeName }}/containers/{{ container.Id }}">
+                  {{ container.Id|truncate:15 }}
+                </a>
+              </td>
+              <td>
+                &nbsp;&nbsp;&nbsp;
+                {{ container.ContainerName }}
+              </td>
+              <td>
+                &nbsp;&nbsp;&nbsp;
+                {{ container.Image }}
+              </td>
+              <td>
+                &nbsp;&nbsp;&nbsp;
+                <span class="label label-{{ container.Status|statusBadge }}" style="font-size: 95%">
+                  {{ container.Status }}
+                </span>
+              </td>
               <td>
                 <a href="#/dashboard/containers/" type="button" id="button_agent_action" ng-click="actionContainer(container.Id, container, container.Status)" class="btn btn-sm btn-default {{ container.Status|statusButtonActive }}" style="padding: 4px;" autocomplete="off">
                   <span class="label label-{{ container.Status|statusInverseBadge }} {{ container.Status|statusIconsStartStop }}" style="font-size: 100%;top: 1.5px;"> </span>

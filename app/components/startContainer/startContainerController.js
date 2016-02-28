@@ -6,22 +6,12 @@ function ($scope, $routeParams, $location, Container, Messages, containernameFil
 
     ConsulPrimarySwarm.get({}, function (d){
       var url = atob(d[0].Value); 
-      Swarm.info({node: url}, function (d) {
-        var nodeUrl = "";
-        for (var i = 4; i < d['SystemStatus'].length;i += 8){
-          var nodename = d['SystemStatus'][i][0].split(" ");
-          if ( nodename[1] === $routeParams.node ) {
-            nodeUrl = d['SystemStatus'][i][1];
-            break;
-          }
-        }
-        Container.query({all: 1, node: nodeUrl}, function (d) {
-          $scope.containerNames = d.map(function (container) {
-              return containernameFilter(container);
-          });
+      Container.query({all: 1, node: url}, function (d) {
+        $scope.containerNames = d.map(function (container) {
+            return containernameFilter(container);
         });
       });
-    }); 
+    });
 
     $scope.config = {
         Env: [],

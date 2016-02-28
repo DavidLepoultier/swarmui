@@ -1,41 +1,87 @@
 <div id="wrapper">     
   <!-- Include Sidebar -->
   <div ng-include="template" ng-controller="WrapperHostsController" onload="updateHosts(1);"></div>
-
   <!-- Main component for a primary marketing message or call to action -->
   <div class="container-fluid">
     <div class="row">
       <!-- Middle Container -->
       <div class="col-xs-12" id="body-middle-container">
-        <h1 class="page-header">Hosts</h1>
+        <h1 class="page-header">Hosts Docker</h1>
         <div class="panel panel-default">
           <div class="panel-heading">
             <h3 class="panel-title">Hosts's List</h3>
           </div>
-          <div class="panel-body">
-            <div class="btn-group">
-              <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                Action <span class="caret"></span>
-              </button>
-              <ul class="dropdown-menu">
-                <li class='disabled'><a href="#" data-toggle="modal" data-target="#addHost">Add Image</a></li>
-                <li role="separator" class="divider"></li>
-                <li class='disabled'><a href="#">Stop all Containers</a></li>
-              </ul>
-            </div>
-          </div>
-
           <!-- Table -->
           <table class="table table-striped">
             <tr>
-              <th>#</th>
-              <th>Hostname</th>
-              <th>Host Status</th>
-              <th>Docker version</th>
-              <th>Containers Status</th>
+              <th>
+                <button type="button" class="btn-link btn-block btn-dropdown" ng-click="order('nodename')">
+                  Hostname
+                  <span class="sortorder" ng-show="predicate === 'nodename'" ng-class="{reverse:reverse}"></span>
+                </button>
+                <input class="form-control input-filter" ng-model="search.nodename" placeholder="Filter...">
+              </th>
+              <th>
+                <button type="button" class="btn-link btn-block btn-dropdown" ng-click="order('url')">
+                  Url
+                  <span class="sortorder" ng-show="predicate === 'url'" ng-class="{reverse:reverse}"></span>
+                </button>
+                <input class="form-control input-filter" ng-model="search.url" placeholder="Filter...">
+              </th>
+              <th>
+                <button type="button" class="btn-link btn-block btn-dropdown" ng-click="order('version')">
+                  Docker version
+                  <span class="sortorder" ng-show="predicate === 'version'" ng-class="{reverse:reverse}"></span>
+                </button>
+                <input class="form-control input-filter" ng-model="search.version" placeholder="Filter...">
+              </th>
+              <th>
+                <button type="button" class="btn-link btn-block btn-dropdown" ng-click="order('health')">
+                  Status
+                  <span class="sortorder" ng-show="predicate === 'health'" ng-class="{reverse:reverse}"></span>
+                </button>
+                <input class="form-control input-filter" ng-model="search.health" placeholder="Filter...">
+              </th>
+              <th>
+                <button type="button" class="btn-link btn-block btn-dropdown" ng-click="order('running')">
+                  Containers Status
+                  <span class="sortorder" ng-show="predicate === 'running'" ng-class="{reverse:reverse}"></span>
+                </button>
+                <input class="form-control input-filter" ng-model="search.running" placeholder="Filter...">
+              </th>
+            </tr>
+            <tr ng-repeat="swarm in swarms | filter:search:strict | orderBy:predicate:reverse">
+              <td>
+                &nbsp;&nbsp;&nbsp;
+                <a href="#/hosts/{{ swarm.nodename }}/">{{ swarm.nodename }}</a>
+              </td>
+              <td>&nbsp;&nbsp;&nbsp;
+                {{ swarm.url }}
+              </td>
+              <td>
+                &nbsp;&nbsp;&nbsp;
+                {{ swarm.version }}
+              </td>
+              <td>
+                &nbsp;&nbsp;&nbsp;
+                <span class="label label-{{ swarm.health|statusbadgeNode }}" style="font-size: 95%">{{ swarm.health }}</span>
+              </td>
+              <td>
+                &nbsp;&nbsp;&nbsp;
+                <a href="" style="text-decoration: none;" data-toggle="tooltip" data-placement="top" title="Container(s) running">
+                  <span class="label label-success" style="font-size: 95%;">{{ swarm.running }}</span>
+                </a>
+                <a href="" style="text-decoration: none;" data-toggle="tooltip" data-placement="top" title="Container(s) stopped">
+                  <span class="label label-warning" style="font-size: 95%;">{{ swarm.stopped }}</span>
+                </a>
+                <a href="" style="text-decoration: none;" data-toggle="tooltip" data-placement="top" title="Container(s) ghost">
+                  <span class="label label-default" style="font-size: 95%;">{{ swarm.ghost }}</span>
+                </a>
+              </td>
             </tr>
           </table>
         </div>
+        <!-- Middle Container --> 
       </div>
     </div>
   </div>
