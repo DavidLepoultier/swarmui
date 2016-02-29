@@ -5,36 +5,141 @@
   <div class="container-fluid">
     <div class="row">
       <!-- Middle Container -->
-      <div class="col-xs-12" id="body-middle-container">
-        <div ng-include="template" ng-controller="StartContainerController"></div>
-
-        <div class="alert alert-error" id="error-message" style="display:none">
-            {{ error }}
-        </div>
-
-        <div class="detail">
-
-          <h4>Image: {{ id }}</h4>
-
-          <div class="btn-group detail">
-              <button class="btn btn-success" data-toggle="modal" data-target="#create-modal">Start Container</button>
+      <div class="col-xs-12">
+        <h1 class="page-header">Image information</h1>
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <div ng-if="!container.edit">
+              <h3 class="panel-title">
+                <span class="col-xs-11" style="margin-top: 5px; font-size: 18px;">{{ RepoTags[0] }}</span>
+                <div class="btn-group">
+                  <button type="button" class="btn btn-default dropdown-toggle" style="margin: 0;" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Action <span class="caret"></span>
+                  </button>
+                  <ul class="dropdown-menu">
+                    <li>
+                      <button type="button" class="btn-link btn-block btn-dropdown"
+                        ng-click="image.addTags = true;">Add Tags
+                      </button>
+                    </li>
+                    <li>
+                      <button type="button" class="btn-link btn-block btn-dropdown" 
+                        data-toggle="modal" data-target="#create-modal">Start Container
+                      </button>
+                    </li>
+                    <li role="separator" class="divider"></li>
+                    <li>
+                      <button type="button" class="btn-link btn-block btn-dropdown"
+                        ng-click="start()"
+                        ng-show="!container.State.Running">Start
+                      </button>
+                    </li>
+                    <li>
+                      <button type="button" class="btn-link btn-block btn-dropdown"
+                        ng-click="stop()"
+                        ng-show="container.State.Running && !container.State.Paused">Stop
+                      </button>
+                    </li>
+                    <li>
+                      <button type="button" class="btn-link btn-block btn-dropdown"
+                        ng-click="kill()"
+                        ng-show="container.State.Running && !container.State.Paused">Kill
+                      </button>
+                    </li>
+                    <li>
+                      <button type="button" class="btn-link btn-block btn-dropdown"
+                        ng-click="pause()"
+                        ng-show="container.State.Running && !container.State.Paused">Pause
+                      </button>
+                    </li>
+                    <li>
+                      <button type="button" class="btn-link btn-block btn-dropdown"
+                        ng-click="unpause()"
+                        ng-show="container.State.Running && container.State.Paused">Unpause
+                      </button>
+                    </li>
+                    <li>
+                      <button type="button" class="btn-link btn-block btn-dropdown"
+                        ng-click="restart()"
+                        ng-show="container.State.Running && !container.State.Stopped">Restart
+                      </button>
+                    </li>
+                    <li>
+                      <button type="button" class="btn-link btn-block btn-dropdown"
+                        ng-click="commit()"
+                        ng-show="container.State.Running && !container.State.Paused">Commit
+                      </button>
+                    </li>
+                    <li role="separator" ng-show="!container.State.Running" class="divider"></li>
+                    <li>
+                      <button type="button" class="btn-link btn-block btn-dropdown"
+                        ng-click="removeImage(id)"
+                        ng-show="!container.State.Running">Remove image
+                      </button>
+                    </li>
+                  </ul>
+                </div>
+              </h3>
+            </div>
           </div>
-
+          <div class="panel-body">
+            <a href="/#/dashboard/images/"><- Return</a><br/><br/>
+            <div class='col-xs-9 well'>
+              <h4>Global</h4>
+              <b>Id : </b>{{ image.Id }}
+              <br/>
+              <b>Created : </b>{{ image.Created | date: 'medium' }}
+              <br/>
+              <br/>
+              <div>
+                <h4>Containers created:</h4>
+                <canvas id="containers-started-chart" class="linecharte-image">
+                    <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a
+                            href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+                </canvas>
+              </div>
+            </div>
+            <div class='col-xs-3'>
+              <br/>
+            </div>
+            <div ng-include="template" ng-controller="StartContainerController"></div>
+            <div class="alert alert-error" id="error-message" style="display:none">
+                {{ error }}
+            </div>
+            <div class="col-xs-12" ng-if="image.addTags">
+              <form class="form-inline" role="form">
+                  <fieldset>
+                      <legend>Tag image</legend>
+                      <div class="form-group">
+                          <label>Tag:</label>
+                          <input type="text" placeholder="repo" ng-model="tagInfo.repo" class="form-control">
+                          <input type="text" placeholder="version" ng-model="tagInfo.version" class="form-control">
+                      </div>
+                      <div class="form-group">
+                          <label class="checkbox">
+                              <input type="checkbox" ng-model="tagInfo.force" class="form-control"/> Force?
+                          </label>
+                      </div>
+                      <input type="button" ng-click="addTag()" value="Add Tag" class="btn btn-primary"/>
+                      <button class="btn btn-danger" ng-click="image.addTags = false;">&times;</button>
+                  </fieldset>
+              </form>
+              <hr/>
+            </div>
+          </div>
+          
           <table class="table table-striped">
               <tbody>
               <tr>
                   <td>Tags:</td>
                   <td>
                       <ul>
-                          <li ng-repeat="tag in RepoTags">{{ tag }}
-                              <button ng-click="removeImage(tag)" class="btn btn-sm btn-danger">Remove tag</button>
+                          <li ng-repeat="tag in RepoTags">
+                            {{ tag }}
+                            <button ng-click="removeImage(tag)" class="btn btn-sm btn-danger">Remove tag</button>
                           </li>
                       </ul>
                   </td>
-              </tr>
-              <tr>
-                  <td>Created:</td>
-                  <td>{{ image.Created | date: 'medium'}}</td>
               </tr>
               <tr>
                   <td>Parent:</td>
@@ -69,54 +174,20 @@
                   <td>Built with:</td>
                   <td>Docker {{ image.DockerVersion }} on {{ image.Os}}, {{ image.Architecture }}</td>
               </tr>
-
+              <tr>
+                <td>History:</td>
+                <td>
+                  <div class="well well-large no-margin-bottom">
+                    <ul class="deco-none">
+                      <li ng-repeat="change in changes | filter:hasContent">
+                        <strong>{{ history.Id }}</strong>: Created: {{ history.Created|getdate }} Created by: {{ history.CreatedBy }}
+                      </li>
+                    </ul>
+                  </div>
+                </td>
+              </tr>
               </tbody>
-          </table>
-
-          <div class="row-fluid">
-              <div class="span1">
-                  History:
-              </div>
-              <div class="span5">
-                  <i class="icon-refresh" style="width:32px;height:32px;" ng-click="getHistory()"></i>
-              </div>
-          </div>
-
-          <div class="well well-large">
-              <ul>
-                  <li ng-repeat="change in history">
-                      <strong>{{ change.Id }}</strong>: Created: {{ change.Created|getdate }} Created by: {{ change.CreatedBy
-                      }}
-                  </li>
-              </ul>
-          </div>
-
-          <hr/>
-
-          <div class="row-fluid">
-              <form class="form-inline" role="form">
-                  <fieldset>
-                      <legend>Tag image</legend>
-                      <div class="form-group">
-                          <label>Tag:</label>
-                          <input type="text" placeholder="repo" ng-model="tagInfo.repo" class="form-control">
-                          <input type="text" placeholder="version" ng-model="tagInfo.version" class="form-control">
-                      </div>
-                      <div class="form-group">
-                          <label class="checkbox">
-                              <input type="checkbox" ng-model="tagInfo.force" class="form-control"/> Force?
-                          </label>
-                      </div>
-                      <input type="button" ng-click="addTag()" value="Add Tag" class="btn btn-primary"/>
-                  </fieldset>
-              </form>
-          </div>
-
-          <hr/>
-
-          <div class="btn-remove">
-              <button class="btn btn-large btn-block btn-primary btn-danger" ng-click="removeImage(id)">Remove Image</button>
-          </div>
+          </table>          
         </div>
         <!-- Middle Container -->   
       </div>

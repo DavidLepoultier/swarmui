@@ -3,6 +3,7 @@ angular.module('image', [])
   'Messages', 'LineChart', 'Swarm', 'ConsulPrimarySwarm',
     function ($scope, $q, $routeParams, $location, Image, Container, Messages, LineChart, Swarm, ConsulPrimarySwarm) {
       $scope.history = [];
+      $scope.addTags = false;
       $scope.tagInfo = {repo: '', version: '', force: false};
       $scope.id = '';
       $scope.repoTags = [];
@@ -47,15 +48,21 @@ angular.module('image', [])
           });
       };
 
-      function getContainersFromImage($q, Container, imageId, nodeUrl) {
+      function getContainersFromImage($q, Container, RepoTags, nodeUrl) {
           var defer = $q.defer();
-          console.log(nodeUrl);
           Container.query({all: 1, node: nodeUrl, notruc: 1}, function (d) {
               var containers = [];
               for (var i = 0; i < d.length; i++) {
                   var c = d[i];
-                  if (c.ImageID === imageId) {
+                  console.log(c);
+                  for (r = 0; r < RepoTags.length; r++) {
+                    var repoSplited = RepoTags[r].split(":");
+                    var repoTagsShort = repoSplited[0];
+                    if (c.Image === repoTagsShort && RepoTags[r] === c.Image + ":latest" ) {
                       containers.push(new ContainerViewModel(c));
+                    } else if ( c.Image === RepoTags[r] ) {
+                      containers.push(new ContainerViewModel(c));
+                    }
                   }
               }
               defer.resolve(containers);
@@ -83,13 +90,14 @@ angular.module('image', [])
         var url = atob(d[0].Value); 
         Image.get({id: $routeParams.id, node: url}, function (d) {
           $scope.image = d;
+          console.log($scope.image);
           $scope.id = d.Id;
           if (d.RepoTags) {
               $scope.RepoTags = d.RepoTags;
           } else {
               getRepoTags($scope.id);
           }
-          getContainersFromImage($q, Container, $scope.id, url).then(function (containers) {
+          getContainersFromImage($q, Container, $scope.RepoTags, url).then(function (containers) {
               LineChart.build('#containers-started-chart', containers, function (c) {
                   return new Date(c.Created * 1000).toLocaleDateString();
               });

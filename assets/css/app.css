@@ -176,6 +176,11 @@
   font: menu;
 }
 
+.linecharte-image {
+  width: 100%;
+  height: 200px;
+}
+
 .sortorder:after {
   content: '\25b2';
 }
