@@ -8,21 +8,34 @@ angular.module('image', [])
       $scope.id = '';
       $scope.repoTags = [];
 
+      console.log($routeParams);
+
+      if ($routeParams.containerId){
+        $scope.from = '/' + $routeParams.from + '/' + $routeParams.node + '/containers/' + $routeParams.containerId;
+        $scope.returnTo = "to container";
+      } else {
+        $scope.from = '/' + $routeParams.from + '/images/';
+        $scope.returnTo = "to images list";
+      }
+
       $scope.removeImage = function (id) {
-        Image.remove({id: id}, function (d) {
-            d.forEach(function(msg){
-                var key = Object.keys(msg)[0];
-                Messages.send(key, msg[key]);
-            });
-            // If last message key is 'Deleted' then assume the image is gone and send to images page
-            if (d[d.length-1].Deleted) {
-                $location.path('/images');
-            } else {
-                $location.path('/images/' + $scope.id); // Refresh the current page.
-            }
-        }, function (e) {
-            $scope.error = e.data;
-            $('#error-message').show();
+        ConsulPrimarySwarm.get({}, function (d){
+          var url = atob(d[0].Value); 
+          Image.remove({id: id, node: url}, function (d) {
+              d.forEach(function(msg){
+                  var key = Object.keys(msg)[0];
+                  Messages.send(key, msg[key]);
+              });
+              // If last message key is 'Deleted' then assume the image is gone and send to images page
+              if (d[d.length-1].Deleted) {
+                  $location.path($scope.from);
+              } else {
+                  $location.path($scope.from + $scope.id); // Refresh the current page.
+              }
+          }, function (e) {
+              $scope.error = e.data;
+              $('#error-message').show();
+          });
         });
       };
 
@@ -33,19 +46,23 @@ angular.module('image', [])
       };
 
       $scope.addTag = function () {
+        ConsulPrimarySwarm.get({}, function (d){
+          var url = atob(d[0].Value); 
           var tag = $scope.tagInfo;
           Image.tag({
               id: $routeParams.id,
+              node:  url,
               repo: tag.repo,
               tag: tag.version,
               force: tag.force ? 1 : 0
           }, function (d) {
               Messages.send("Tag Added", $routeParams.id);
-              $location.path('/images/' + $scope.id);
+              $location.path($scope.from + $scope.id);
           }, function (e) {
               $scope.error = e.data;
               $('#error-message').show();
           });
+        });
       };
 
       function getContainersFromImage($q, Container, RepoTags, nodeUrl) {
@@ -54,7 +71,6 @@ angular.module('image', [])
               var containers = [];
               for (var i = 0; i < d.length; i++) {
                   var c = d[i];
-                  console.log(c);
                   for (r = 0; r < RepoTags.length; r++) {
                     var repoSplited = RepoTags[r].split(":");
                     var repoTagsShort = repoSplited[0];
@@ -90,7 +106,6 @@ angular.module('image', [])
         var url = atob(d[0].Value); 
         Image.get({id: $routeParams.id, node: url}, function (d) {
           $scope.image = d;
-          console.log($scope.image);
           $scope.id = d.Id;
           if (d.RepoTags) {
               $scope.RepoTags = d.RepoTags;

@@ -38,7 +38,7 @@ angular.module('swarmui', [
             templateUrl: 'app/components/container/container.html',
             controller: 'ContainerController'
         });
-        $routeProvider.when('/:from/:node/images/:id/', {
+        $routeProvider.when('/:from/:node/containers/:containerId/image/:id/', {
             templateUrl: 'app/components/image/image.html',
             controller: 'ImageController'
         });

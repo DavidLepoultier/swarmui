@@ -83,7 +83,7 @@
             </div>
           </div>
           <div class="panel-body">
-            <a href="/#/dashboard/images/"><- Return</a><br/><br/>
+            <a href="/#{{ from }}"><- Return {{ returnTo }}</a><br/><br/>
             <div class='col-xs-9 well'>
               <h4>Global</h4>
               <b>Id : </b>{{ image.Id }}
@@ -179,8 +179,8 @@
                 <td>
                   <div class="well well-large no-margin-bottom">
                     <ul class="deco-none">
-                      <li ng-repeat="change in changes | filter:hasContent">
-                        <strong>{{ history.Id }}</strong>: Created: {{ history.Created|getdate }} Created by: {{ history.CreatedBy }}
+                      <li ng-repeat="change in history | filter:hasContent">
+                        <strong>{{ change.Id }}</strong>: Created: {{ change.Created|getdate }} Created by: {{ change.CreatedBy }}
                       </li>
                     </ul>
                   </div>

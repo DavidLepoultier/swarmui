@@ -165,8 +165,8 @@ angular.module('swarmui.services', ['ngResource'])
           },
           insert: {method: 'POST', params: {id: '@id', action: 'insert'}},
           push: {method: 'POST', params: {id: '@id', action: 'push'}},
-          tag: {method: 'POST', params: {id: '@id', action: 'tag', force: 0, repo: '@repo', tag: '@tag'}},
-          remove: {method: 'DELETE', params: {id: '@id'}, isArray: true}
+          tag: {method: 'POST', params: {id: '@id', node: '@node', action: 'tag', force: 0, repo: '@repo', tag: '@tag'}},
+          remove: {method: 'DELETE', params: {id: '@id', node: '@node'}, isArray: true}
       });
   }])
   .factory('Version', ['$resource', 'Settings', function VersionFactory($resource, Settings) {
