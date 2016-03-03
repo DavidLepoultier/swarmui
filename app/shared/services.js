@@ -117,10 +117,10 @@ angular.module('swarmui.services', ['ngResource'])
       'use strict';
       // http://docs.docker.com/reference/api/docker_remote_api_<%= remoteApiVersion %>/#get-container-logs
       return {
-          get: function (id, params, callback) {
+          get: function (id, node, params, callback) {
               $http({
                   method: 'GET',
-                  url: Settings.url + '/containers/' + id + '/logs',
+                  url: Settings.url + '/' + node + '/containers/' + id + '/logs',
                   params: {
                       'stdout': params.stdout || 0,
                       'stderr': params.stderr || 0,

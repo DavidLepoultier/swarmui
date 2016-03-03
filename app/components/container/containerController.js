@@ -1,9 +1,14 @@
 angular.module('container', [])
 .controller('ContainerController', ['$scope', '$routeParams', '$location', 'Container', 'ContainerCommit', 
-  'Messages', 'ViewSpinner', '$timeout', 'Swarm', 'ConsulPrimarySwarm',
-  function ($scope, $routeParams, $location, Container, ContainerCommit, Messages, ViewSpinner, $timeout, Swarm, ConsulPrimarySwarm) {
+  'ContainerLogs', 'Messages', 'ViewSpinner', '$timeout', 'Swarm', 'ConsulPrimarySwarm',
+  function ($scope, $routeParams, $location, Container, ContainerCommit, ContainerLogs, Messages, ViewSpinner, $timeout, Swarm, ConsulPrimarySwarm) {
       $scope.changes = [];
       $scope.edit = false;
+      $scope.stdout = '';
+      $scope.stderr = '';
+      $scope.showTimestamps = false;
+      $scope.tailLines = 2000;
+      $scope.logIntervalId = '';
 
       var update = function () {
         ViewSpinner.spin();
@@ -37,6 +42,55 @@ angular.module('container', [])
           });
         });
       };
+
+      var getLog = function () {
+        ViewSpinner.spin();
+        ContainerLogs.get($routeParams.id, $scope.primarySwarm, {
+            stdout: 1,
+            stderr: 0,
+            timestamps: $scope.showTimestamps,
+            tail: $scope.tailLines
+        }, function (data, status, headers, config) {
+            // Replace carriage returns with newlines to clean up output
+            data = data.replace(/[\r]/g, '\n');
+            // Strip 8 byte header from each line of output
+            data = data.substring(8);
+            data = data.replace(/\n(.{8})/g, '\n');
+            $scope.stdout = data;
+            ViewSpinner.stop();
+        });
+
+        ContainerLogs.get($routeParams.id, $scope.primarySwarm, {
+            stdout: 0,
+            stderr: 1,
+            timestamps: $scope.showTimestamps,
+            tail: $scope.tailLines
+        }, function (data, status, headers, config) {
+            // Replace carriage returns with newlines to clean up output
+            data = data.replace(/[\r]/g, '\n');
+            // Strip 8 byte header from each line of output
+            data = data.substring(8);
+            data = data.replace(/\n(.{8})/g, '\n');
+            $scope.stderr = data;
+            ViewSpinner.stop();
+        });
+      };
+
+      // initial call
+      $scope.getLogs = function () {
+        getLog();
+        $scope.logIntervalId = window.setInterval(getLog, 5000);
+      };
+
+      $scope.destroyInterval = function () {
+        // clearing interval when view changes
+        clearInterval($scope.logIntervalId);
+      };
+
+      $scope.$on("$destroy", function () {
+        // clearing interval when view changes
+        clearInterval($scope.logIntervalId);
+      });
 
       $scope.getChanges = function () {
         ViewSpinner.spin();

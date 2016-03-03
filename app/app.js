@@ -1,6 +1,8 @@
 angular.module('swarmui', [
     'swarmui.templates',
+    'ngAnimate',
     'ngRoute',
+    'ui.bootstrap',
     'swarmui.services',
     'swarmui.filters',
     'masthead',
@@ -8,6 +10,7 @@ angular.module('swarmui', [
     'dashboardContainers',
     'dashboardImages',
     'container',
+    'containerLogs',
     'image',
     'startContainer',
     'hosts',
@@ -37,6 +40,18 @@ angular.module('swarmui', [
         $routeProvider.when('/:from/:node/containers/:id/', {
             templateUrl: 'app/components/container/container.html',
             controller: 'ContainerController'
+        });
+        $routeProvider.when('/:from/:node/containers/:id/logs/', {
+            templateUrl: 'app/components/containerLogs/containerlogs.html',
+            controller: 'ContainerLogsController'
+        });
+        $routeProvider.when('/:from/:node/containers/:id/top', {
+            templateUrl: 'app/components/containerTop/containerTop.html',
+            controller: 'ContainerTopController'
+        });
+        $routeProvider.when('/:from/:node/containers/:id/stats', {
+            templateUrl: 'app/components/stats/stats.html',
+            controller: 'StatsController'
         });
         $routeProvider.when('/:from/:node/containers/:containerId/image/:id/', {
             templateUrl: 'app/components/image/image.html',
