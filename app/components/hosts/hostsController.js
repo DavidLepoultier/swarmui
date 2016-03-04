@@ -3,6 +3,7 @@ angular.module('hosts', [])
   'ConsulPrimarySwarm', 'SettingsConsul', 'Settings', 'Messages', 'ViewSpinner',
   function ($scope, $routeParams, ConsulNodes, Swarm, Container, ConsulPrimarySwarm, SettingsConsul, Settings, Messages, ViewSpinner) {
     $scope.swarms = [];
+    $scope.dashboard = '1';
     $scope.containers = [];
 
     $scope.predicate = 'nodename';

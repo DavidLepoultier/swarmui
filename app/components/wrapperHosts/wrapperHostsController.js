@@ -8,7 +8,6 @@ angular.module('wrapperHosts', [])
     };
 
     $scope.updateHosts = function(page) {
-      
       var containerWrapperName="#wrapper-hosts_000";
       var totalDashElem=5+1;
       var currentContainer=page;
@@ -20,4 +19,8 @@ angular.module('wrapperHosts', [])
       $(containerWrapperName+currentContainer).addClass('active');
     };
     
+    $scope.$on('$includeContentLoaded', function(event) {
+      $scope.updateHosts($scope.dashboard);
+    });
+
 }]);

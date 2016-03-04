@@ -19,4 +19,8 @@ angular.module('wrapperDashboard', [])
       $(containerWrapperName+currentContainer).addClass('active');
     };
     
+    $scope.$on('$includeContentLoaded', function(event) {
+      $scope.updateDash($scope.dashboard);
+    });
+
 }]);

@@ -2,6 +2,7 @@ angular.module('dashboard', [])
 .controller('DashboardController', ['$scope', 'Container', 'Image', 'Settings', 'LineChart', 'ConsulPrimarySwarm', 'Swarm',
   function ($scope, Container, Image, Settings, LineChart, ConsulPrimarySwarm, Swarm) {
   $scope.predicate = '-Created';
+  $scope.dashboard = '1';
 
   $scope.wrapperDash = function() {
       $('#wrapper').toggleClass('active');

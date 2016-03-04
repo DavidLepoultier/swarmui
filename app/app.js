@@ -1,6 +1,5 @@
 angular.module('swarmui', [
     'swarmui.templates',
-    'ngAnimate',
     'ngRoute',
     'ui.bootstrap',
     'swarmui.services',
@@ -15,7 +14,6 @@ angular.module('swarmui', [
     'hosts',
     'wrapperHosts',
     'wrapperDashboard',
-    'stats',
     'tasks',
     'tasksHosts',
     'tasksDashboard'])

@@ -4,6 +4,7 @@ angular.module('dashboardContainers', [])
   function ($scope, $routeParams, Container, ConsulPrimarySwarm, SettingsConsul, Settings, Messages, ViewSpinner, ConsulTasks) {
     $scope.toggle = false;
     $scope.displayAll = Settings.displayAll;
+    $scope.dashboard = '3';
 
     $scope.predicate = 'NodeName';
     $scope.reverse = false;

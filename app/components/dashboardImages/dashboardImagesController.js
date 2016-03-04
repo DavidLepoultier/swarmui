@@ -3,6 +3,7 @@ angular.module('dashboardImages', [])
   'ConsulPrimarySwarm', 'SettingsConsul', 'Settings', 'Messages', 'ViewSpinner',
   function ($scope, $routeParams, Image, ConsulPrimarySwarm, SettingsConsul, Settings, Messages, ViewSpinner) {
     $scope.images = [];
+    $scope.dashboard = '2';
 
     $scope.predicate = 'RepoTag';
     $scope.reverse = false;

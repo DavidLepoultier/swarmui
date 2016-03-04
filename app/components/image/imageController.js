@@ -2,6 +2,7 @@ angular.module('image', [])
 .controller('ImageController', ['$scope', '$q', '$routeParams', '$location', 'Image', 'Container',
   'Messages', 'LineChart', 'Swarm', 'ConsulPrimarySwarm',
     function ($scope, $q, $routeParams, $location, Image, Container, Messages, LineChart, Swarm, ConsulPrimarySwarm) {
+      $scope.dashboard = '2';
       $scope.history = [];
       $scope.addTags = false;
       $scope.tagInfo = {repo: '', version: '', force: false};
