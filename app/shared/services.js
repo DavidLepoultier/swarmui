@@ -158,8 +158,8 @@ angular.module('swarmui.services', ['ngResource'])
   .factory('Version', ['$resource', 'Settings', function VersionFactory($resource, Settings) {
       'use strict';
       // http://docs.docker.com/reference/api/docker_remote_api_<%= remoteApiVersion %>/#show-the-docker-version-information
-      return $resource(Settings.url + '/version', {}, {
-          get: {method: 'GET'}
+      return $resource(Settings.url + '/:node/version', {}, {
+          get: {method: 'GET', params: {node: '@node'}}
       });
   }])
   .factory('Auth', ['$resource', 'Settings', function AuthFactory($resource, Settings) {
