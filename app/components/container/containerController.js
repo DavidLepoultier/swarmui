@@ -45,6 +45,7 @@ angular.module('container', [])
       };
 
       $scope.getTop = function () {
+        $scope.destroyInterval();
         Container.top({id: $routeParams.id,
           node: $scope.primarySwarm,
           ps_args: $scope.ps_args
