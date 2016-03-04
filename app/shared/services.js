@@ -92,6 +92,7 @@ angular.module('swarmui.services', ['ngResource'])
           create: {method: 'POST', params: {node: '@node', action: 'create'}},
           remove: {method: 'DELETE', params: {id: '@id', node: '@node', v: 0}},
           rename: {method: 'POST', params: {id: '@id', node: '@node', action: 'rename'}, isArray: false},
+          top: {method: 'GET', params: {id: '@id', node: '@node', ps_args: '@ps_args', action: 'top'}},
           stats: {method: 'GET', params: {id: '@id', node: '@node', stream: false, action: 'stats'}, timeout: 5000}
       });
   }])
@@ -130,21 +131,6 @@ angular.module('swarmui.services', ['ngResource'])
               }).success(callback).error(function (data, status, headers, config) {
                   console.log(error, data);
               });
-          }
-      };
-  }])
-  .factory('ContainerTop', ['$http', 'Settings', function ($http, Settings) {
-      'use strict';
-      // http://docs.docker.com/reference/api/docker_remote_api_<%= remoteApiVersion %>/#list-processes-running-inside-a-container
-      return {
-          get: function (id, params, callback, errorCallback) {
-              $http({
-                  method: 'GET',
-                  url: Settings.url + '/containers/' + id + '/top',
-                  params: {
-                      ps_args: params.ps_args
-                  }
-              }).success(callback);
           }
       };
   }])

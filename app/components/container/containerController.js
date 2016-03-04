@@ -9,6 +9,7 @@ angular.module('container', [])
       $scope.showTimestamps = false;
       $scope.tailLines = 2000;
       $scope.logIntervalId = '';
+      $scope.ps_args = '';
 
       var update = function () {
         ViewSpinner.spin();
@@ -43,8 +44,16 @@ angular.module('container', [])
         });
       };
 
+      $scope.getTop = function () {
+        Container.top({id: $routeParams.id,
+          node: $scope.primarySwarm,
+          ps_args: $scope.ps_args
+        }, function (d) {
+          $scope.containerTop = d;
+        });
+      };
+
       var getLog = function () {
-        ViewSpinner.spin();
         ContainerLogs.get($routeParams.id, $scope.primarySwarm, {
             stdout: 1,
             stderr: 0,
@@ -57,7 +66,6 @@ angular.module('container', [])
             data = data.substring(8);
             data = data.replace(/\n(.{8})/g, '\n');
             $scope.stdout = data;
-            ViewSpinner.stop();
         });
 
         ContainerLogs.get($routeParams.id, $scope.primarySwarm, {
@@ -72,7 +80,6 @@ angular.module('container', [])
             data = data.substring(8);
             data = data.replace(/\n(.{8})/g, '\n');
             $scope.stderr = data;
-            ViewSpinner.stop();
         });
       };
 

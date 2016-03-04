@@ -239,16 +239,8 @@
                       </td>
                     </tr>
                     <tr>
-                      <td>Logs:</td>
-                      <td><a href="#/{{ container.From }}/{{ container.Node }}/containers/{{ container.Id }}/logs">stdout/stderr</a></td>
-                    </tr>
-                    <tr>
                       <td>Stats:</td>
                       <td><a href="#/{{ container.From }}/{{ container.Node }}/containers/{{ container.Id }}/stats">stats</a></td>
-                    </tr>
-                    <tr>
-                      <td>Top:</td>
-                      <td><a href="#/{{ container.From }}/{{ container.Node }}/containers/{{ container.Id }}/top">Top</a></td>
                     </tr>
                     <tr>
                       <td>Changes:</td>
@@ -266,6 +258,7 @@
                 </table>
               <!-- End Tabs 1 container info -->
               </uib-tab>
+
               <uib-tab index="1" heading="Logs" ng-click="getLogs()">
                 <div class="row logs">
                     <div class="col-xs-12">
@@ -282,7 +275,6 @@
                         </div>
                       </div>
                     </div>
-
                     <div class="col-xs-12">
                       <div class="panel panel-default">
                         <div class="panel-heading">
@@ -305,8 +297,34 @@
                     </div>
                 </div>
               </uib-tab>
-              <uib-tab index="2" heading="Stats">Container stats</uib-tab>
-              <uib-tab index="4" heading="Top">Container top</uib-tab>
+
+              <uib-tab index="2" heading="Stats">
+                <div ng-include="template" ng-controller="StatsController"></div>
+              </uib-tab>
+
+
+
+              <uib-tab index="3" heading="Top" ng-click="getTop()">
+                <div class="containerTop">
+                  <div class="form-group col-xs-2">
+                      <input type="text" class="form-control" placeholder="[options] (aux)" ng-model="ps_args">
+                  </div>
+                  <button type="button" class="btn btn-default" ng-click="getTop()">Submit</button>
+
+                  <table class="table table-striped">
+                      <thead>
+                      <tr>
+                          <th ng-repeat="title in containerTop.Titles">{{title}}</th>
+                      </tr>
+                      </thead>
+                      <tbody>
+                      <tr ng-repeat="processInfos in containerTop.Processes">
+                          <td ng-repeat="processInfo in processInfos track by $index">{{processInfo}}</td>
+                      </tr>
+                      </tbody>
+                  </table>
+                </div>
+              </uib-tab>
             </uib-tabset>
 
           </div>

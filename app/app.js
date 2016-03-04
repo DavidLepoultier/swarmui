@@ -10,12 +10,12 @@ angular.module('swarmui', [
     'dashboardContainers',
     'dashboardImages',
     'container',
-    'containerLogs',
     'image',
     'startContainer',
     'hosts',
     'wrapperHosts',
     'wrapperDashboard',
+    'stats',
     'tasks',
     'tasksHosts',
     'tasksDashboard'])
@@ -40,6 +40,10 @@ angular.module('swarmui', [
         $routeProvider.when('/:from/:node/containers/:id/', {
             templateUrl: 'app/components/container/container.html',
             controller: 'ContainerController'
+        });
+        $routeProvider.when('/:from/:node/containers/:id/stats', {
+            templateUrl: 'app/components/stats/stats.html',
+            controller: 'StatsController'
         });
         $routeProvider.when('/:from/:node/containers/:id/logs/', {
             templateUrl: 'app/components/containerLogs/containerlogs.html',
