@@ -1,8 +1,12 @@
 angular.module('masthead', [])
-.controller('MastheadController', ['$scope',
- function ($scope) {
+.controller('MastheadController', ['$scope', 'Settings', 'Version', 'ConsulPrimarySwarm', '$uibModal',
+  function ($scope, Settings, Version, ConsulPrimarySwarm, $uibModal) {
     $scope.template = 'app/components/masthead/masthead.html';
     $scope.showNetworksVolumes = false;
+    $scope.animationsEnabled = true;
+    $scope.endpoint = Settings.endpoint;
+    $scope.uiVersion = Settings.uiVersion;
+    $scope.docker = {};
 
     $scope.updateMasthead = function(page) {
   
@@ -17,7 +21,27 @@ angular.module('masthead', [])
       $(containerWrapperName+currentContainer).addClass('active');
     };
 
+    ConsulPrimarySwarm.get({}, function (d){
+      var url = atob(d[0].Value); 
+      Version.get({node: url}, function (d) {
+        $scope.docker = d;
+      });
+    });
+
+    $scope.open = function () {
+      var modalInstance = $uibModal.open({
+        animation: $scope.animationsEnabled,
+        templateUrl: 'app/components/about/about.html',
+        controller: 'MastheadController'
+      });
+    };
+
+    $scope.cancel = function () {
+      modalInstance.dismiss('cancel');
+    };
+
     $scope.refresh = function() {
         location.reload();
     };
-}]);
+  }
+]);

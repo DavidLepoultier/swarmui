@@ -89,7 +89,7 @@ angular.module('swarmui.services', ['ngResource'])
           get: {method: 'GET', params: {node: '@node', action: 'json'}},
           actionCont: {method: 'POST', params: {id: '@id', node: '@node', t: 5, action: '@action'}},
           changes: {method: 'GET', params: {node: '@node', action: 'changes'}, isArray: true},
-          create: {method: 'POST', params: {node: '@node', action: 'create'}},
+          create: {method: 'POST', params: {node: '@SwarmHost', action: 'create'}},
           remove: {method: 'DELETE', params: {id: '@id', node: '@node', v: 0}},
           rename: {method: 'POST', params: {id: '@id', node: '@node', action: 'rename'}, isArray: false},
           top: {method: 'GET', params: {id: '@id', node: '@node', ps_args: '@ps_args', action: 'top'}},
@@ -152,7 +152,7 @@ angular.module('swarmui.services', ['ngResource'])
           insert: {method: 'POST', params: {id: '@id', action: 'insert'}},
           push: {method: 'POST', params: {id: '@id', action: 'push'}},
           tag: {method: 'POST', params: {id: '@id', node: '@node', action: 'tag', force: 0, repo: '@repo', tag: '@tag'}},
-          remove: {method: 'DELETE', params: {id: '@id', node: '@node'}, isArray: true}
+          remove: {method: 'DELETE', params: {id: '@id', node: '@node'}}
       });
   }])
   .factory('Version', ['$resource', 'Settings', function VersionFactory($resource, Settings) {

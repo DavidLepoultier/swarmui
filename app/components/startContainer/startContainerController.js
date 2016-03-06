@@ -3,13 +3,23 @@ angular.module('startContainer', ['ui.bootstrap'])
   'containernameFilter', 'errorMsgFilter', 'Swarm', 'ConsulPrimarySwarm',
 function ($scope, $routeParams, $location, Container, Messages, containernameFilter, errorMsgFilter, Swarm, ConsulPrimarySwarm) {
     $scope.template = 'app/components/startContainer/startcontainer.html';
+    $scope.swarmUrl = '';
+    $scope.selected = [];
+    $scope.Nodes = [];
 
     ConsulPrimarySwarm.get({}, function (d){
-      var url = atob(d[0].Value); 
-      Container.query({all: 1, node: url}, function (d) {
+      $scope.swarmUrl = atob(d[0].Value); 
+      Container.query({all: 1, node: $scope.swarmUrl}, function (d) {
         $scope.containerNames = d.map(function (container) {
             return containernameFilter(container);
         });
+      });
+      Swarm.info({node: $scope.swarmUrl}, function (d) {
+        var n = 0;
+        for (var i = 4; i < d['SystemStatus'].length;i += 8) {
+          $scope.Nodes[n] = d['SystemStatus'][i];
+          n++;
+        }
       });
     });
 
@@ -60,14 +70,22 @@ function ($scope, $routeParams, $location, Container, Messages, containernameFil
         // Copy the config before transforming fields to the remote API format
         var config = angular.copy($scope.config);
 
-        config.Image = $routeParams.id;
+        //config.Image = $routeParams.id;
+        if (!config.Image) {
+            Messages.send('Warning', 'Select a Tag version !');
+            return;
+        }
+
+        if (!$scope.selected.Host) {
+            Messages.send('Warning', 'Select a server host !');
+            return;
+        }
 
         if (config.Cmd && config.Cmd[0] === "[") {
             config.Cmd = angular.fromJson(config.Cmd);
         } else if (config.Cmd) {
             config.Cmd = config.Cmd.split(' ');
         }
-
         config.Env = config.Env.map(function (envar) {
             return envar.name + '=' + envar.value;
         });
@@ -120,6 +138,9 @@ function ($scope, $routeParams, $location, Container, Messages, containernameFil
         config.ExposedPorts = ExposedPorts;
         config.HostConfig.PortBindings = PortBindings;
 
+        // Set Swarm Manager Host
+        config.SwarmHost = $scope.swarmUrl;
+
         // Remove empty fields from the request to avoid overriding defaults
         rmEmptyKeys(config.HostConfig);
         rmEmptyKeys(config);
@@ -127,33 +148,41 @@ function ($scope, $routeParams, $location, Container, Messages, containernameFil
         var ctor = Container;
         var loc = $location;
         var s = $scope;
+        $('#create-modal').modal('hide');
         Container.create(config, function (d) {
-            if (d.Id) {
-                var reqBody = config.HostConfig || {};
-                reqBody.id = d.Id;
-                ctor.start(reqBody, function (cd) {
-                    if (cd.id) {
-                        Messages.send('Container Started', d.Id);
-                        $('#create-modal').modal('hide');
-                        loc.path('/containers/' + d.Id + '/');
-                    } else {
-                        failedRequestHandler(cd, Messages);
-                        ctor.remove({id: d.Id}, function () {
-                            Messages.send('Container Removed', d.Id);
-                        });
-                    }
-                }, function (e) {
-                    failedRequestHandler(e, Messages);
-                });
-            } else {
-                failedRequestHandler(d, Messages);
-            }
+            Messages.send('Container Created', d.Id);
+            delete $scope.config;
+            delete $scope.selected;
+            $scope.selected = [];
+            $scope.config = {
+              Env: [],
+              Labels: [],
+              Volumes: [],
+              SecurityOpts: [],
+              HostConfig: {
+                  PortBindings: [],
+                  Binds: [],
+                  Links: [],
+                  Dns: [],
+                  DnsSearch: [],
+                  VolumesFrom: [],
+                  CapAdd: [],
+                  CapDrop: [],
+                  Devices: [],
+                  LxcConf: [],
+                  ExtraHosts: []
+              }
+            };
         }, function (e) {
-            failedRequestHandler(e, Messages);
+          failedRequestHandler(e, Messages);
         });
     };
 
     $scope.addEntry = function (array, entry) {
+        array.push(entry);
+    };
+    $scope.addNodeEntry = function (array) {
+        var entry = {name: 'constraint:node=', value: $scope.selected.Host};
         array.push(entry);
     };
     $scope.rmEntry = function (array, entry) {

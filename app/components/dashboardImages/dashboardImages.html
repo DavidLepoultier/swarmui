@@ -9,11 +9,32 @@
         <h1 class="page-header">Images Docker</h1>
         <div class="panel panel-default">
           <div class="panel-heading">
-            <h3 class="panel-title">Images's List</h3>
+            <h3 class="panel-title">
+              <span class="col-xs-11" style="margin-top: 5px; font-size: 18px;">Images's List</span>
+              <div class="btn-group">
+                <button type="button" class="btn btn-default dropdown-toggle" style="margin: 0;" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  Action <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu">
+                  <li>
+                    <button type="button" class="btn-link btn-block btn-dropdown"
+                      data-toggle="modal" data-target="#pull-modal">Pull image
+                    </button>
+                  </li>
+                  <li>
+                    <button type="button" class="btn-link btn-block btn-dropdown"
+                      ng-click="removeAction()">Remove image
+                    </button>
+                  </li>
+                </ul>
+              </div>
+            </h3>
           </div>
+          <div ng-include="template" ng-controller="PullImageController"></div>
           <!-- Table -->
           <table class="table table-striped">
             <tr>
+              <th><input type="checkbox" ng-model="toggle" ng-change="toggleSelectAll()" style="margin-top: 35px;"/></th>
               <th>
                 <button type="button" class="btn-link btn-block btn-dropdown" ng-click="order('RepoTag')">
                   Tags
@@ -44,6 +65,7 @@
               </th>
             </tr>
             <tr ng-repeat="image in images | filter:search:strict | orderBy:predicate:reverse">
+              <td><input type="checkbox" ng-model="image.Checked" /></td>
               <td>
                 &nbsp;&nbsp;&nbsp;
                 <a href="#/{{ image.From }}/images/{{ image.Id }}">{{ image.RepoTag }}</a>
@@ -53,7 +75,7 @@
                 {{ image.Id | truncate:15  }}
               </td>
               <td>&nbsp;&nbsp;&nbsp;
-                {{ image.Created | getdate }}
+                {{ image.Created | getdate1000 }}
               </td>
               <td>
                 &nbsp;&nbsp;&nbsp;

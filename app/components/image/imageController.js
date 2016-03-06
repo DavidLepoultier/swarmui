@@ -9,13 +9,13 @@ angular.module('image', [])
       $scope.id = '';
       $scope.repoTags = [];
 
-      console.log($routeParams);
-
       if ($routeParams.containerId){
         $scope.from = '/' + $routeParams.from + '/' + $routeParams.node + '/containers/' + $routeParams.containerId;
+        $scope.toParent = $scope.from + '/image/';
         $scope.returnTo = "to container";
       } else {
         $scope.from = '/' + $routeParams.from + '/images/';
+        $scope.toParent = $scope.from;
         $scope.returnTo = "to images list";
       }
 
@@ -23,19 +23,27 @@ angular.module('image', [])
         ConsulPrimarySwarm.get({}, function (d){
           var url = atob(d[0].Value); 
           Image.remove({id: id, node: url}, function (d) {
-              d.forEach(function(msg){
+              if (d instanceof Array) {
+                d.forEach(function(msg){
                   var key = Object.keys(msg)[0];
                   Messages.send(key, msg[key]);
-              });
-              // If last message key is 'Deleted' then assume the image is gone and send to images page
-              if (d[d.length-1].Deleted) {
+                });
+                // If last message key is 'Deleted' then assume the image is gone and send to images page
+                if (d[d.length-1].Deleted) {
                   $location.path($scope.from);
-              } else {
+                } else {
                   $location.path($scope.from + $scope.id); // Refresh the current page.
+                }
+              } else {
+                  $scope.error = '';
+                  for ( var i =0; i < Object.keys(d).length - 2; i++){
+                    $scope.error += d[i];
+                  }
+                  Messages.error("Warning", $scope.error);
               }
           }, function (e) {
               $scope.error = e.data;
-              $('#error-message').show();
+              Messages.error("Warning", $scope.error);
           });
         });
       };

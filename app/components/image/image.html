@@ -22,55 +22,12 @@
                         ng-click="image.addTags = true;">Add Tags
                       </button>
                     </li>
-                    <li>
-                      <button type="button" class="btn-link btn-block btn-dropdown" 
-                        data-toggle="modal" data-target="#create-modal">Start Container
-                      </button>
-                    </li>
                     <li role="separator" class="divider"></li>
                     <li>
                       <button type="button" class="btn-link btn-block btn-dropdown"
-                        ng-click="start()"
-                        ng-show="!container.State.Running">Start
+                        data-toggle="modal" data-target="#create-modal">Create Container
                       </button>
                     </li>
-                    <li>
-                      <button type="button" class="btn-link btn-block btn-dropdown"
-                        ng-click="stop()"
-                        ng-show="container.State.Running && !container.State.Paused">Stop
-                      </button>
-                    </li>
-                    <li>
-                      <button type="button" class="btn-link btn-block btn-dropdown"
-                        ng-click="kill()"
-                        ng-show="container.State.Running && !container.State.Paused">Kill
-                      </button>
-                    </li>
-                    <li>
-                      <button type="button" class="btn-link btn-block btn-dropdown"
-                        ng-click="pause()"
-                        ng-show="container.State.Running && !container.State.Paused">Pause
-                      </button>
-                    </li>
-                    <li>
-                      <button type="button" class="btn-link btn-block btn-dropdown"
-                        ng-click="unpause()"
-                        ng-show="container.State.Running && container.State.Paused">Unpause
-                      </button>
-                    </li>
-                    <li>
-                      <button type="button" class="btn-link btn-block btn-dropdown"
-                        ng-click="restart()"
-                        ng-show="container.State.Running && !container.State.Stopped">Restart
-                      </button>
-                    </li>
-                    <li>
-                      <button type="button" class="btn-link btn-block btn-dropdown"
-                        ng-click="commit()"
-                        ng-show="container.State.Running && !container.State.Paused">Commit
-                      </button>
-                    </li>
-                    <li role="separator" ng-show="!container.State.Running" class="divider"></li>
                     <li>
                       <button type="button" class="btn-link btn-block btn-dropdown"
                         ng-click="removeImage(id)"
@@ -103,9 +60,6 @@
               <br/>
             </div>
             <div ng-include="template" ng-controller="StartContainerController"></div>
-            <div class="alert alert-error" id="error-message" style="display:none">
-                {{ error }}
-            </div>
             <div class="col-xs-12" ng-if="image.addTags">
               <form class="form-inline" role="form">
                   <fieldset>
@@ -131,19 +85,25 @@
           <table class="table table-striped">
               <tbody>
               <tr>
-                  <td>Tags:</td>
-                  <td>
-                      <ul>
-                          <li ng-repeat="tag in RepoTags">
-                            {{ tag }}
-                            <button ng-click="removeImage(tag)" class="btn btn-sm btn-danger">Remove tag</button>
-                          </li>
-                      </ul>
-                  </td>
+                <td class="col-xs-2">Tags:</td>
+                <td class="col-xs10">
+                  <ul class="deco-none">
+                    <li ng-repeat="tag in RepoTags">
+                      <div class="col-xs-12" style="margin: 5px">
+                        <div class="col-xs-1"style="margin-right: 20px;">
+                          <button ng-click="removeImage(tag)" class="btn btn-sm btn-danger">Remove tag</button>
+                        </div>
+                        <div class="col-xs-10" style="margin-top: 5px;">
+                          {{ tag }}
+                        </div>
+                      </div>
+                    </li>
+                  </ul>
+                </td>
               </tr>
               <tr>
                   <td>Parent:</td>
-                  <td><a href="#/images/{{ image.Parent }}/">{{ image.Parent }}</a></td>
+                  <td><a href="#{{ toParent }}{{ image.Parent }}/">{{ image.Parent }}</a></td>
               </tr>
               <tr>
                   <td>Size (Virtual Size):</td>
@@ -160,19 +120,34 @@
               </tr>
               <tr>
                   <td>Cmd:</td>
-                  <td>{{ image.ContainerConfig.Cmd }}</td>
+                  <td>
+                    <div class="well well-large no-margin-bottom">
+                      <ul class="deco-none">
+                        <li>{{ image.ContainerConfig.Cmd }}</li>
+                      </ul>
+                    </div>
+                  </td>
               </tr>
               <tr>
                   <td>Volumes:</td>
-                  <td>{{ image.ContainerConfig.Volumes }}</td>
+                  <td>
+                    {{ image.ContainerConfig.Volumes }}</td>
               </tr>
               <tr>
                   <td>Volumes from:</td>
-                  <td>{{ image.ContainerConfig.VolumesFrom }}</td>
+                  <td>
+                    {{ image.ContainerConfig.VolumesFrom }}
+                  </td>
               </tr>
               <tr>
                   <td>Built with:</td>
-                  <td>Docker {{ image.DockerVersion }} on {{ image.Os}}, {{ image.Architecture }}</td>
+                  <td>
+                    <div class="well well-large no-margin-bottom">
+                      <ul class="deco-none">
+                        <li>Docker {{ image.DockerVersion }} on {{ image.Os}}, {{ image.Architecture }}</li>
+                      </ul>
+                    </div>
+                  </td>
               </tr>
               <tr>
                 <td>History:</td>

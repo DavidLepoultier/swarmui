@@ -45,14 +45,14 @@ angular.module('dashboard', [])
     var url = atob(d[0].Value);
     Container.query({all: 1, node: url}, function (d) {
         var running = 0;
-        var ghost = 0;
+        var created = 0;
         var stopped = 0;
         
         for (var i = 0; i < d.length; i++) {
             var item = d[i];
 
-            if (item.Status === "Ghost") {
-                ghost += 1;
+            if (item.Status === '') {
+                created += 1;
             } else if (item.Status.indexOf('Exit') !== -1) {
                 stopped += 1;
             } else {
@@ -73,10 +73,10 @@ angular.module('dashboard', [])
                 title: 'Stopped'
             }, // stopped
             {
-                value: ghost,
+                value: created,
                 color: '#E2EAE9',
-                title: 'Ghost'
-            } // ghost
+                title: 'Created'
+            } // created
         ];
 
         c.Doughnut(data, opts);

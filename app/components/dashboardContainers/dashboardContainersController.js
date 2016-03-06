@@ -5,6 +5,7 @@ angular.module('dashboardContainers', [])
     $scope.toggle = false;
     $scope.displayAll = Settings.displayAll;
     $scope.dashboard = '3';
+    $scope.swarmUrl = '';
 
     $scope.predicate = 'NodeName';
     $scope.reverse = false;
@@ -34,16 +35,13 @@ angular.module('dashboardContainers', [])
       var actionCont = '';
       if (status === 'Ghost') {
           return;
-      } else if (status.indexOf('Exit') !== -1 && status !== 'Exit 0') {
+      } else if (status.indexOf('Exit') !== -1 && status !== 'Exit 0' || status === '' ) {
         actionCont = 'start';
       } else {
         actionCont = 'stop';
       }
-      ConsulPrimarySwarm.get({}, function (d){
-        var url = atob(d[0].Value);
-        var node = container.Names[0].split("/");
-        containerBatch(id, url, actionCont, node[1], startDate);
-      });
+      var node = container.Names[0].split("/");
+      containerBatch(id, $scope.swarmUrl, actionCont, node[1], startDate);
     };
 
     var containerBatch = function (id, url, actionCont, node, startDate) {
@@ -70,12 +68,15 @@ angular.module('dashboardContainers', [])
     var update = function (data) {
       ViewSpinner.spin();
       ConsulPrimarySwarm.get({}, function (d){
-        var url = atob(d[0].Value); 
-        Container.query({all: 1, node: url}, function (d) {
+        $scope.swarmUrl = atob(d[0].Value); 
+        Container.query({all: 1, node: $scope.swarmUrl}, function (d) {
           $scope.containers = d.map(function (item) {
               return new ContainerViewModel(item);
           });
           for (var i = 0; i < $scope.containers.length; i++){
+            if ($scope.containers[i].Status === ''){
+              $scope.containers[i].Status = 'created';
+            }
             var splitedNames = $scope.containers[i].Names[0].split("/");
             $scope.containers[i].NodeName = splitedNames[1];
             $scope.containers[i].ContainerName = splitedNames[2];
@@ -85,7 +86,7 @@ angular.module('dashboardContainers', [])
       });
     };
     
-    var batch = function (items, action, msg) {
+    var batch = function (items, order, action, msg) {
       ViewSpinner.spin();
       var counter = 0;
       var complete = function () {
@@ -97,11 +98,11 @@ angular.module('dashboardContainers', [])
       };
       angular.forEach(items, function (c) {
         if (c.Checked) {
-          if (action === Container.start) {
-            Container.get({id: c.Id}, function (d) {
+          if (action === 'start') {
+            Container.get({id: c.Id, node: $scope.swarmUrl}, function (d) {
               c = d;
               counter = counter + 1;
-              action({id: c.Id, HostConfig: c.HostConfig || {}}, function (d) {
+              order({id: c.Id, node: $scope.swarmUrl, action: action,  HostConfig: c.HostConfig || {}}, function (d) {
                 Messages.send("Container " + msg, c.Id);
                 var index = $scope.containers.indexOf(c);
                 complete();
@@ -118,10 +119,9 @@ angular.module('dashboardContainers', [])
               }
               complete();
             });
-          }
-          else {
+          } else if (order === Container.remove) {
             counter = counter + 1;
-            action({id: c.Id}, function (d) {
+            order({id: c.Id, node: $scope.swarmUrl}, function (d) {
               Messages.send("Container " + msg, c.Id);
               var index = $scope.containers.indexOf(c);
               complete();
@@ -129,7 +129,16 @@ angular.module('dashboardContainers', [])
               Messages.error("Failure", e.data);
               complete();
             });
-
+          } else {
+            counter = counter + 1;
+            order({id: c.Id, action: action, node: $scope.swarmUrl}, function (d) {
+              Messages.send("Container " + msg, c.Id);
+              var index = $scope.containers.indexOf(c);
+              complete();
+            }, function (e) {
+              Messages.error("Failure", e.data);
+              complete();
+            });
           }
 
         }
@@ -151,31 +160,31 @@ $scope.toggleGetAll = function () {
 };
 
 $scope.startAction = function () {
-  batch($scope.containers, Container.start, "Started");
+  batch($scope.containers, Container.actionCont, 'start' , "Started");
 };
 
 $scope.stopAction = function () {
-  batch($scope.containers, Container.stop, "Stopped");
+  batch($scope.containers, Container.actionCont, 'stop', "Stopped");
 };
 
 $scope.restartAction = function () {
-  batch($scope.containers, Container.restart, "Restarted");
+  batch($scope.containers, Container.actionCont, 'restart', "Restarted");
 };
 
 $scope.killAction = function () {
-  batch($scope.containers, Container.kill, "Killed");
+  batch($scope.containers, CContainer.actionCont, 'kill', "Killed");
 };
 
 $scope.pauseAction = function () {
-  batch($scope.containers, Container.pause, "Paused");
+  batch($scope.containers, Container.actionCont, 'pause', "Paused");
 };
 
 $scope.unpauseAction = function () {
-  batch($scope.containers, Container.unpause, "Unpaused");
+  batch($scope.containers, Container.actionCont, 'unpause', "Unpaused");
 };
 
 $scope.removeAction = function () {
-  batch($scope.containers, Container.remove, "Removed");
+  batch($scope.containers, Container.remove, '', "Removed");
 };
 
 //update({all: Settings.displayAll ? 1 : 0});

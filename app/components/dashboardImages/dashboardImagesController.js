@@ -28,9 +28,14 @@ angular.module('dashboardImages', [])
             var date = new Date($scope.images[i].Created*1000);
             $scope.images[i].Create = date.toLocaleDateString(language, options);
           }
-          console.log($scope.images);
           ViewSpinner.stop();
         });
+      });
+    };
+
+    $scope.toggleSelectAll = function () {
+      angular.forEach($scope.images, function (i) {
+        i.Checked = $scope.toggle;
       });
     };
     

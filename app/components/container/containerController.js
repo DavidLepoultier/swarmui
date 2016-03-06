@@ -19,6 +19,8 @@ angular.module('container', [])
 
 // ****** START CONTAINERS ****** //
 
+    $scope.from = '/' + $routeParams.from + '/containers/';
+    
     var update = function () {
         ViewSpinner.spin();
         ConsulPrimarySwarm.get({}, function (d){
@@ -221,13 +223,14 @@ angular.module('container', [])
       };
 
       $scope.remove = function () {
+          console.log($scope.from);
           ViewSpinner.spin();
           Container.remove({
             id: $routeParams.id,
             node: $scope.primarySwarm
           }, function (d) {
               update();
-              $location.path('/containers');
+              $location.path($scope.from);
               Messages.send("Container removed", $routeParams.id);
           }, function (e) {
               update();
@@ -284,7 +287,7 @@ angular.module('container', [])
     var networkLabels = [];
     var networkTxData = [];
     var networkRxData = [];
-    for (var i = 0; i < 20; i++) {
+    for (var i = 0; i < 60; i++) {
         cpuLabels.push('');
         cpuData.push(0);
         memoryLabels.push('');
@@ -296,14 +299,14 @@ angular.module('container', [])
     var cpuDataset = { // CPU Usage
         fillColor: "rgba(151,187,205,0.5)",
         strokeColor: "rgba(151,187,205,1)",
-        pointColor: "rgba(151,187,205,1)",
+        //pointColor: "rgba(151,187,205,1)",
         pointStrokeColor: "#fff",
         data: cpuData
     };
     var memoryDataset = {
         fillColor: "rgba(151,187,205,0.5)",
         strokeColor: "rgba(151,187,205,1)",
-        pointColor: "rgba(151,187,205,1)",
+        //pointColor: "rgba(151,187,205,1)",
         pointStrokeColor: "#fff",
         data: memoryData
     };
@@ -311,7 +314,7 @@ angular.module('container', [])
         label: "Rx Bytes",
         fillColor: "rgba(151,187,205,0.5)",
         strokeColor: "rgba(151,187,205,1)",
-        pointColor: "rgba(151,187,205,1)",
+        //pointColor: "rgba(151,187,205,1)",
         pointStrokeColor: "#fff",
         data: networkRxData
     };
@@ -319,7 +322,7 @@ angular.module('container', [])
         label: "Tx Bytes",
         fillColor: "rgba(255,180,174,0.5)",
         strokeColor: "rgba(255,180,174,1)",
-        pointColor: "rgba(255,180,174,1)",
+        //pointColor: "rgba(255,180,174,1)",
         pointStrokeColor: "#fff",
         data: networkTxData
     };
@@ -327,7 +330,7 @@ angular.module('container', [])
         {
             //value: '',
             color: 'rgba(151,187,205,0.5)',
-            title: 'Rx Data'
+            title: 'Tx Data'
         },
         {
             //value: '',
@@ -336,11 +339,12 @@ angular.module('container', [])
         }];
     legend($('#network-legend').get(0), networkLegendData);
 
-    Chart.defaults.global.animationSteps = 30; // Lower from 60 to ease CPU load.
+    Chart.defaults.global.animationSteps = 60; // Lower from 60 to ease CPU load.
     var cpuChart = new Chart($('#cpu-stats-chart').get(0).getContext("2d")).Line({
         labels: cpuLabels,
         datasets: [cpuDataset]
     }, {
+        pointDot : false,
         responsive: true
     });
 
@@ -352,6 +356,7 @@ angular.module('container', [])
             scaleLabel: function (valueObj) {
                 return humansizeFilter(parseInt(valueObj.value, 10));
             },
+            pointDot : false,
             responsive: true
             //scaleOverride: true,
             //scaleSteps: 10,
@@ -365,6 +370,7 @@ angular.module('container', [])
         scaleLabel: function (valueObj) {
             return humansizeFilter(parseInt(valueObj.value, 10));
         },
+        pointDot : false,
         responsive: true
     });
     $scope.networkLegend = $sce.trustAsHtml(networkChart.generateLegend());
@@ -409,12 +415,12 @@ angular.module('container', [])
     $timeout(updateStats, 1000);
 
     function updateCpuChart(data) {
-        cpuChart.addData([calculateCPUPercent(data)], new Date(data.read).toLocaleTimeString());
+        cpuChart.addData([calculateCPUPercent(data)], '');
         cpuChart.removeData();
     }
 
     function updateMemoryChart(data) {
-        memoryChart.addData([data.memory_stats.usage], new Date(data.read).toLocaleTimeString());
+        memoryChart.addData([data.memory_stats.usage], '');
         memoryChart.removeData();
     }
 
@@ -435,7 +441,7 @@ angular.module('container', [])
         }
         lastRxBytes = data.network.rx_bytes;
         lastTxBytes = data.network.tx_bytes;
-        networkChart.addData([rxBytes, txBytes], new Date(data.read).toLocaleTimeString());
+        networkChart.addData([rxBytes, txBytes], '');
         networkChart.removeData();
     }
 

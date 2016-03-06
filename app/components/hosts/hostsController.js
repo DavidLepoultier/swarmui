@@ -34,13 +34,13 @@ angular.module('hosts', [])
         for (var n = 0; n < node.length; n++) {
           var running = 0;
           var stopped = 0;
-          var ghost = 0;
+          var created = 0;
           for (var i = 0; i < d.length; i++) {
             var item = d[i];
             var splitedNames = item.Names[0].split("/");
             if (node[n].nodename === splitedNames[1]) {
-              if (item.Status === 'Ghost') {
-                ghost++;
+              if (item.Status === '') {
+                created++;
               } else if (item.Status.indexOf('Exit') !== -1 && item.Status !== 'Exit 0') {
                 stopped++;
               } else {
@@ -51,12 +51,12 @@ angular.module('hosts', [])
           if (stopped === 0 ){
             stopped = "";
           }
-          if (ghost === 0 ){
-            ghost = "";
+          if (created === 0 ){
+            created = "";
           }
           $scope.swarms[n].running = running;
           $scope.swarms[n].stopped = stopped;
-          $scope.swarms[n].ghost = ghost;
+          $scope.swarms[n].created = created;
         }
       });
     };

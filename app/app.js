@@ -10,8 +10,8 @@ angular.module('swarmui', [
     'dashboardImages',
     'container',
     'image',
-    'footer',
     'startContainer',
+    'pullImage',
     'hosts',
     'wrapperHosts',
     'wrapperDashboard',
@@ -79,4 +79,4 @@ angular.module('swarmui', [
     .constant('CONSUL_ENDPOINT', 'consulapi')
     .constant('DOCKER_ENDPOINT', 'swarmuiapitls')
     .constant('DOCKER_PORT', '') // Docker port, leave as an empty string if no port is requred.  If you have a port, prefix it with a ':' i.e. :4243
-    .constant('UI_VERSION', 'v0.1.0-alpha');
+    .constant('UI_VERSION', '<%= pkg.version %>');

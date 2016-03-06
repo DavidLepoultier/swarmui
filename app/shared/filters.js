@@ -34,6 +34,19 @@ angular.module('swarmui.filters', [])
     return name.substring(1, name.length);
   };
 })
+.filter('nodename', function () {
+  'use strict';
+  return function (Node) {
+    var name = Node[0];
+    return name.substring(1, name.length);
+  };
+})
+.filter('nodeurl', function () {
+  'use strict';
+  return function (Node) {
+    return Node[1];
+  };
+})
 .filter('statusbarTask', function () {
   'use strict';
   return function (text) {
@@ -54,20 +67,37 @@ angular.module('swarmui.filters', [])
 .filter('statusBadge', function () {
   'use strict';
   return function (text) {
+    if (text === 'created') {
+      return 'default';
+    } 
     if (text === 'Ghost') {
       return 'important';
-    } else if (text.indexOf('Exit') !== -1 && text !== 'Exit 0' || text.indexOf('exited') !== -1 ) {
+    } 
+    if (text.indexOf('Exit') !== -1 && text !== 'Exit 0' || text.indexOf('exited') !== -1 ) {
       return 'warning';
     }
     return 'success';
   };
 })
+.filter('statusControle', function () {
+  'use strict';
+  return function (text) {
+    if (text === 'created') {
+      return 'Created';
+    } 
+    return text;
+  };
+})
 .filter('statusInverseBadge', function () {
   'use strict';
   return function (text) {
+    if (text === 'created') {
+      return 'success';
+    }
     if (text === 'Ghost') {
       return 'important';
-    } else if (text.indexOf('Exit') !== -1 && text !== 'Exit 0') {
+    } 
+    if (text.indexOf('Exit') !== -1 && text !== 'Exit 0') {
       return 'success';
     }
     return 'danger';
@@ -76,9 +106,13 @@ angular.module('swarmui.filters', [])
 .filter('statusIconsStartStop', function () {
   'use strict';
   return function (text) {
+    if (text === '') {
+      return 'glyphicon glyphicon-play';
+    }
     if (text === 'Ghost') {
       return 'glyphicon glyphicon-off';
-    } else if (text.indexOf('Exit') !== -1 && text !== 'Exit 0') {
+    } 
+    if (text.indexOf('Exit') !== -1 && text !== 'Exit 0') {
       return 'glyphicon glyphicon-play';
     }
     return 'glyphicon glyphicon-off';
@@ -183,6 +217,16 @@ angular.module('swarmui.filters', [])
   };
 })
 .filter('getdate', function () {
+  'use strict';
+  return function (data) {
+    var options = { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit' };
+    var language = navigator.browserLanguage;
+    //Multiply by 1000 for the unix format
+    var date = new Date(data);
+    return date.toLocaleDateString(language, options);
+  };
+})
+.filter('getdate1000', function () {
   'use strict';
   return function (data) {
     var options = { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit' };
