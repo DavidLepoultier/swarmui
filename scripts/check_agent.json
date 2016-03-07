@@ -1,0 +1,8 @@
+{
+    "ID": "docker-daemon:docker-daemon",
+    "ServiceID": "docker-daemon:docker-daemon",
+    "Name": "Check 'docker-daemon' access",
+    "Script": "curl -k 192.168.99.111:2376/info",
+    "Interval": "5s",
+    "Timeout": "1s"
+}

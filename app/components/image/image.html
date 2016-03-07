@@ -9,35 +9,33 @@
         <h1 class="page-header">Image information</h1>
         <div class="panel panel-default">
           <div class="panel-heading">
-            <div ng-if="!container.edit">
-              <h3 class="panel-title">
-                <span class="col-xs-11" style="margin-top: 5px; font-size: 18px;">{{ RepoTags[0] }}</span>
-                <div class="btn-group">
-                  <button type="button" class="btn btn-default dropdown-toggle" style="margin: 0;" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    Action <span class="caret"></span>
-                  </button>
-                  <ul class="dropdown-menu">
-                    <li>
-                      <button type="button" class="btn-link btn-block btn-dropdown"
-                        ng-click="image.addTags = true;">Add Tags
-                      </button>
-                    </li>
-                    <li role="separator" class="divider"></li>
-                    <li>
-                      <button type="button" class="btn-link btn-block btn-dropdown"
-                        data-toggle="modal" data-target="#create-modal">Create Container
-                      </button>
-                    </li>
-                    <li>
-                      <button type="button" class="btn-link btn-block btn-dropdown"
-                        ng-click="removeImage(id)"
-                        ng-show="!container.State.Running">Remove image
-                      </button>
-                    </li>
-                  </ul>
-                </div>
-              </h3>
-            </div>
+            <h3 class="panel-title">
+              <span class="col-xs-11" style="margin-top: 5px; font-size: 18px;">{{ RepoTags[0] }} / last repo {{ $scope.lastRepoTags }}</span>
+              <div class="btn-group">
+                <button type="button" class="btn btn-default dropdown-toggle" style="margin: 0;" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  Action <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu">
+                  <li>
+                    <button type="button" class="btn-link btn-block btn-dropdown"
+                      ng-click="image.addTags = true;">Add Tags
+                    </button>
+                  </li>
+                  <li role="separator" class="divider"></li>
+                  <li>
+                    <button type="button" class="btn-link btn-block btn-dropdown"
+                      data-toggle="modal" data-target="#create-modal">Create Container
+                    </button>
+                  </li>
+                  <li>
+                    <button type="button" class="btn-link btn-block btn-dropdown"
+                      ng-click="removeImage(id)"
+                      ng-show="!containerchart">Remove image
+                    </button>
+                  </li>
+                </ul>
+              </div>
+            </h3>
           </div>
           <div class="panel-body">
             <a href="/#{{ from }}"><- Return {{ returnTo }}</a><br/><br/>
@@ -48,7 +46,7 @@
               <b>Created : </b>{{ image.Created | date: 'medium' }}
               <br/>
               <br/>
-              <div>
+              <div ng-if="containerchart">
                 <h4>Containers created:</h4>
                 <canvas id="containers-started-chart" class="linecharte-image">
                     <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a
@@ -62,21 +60,21 @@
             <div ng-include="template" ng-controller="StartContainerController"></div>
             <div class="col-xs-12" ng-if="image.addTags">
               <form class="form-inline" role="form">
-                  <fieldset>
-                      <legend>Tag image</legend>
-                      <div class="form-group">
-                          <label>Tag:</label>
-                          <input type="text" placeholder="repo" ng-model="tagInfo.repo" class="form-control">
-                          <input type="text" placeholder="version" ng-model="tagInfo.version" class="form-control">
-                      </div>
-                      <div class="form-group">
-                          <label class="checkbox">
-                              <input type="checkbox" ng-model="tagInfo.force" class="form-control"/> Force?
-                          </label>
-                      </div>
-                      <input type="button" ng-click="addTag()" value="Add Tag" class="btn btn-primary"/>
-                      <button class="btn btn-danger" ng-click="image.addTags = false;">&times;</button>
-                  </fieldset>
+                <fieldset>
+                  <legend>Tag image</legend>
+                  <div class="form-group">
+                    <label>Tag:</label>
+                    <input type="text" placeholder="repo" ng-model="tagInfo.repo" class="form-control">
+                    <input type="text" placeholder="version" ng-model="tagInfo.version" class="form-control">
+                  </div>
+                  <div class="form-group">
+                    <label class="checkbox">
+                      <input type="checkbox" ng-model="tagInfo.force" class="form-control"/> Force?
+                    </label>
+                  </div>
+                  <input type="button" ng-click="addTag()" value="Add Tag" class="btn btn-primary"/>
+                  <button class="btn btn-danger" ng-click="image.addTags = false;">&times;</button>
+                </fieldset>
               </form>
               <hr/>
             </div>
@@ -155,7 +153,7 @@
                   <div class="well well-large no-margin-bottom">
                     <ul class="deco-none">
                       <li ng-repeat="change in history | filter:hasContent">
-                        <strong>{{ change.Id }}</strong>: Created: {{ change.Created|getdate }} Created by: {{ change.CreatedBy }}
+                        <strong>{{ change.Id }}</strong>: Created: {{ change.Created|getdate1000 }} Created by: {{ change.CreatedBy }}
                       </li>
                     </ul>
                   </div>

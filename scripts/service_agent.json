@@ -1,0 +1,9 @@
+{
+  "ID": "docker-daemon:docker-daemon",
+  "Name": "docker-daemon",
+  "Tags": [
+    "docker-daemon"
+  ],
+  "Address": "",
+  "Port": 2376
+}

@@ -1,0 +1,8 @@
+{
+    "ID": "%SERVER_NAME%:%SERVICE_NAME%",
+    "ServiceID": "%SERVER_NAME%:%SERVICE_NAME%",
+    "Name": "Check '%SERVICE_NAME%' access",
+    "Script": "curl -k %SERVER_IP%:%SERVICE_PORT%/info",
+    "Interval": "5s",
+    "Timeout": "1s"
+}

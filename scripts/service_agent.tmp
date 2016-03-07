@@ -1,0 +1,9 @@
+{
+  "ID": "%SERVER_NAME%:%SERVICE_NAME%",
+  "Name": "%SERVICE_NAME%",
+  "Tags": [
+    "%SERVICE_NAME%"
+  ],
+  "Address": "",
+  "Port": %SERVICE_PORT%
+}

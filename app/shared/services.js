@@ -152,7 +152,13 @@ angular.module('swarmui.services', ['ngResource'])
           insert: {method: 'POST', params: {id: '@id', action: 'insert'}},
           push: {method: 'POST', params: {id: '@id', action: 'push'}},
           tag: {method: 'POST', params: {id: '@id', node: '@node', action: 'tag', force: 0, repo: '@repo', tag: '@tag'}},
-          remove: {method: 'DELETE', params: {id: '@id', node: '@node'}}
+          remove: {method: 'DELETE', params: {id: '@id', node: '@node'}, isArray: true}
+      });
+  }])
+  .factory('Repositories', ['$resource', function ImageFactory($resource) {
+      'use strict';
+      return $resource('https://index.docker.io/v1/repositories/:image/tags', {}, {
+        get: {method: 'GET', params: {image: '@image'}, headers: {'Origin': 'https://index.docker.io'}}
       });
   }])
   .factory('Version', ['$resource', 'Settings', function VersionFactory($resource, Settings) {
