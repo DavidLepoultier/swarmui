@@ -55,22 +55,25 @@ func createTcpHandler(e string) http.Handler {
 	return httputil.NewSingleHostReverseProxy(u)
 }
 
-func createHandler(dir string, e string, e2 string, e3 string) http.Handler {
+func createHandler(dir string, e string, e2 string, e3 string, e4 string) http.Handler {
 	var (
 		mux         = http.NewServeMux()
 		fileHandler = http.FileServer(http.Dir(dir))
 		dockerHandler http.Handler
 		dockerHandlerTls http.Handler
+		dockerHandlerRepo http.Handler
 		h           http.Handler
 	)
 
 	h = createTcpHandler(e)
 	dockerHandler = createTcpHandler(e2)
 	dockerHandlerTls = createTcpHandler(e3)
+	dockerHandlerRepo = createTcpHandler(e4)
 
 	mux.Handle("/consulapi/", http.StripPrefix("/consulapi", h))
 	mux.Handle("/swarmuiapi/", http.StripPrefix("/swarmuiapi", dockerHandler))
 	mux.Handle("/swarmuiapitls/", http.StripPrefix("/swarmuiapitls", dockerHandlerTls))
+	mux.Handle("/swarmuiapirepo/", http.StripPrefix("/swarmuiapirepo", dockerHandlerRepo))
 	mux.Handle("/", fileHandler)
 	return mux
 }
@@ -83,13 +86,14 @@ func main() {
 		endpoint = flag.String("e", consul, "Consul endpoint")
 		endpoint2 = flag.String("e2", "http://localhost:9001", "Dockers endpoint")
 		endpoint3 = flag.String("e3", "http://localhost:9002", "Dockers TLS endpoint")
+		endpoint4 = flag.String("e4", "http://localhost:9003", "Dockers REPO endpoint")
 		addr     = flag.String("p", ":9000", "Address and port to serve dockerui")
 		assets   = flag.String("a", ".", "Path to the assets")
 	)
 
 	flag.Parse()
 
-	handler := createHandler(*assets, *endpoint, *endpoint2, *endpoint3)
+	handler := createHandler(*assets, *endpoint, *endpoint2, *endpoint3, *endpoint4)
 	if err := http.ListenAndServe(*addr, handler); err != nil {
 		log.Println(handler)
 		log.Fatal(err)

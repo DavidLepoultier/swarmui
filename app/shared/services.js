@@ -155,10 +155,10 @@ angular.module('swarmui.services', ['ngResource'])
           remove: {method: 'DELETE', params: {id: '@id', node: '@node'}, isArray: true}
       });
   }])
-  .factory('Repositories', ['$resource', function ImageFactory($resource) {
+  .factory('Repositories', ['$resource', 'SettingsRepo', function ImageFactory($resource, SettingsRepo) {
       'use strict';
-      return $resource('https://index.docker.io/v1/repositories/:image/tags', {}, {
-        get: {method: 'GET', params: {image: '@image'}, headers: {'Origin': 'https://index.docker.io'}}
+      return $resource(SettingsRepo.url + '/hub.docker.com/v2/repositories/:image/tags', {}, {
+        get: {method: 'GET', params: {image: '@image'}}
       });
   }])
   .factory('Version', ['$resource', 'Settings', function VersionFactory($resource, Settings) {
@@ -215,6 +215,17 @@ angular.module('swarmui.services', ['ngResource'])
           url: url,
           firstLoad: firstLoad
       };
+  }])
+  .factory('SettingsRepo', ['DOCKERREPO_ENDPOINT', function SettingsFactory(DOCKERREPO_ENDPOINT) {
+    'use strict';
+    var url = DOCKERREPO_ENDPOINT;
+    var firstLoad = (localStorage.getItem('firstLoad') || 'true') === 'true';
+    return {
+        displayAll: false,
+        endpoint: DOCKERREPO_ENDPOINT,
+        url: url,
+        firstLoad: firstLoad
+    };
   }])
   .factory('Settings', ['DOCKER_ENDPOINT', 'DOCKER_PORT', 'UI_VERSION', function SettingsFactory(DOCKER_ENDPOINT, DOCKER_PORT, UI_VERSION) {
       'use strict';

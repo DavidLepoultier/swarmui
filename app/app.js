@@ -78,5 +78,6 @@ angular.module('swarmui', [
     // You need to set this to the api endpoint without the port i.e. http://192.168.1.9
     .constant('CONSUL_ENDPOINT', 'consulapi')
     .constant('DOCKER_ENDPOINT', 'swarmuiapitls')
+    .constant('DOCKERREPO_ENDPOINT', 'swarmuiapirepo')
     .constant('DOCKER_PORT', '') // Docker port, leave as an empty string if no port is requred.  If you have a port, prefix it with a ':' i.e. :4243
     .constant('UI_VERSION', '<%= pkg.version %>');
