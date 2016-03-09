@@ -1,4 +1,4 @@
-package main // import "github.com/Ptimagos/swarmui"
+package main 
 
 import (
 	"crypto/tls"
@@ -107,7 +107,8 @@ func sendHttp(w http.ResponseWriter, r *http.Request, client *http.Client) {
 }
 
 func sendHttps(w http.ResponseWriter, r *http.Request, client *http.Client) {
-
+	fmt.Printf("Value de r.URL.Path : %s\n", r.URL.Path)
+	fmt.Printf("Value de client : %s\n", client)
     req, err := http.NewRequest(r.Method, "https:/" + r.URL.Path + "?" + r.URL.RawQuery, r.Body)
     if err != nil {
         log.Println(err)
@@ -141,10 +142,12 @@ func swarmui() {
 		)
 
 		handler := createHandler(*assets, *endpoint, *endpoint2, *endpoint3, *endpoint4)
-		if err := http.ListenAndServe(*addr, handler); err != nil {
-			log.Println(handler)
-			log.Fatal(err)
-		}
+		go func() {
+			if err := http.ListenAndServe(*addr, handler); err != nil {
+				log.Println(handler)
+				log.Fatal(err)
+			}
+		}()
 	} else {
 		msg()
 	}
@@ -164,9 +167,11 @@ func docker() {
     log.Fatal(http.ListenAndServe(":9001", nil))
 }
 
+
 func dockerRepo() {
-	if len(os.Args) > 2 {
-    	myProxy := os.Args[2]
+	repo := http.NewServeMux()
+	if len(os.Args) > 3 {
+    	myProxy := os.Args[3]
 	    url_i := url.URL{}
 	    url_proxy, _ := url_i.Parse(myProxy)
 
@@ -177,10 +182,10 @@ func dockerRepo() {
 	    }
 	    client := &http.Client{Transport: tr}
 
-	    http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		    sendHttps(w, r, client)
-		})
-		log.Fatal(http.ListenAndServe(":9003", nil))
+	    repo.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+        	sendHttps(w, r, client)
+    	})
+		log.Fatal(http.ListenAndServe(":9003", repo))
 	} else {
 		tr := &http.Transport{
 	        DisableCompression: false,
@@ -188,10 +193,10 @@ func dockerRepo() {
 	    }
 	    client := &http.Client{Transport: tr}
 
-		http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		    sendHttps(w, r, client)
-		})
-		log.Fatal(http.ListenAndServe(":9003", nil))
+		repo.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+        	sendHttps(w, r, client)
+    	})
+		log.Fatal(http.ListenAndServe(":9003", repo))
 	}
 }
 
@@ -230,10 +235,14 @@ func dockerTls() {
     }
     client := &http.Client{Transport: tr}
 
-    http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+    tls := http.NewServeMux()
+
+    tls.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
         sendHttps(w, r, client)
     })
-    log.Fatal(http.ListenAndServe(":9002", nil))
+    go func() {
+    	log.Fatal(http.ListenAndServe(":9002", tls))
+    }()
 
 }
 
@@ -245,22 +254,22 @@ func main() {
 		flag.Parse()
 
 		switch starting {
-			case "swarmui":
-				fmt.Printf("Starting %s server\n", starting)
-				swarmui()
-				
 			case "docker":
 				fmt.Printf("Starting Dockers endpoint\n")
 				docker()
-
 			case "dockerTls":
 				fmt.Printf("Starting Dockers Tls endpoint\n")
 				dockerTls()
-
 			case "dockerRepo":
 				fmt.Printf("Starting Dockers Repo endpoint\n")
 				dockerRepo()
-
+			case "swarmui":
+				fmt.Printf("Starting %s server\n", starting)
+				swarmui()
+				fmt.Printf("Starting Dockers Tls endpoint\n")
+				dockerTls()
+				fmt.Printf("Starting Dockers Repo endpoint\n")
+				dockerRepo()
 			default:
 				msg()
 		}
