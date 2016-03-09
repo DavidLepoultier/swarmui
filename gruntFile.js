@@ -11,6 +11,7 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-html2js');
     grunt.loadNpmTasks('grunt-shell');
     grunt.loadNpmTasks('grunt-if');
+    grunt.loadNpmTasks('grunt-chmod');
 
     // Default task.
     grunt.registerTask('default', ['jshint', 'build', 'karma:unit']);
@@ -32,11 +33,14 @@ module.exports = function (grunt) {
         'jshint',
         'karma:unit',
         'concat:index',
+        'concat:shell',
+        'chmod:shell',
         'recess:min',
         'copy'
     ]);
     grunt.registerTask('test-watch', ['karma:watch']);
     grunt.registerTask('run', ['if:binaryNotExist', 'build', 'shell:buildImage', 'shell:run']);
+    grunt.registerTask('runRelease', ['release', 'shell:buildImage', 'shell:run']);
     grunt.registerTask('runSwarm', ['if:binaryNotExist', 'build', 'shell:buildImage', 'shell:runSwarm']);
     grunt.registerTask('run-dev', ['if:binaryNotExist', 'shell:buildImage', 'shell:run', 'watch:build']);
 
@@ -85,7 +89,8 @@ module.exports = function (grunt) {
                 'bower_components/bootstrap/dist/css/bootstrap.css',
                 'bower_components/jquery.gritter/css/jquery.gritter.css',
                 'bower_components/vis/dist/vis.css'
-            ]
+            ],
+            script: ['bin/swarmui.sh']
         },
         clean: {
             all: ['<%= distdir %>/*'],
@@ -155,12 +160,27 @@ module.exports = function (grunt) {
                     process: true
                 }
             },
+            shell: {
+                src: ['bin/swarmui.sh'],
+                dest: '<%= distdir %>/swarmui.sh',
+                options: {
+                    process: true
+                }
+            },
             angular: {
                 src: ['bower_components/angular/angular.js',
                     'bower_components/angular-route/angular-route.js',
                     'bower_components/angular-resource/angular-resource.js',
                     'bower_components/angular-bootstrap/ui-bootstrap-tpls.js'],
                 dest: '<%= distdir %>/angular.js'
+            }
+        },
+        chmod: {
+            shell: {
+                options: {
+                    mode: '755'
+                },
+                src: ['<%= distdir %>/swarmui.sh']
             }
         },
         uglify: {
@@ -249,10 +269,10 @@ module.exports = function (grunt) {
             },
             buildBinary: {
                 command: [
-                    'docker run --rm -v $(pwd):/src centurylink/golang-builder',
-                    'shasum swarmui > swarmui-checksum.txt',
+                    'docker run --rm -e COMPRESS_BINARY=true -v $(pwd)/src/swarmui:/src centurylink/golang-builder',
+                    'shasum $(pwd)/src/swarmui/swarmui > swarmui-checksum.txt',
                     'mkdir -p dist',
-                    'mv swarmui dist/'
+                    'mv $(pwd)/src/swarmui/swarmui dist/'
                 ].join('&&')
             },
             run: {
