@@ -34,20 +34,19 @@ angular.module('dashboardContainers', [])
       var actionCont = '';
       if (status === 'Ghost') {
           return;
-      } else if (status.indexOf('Exit') !== -1 && status !== 'Exit 0' || status === '' ) {
+      } else if (status.indexOf('Exit') !== -1 && status !== 'Exit 0' || status === 'created' ) {
         actionCont = 'start';
       } else {
         actionCont = 'stop';
       }
       var node = container.Names[0].split("/");
-      containerBatch(id, $scope.swarmUrl, actionCont, node[1], startDate);
+      containerBatch(id, $scope.swarmUrl, actionCont, node[1]);
     };
 
-    var containerBatch = function (id, url, actionCont, node, startDate) {
+    var containerBatch = function (id, url, actionCont, node) {
       ViewSpinner.spin();
       var actionTask = actionCont[0].toUpperCase() + actionCont.slice(1) + " container";
       var idShort = id.substring(0, 12);
-      var idConsul = startDate + "-" + idShort;
       var logs = "";
       Container.actionCont({id: id, node: url, action: actionCont}, function (d) {
         update();
@@ -115,11 +114,24 @@ angular.module('dashboardContainers', [])
           } else if (order === Container.remove) {
             counter = counter + 1;
             order({id: c.Id, node: $scope.swarmUrl}, function (d) {
-              Messages.send("Container " + msg, c.Id);
+              console.log(typeof d);
+              console.log(d[0]);
+              if (d[0] === '4'){ 
+                var array = $.map(d, function(value, index) {
+                  return [value];
+                });
+                var error = "";
+                for (var i = 0; i < array.length - 15; i++) {
+                  error += array[i];
+                }
+                Messages.error("Failure Container " + msg, error);
+              } else {
+                Messages.send("Container " + msg, c.Id);
+              }
               var index = $scope.containers.indexOf(c);
               complete();
             }, function (e) {
-              Messages.error("Failure", e.data);
+              Messages.error("Failure Container " + msg, e.data);
               complete();
             });
           } else {

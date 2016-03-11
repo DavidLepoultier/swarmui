@@ -106,7 +106,7 @@ angular.module('swarmui.filters', [])
 .filter('statusIconsStartStop', function () {
   'use strict';
   return function (text) {
-    if (text === '') {
+    if (text === 'created') {
       return 'glyphicon glyphicon-play';
     }
     if (text === 'Ghost') {

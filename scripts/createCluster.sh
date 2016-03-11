@@ -7,8 +7,11 @@ echo "Create VM to docker :"
 for serv in $servers
 do
   echo "-------------------------------------------"
-  echo "Create Docker machine $serv ..."
+  echo "Create Docker machine $serv..."
   docker-machine create -d virtualbox $machine_opt $serv
+  echo "Copy certFile Docker $serv in /certs..."
+  set -x
+  docker-machine ssh $serv "sudo mkdir /certs; sudo cp /var/lib/boot2docker/ca.pem /certs; sudo cp /var/lib/boot2docker/server.pem /certs/cert.pem; sudo cp /var/lib/boot2docker/server-key.pem /certs/key.pem"
 done
 
 echo "###########################################"
@@ -19,14 +22,14 @@ echo "Install Consul and start at server mode :"
 for serv in $servers
 do
   echo "-------------------------------------------"
-  echo "Get Consul image on $serv ..."
+  echo "Get Consul image on $serv..."
   eval "$(docker-machine env $serv)"
   docker pull progrium/consul:${consul_tags}
   machine_ip=`docker-machine ls | grep $serv | awk '{print $5}' | awk -F"/" '{print $3}' | awk -F":" '{print $1}'`
   echo "Ip public for $serv : - $machine_ip -"
   if [ -z $master ]
   then
-    echo "Start Consul server Master on $serv ..."
+    echo "Start Consul server Master on $serv..."
     docker run -d --name consul-server -h $serv -v /mnt:/data \
       -p 8300:8300 \
       -p 8301:8301 \
@@ -40,7 +43,7 @@ do
     master=1
     master_ip=$machine_ip
   else
-    echo "Start Consul server on $serv and join $master_ip ..."
+    echo "Start Consul server on $serv and join $master_ip..."
     docker run -d --name consul-server -h $serv -v /mnt:/data \
       -p 8300:8300 \
       -p 8301:8301 \
@@ -65,7 +68,7 @@ echo "Install Swarm and start server and agent :"
 for serv in $servers
 do
   echo "-------------------------------------------"
-  echo "Get Swarm image on $serv ..."
+  echo "Get Swarm image on $serv..."
   eval "$(docker-machine env $serv)"
   docker pull swarm:${swarm_tags}
   machine_ip=`docker-machine ls | grep $serv | awk '{print $5}' | awk -F"/" '{print $3}' | awk -F":" '{print $1}'`

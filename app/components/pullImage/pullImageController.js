@@ -1,22 +1,76 @@
 angular.module('pullImage', [])
-    .controller('PullImageController', ['$scope', '$log', 'Messages', 'Image', 'ViewSpinner',
-        function ($scope, $log, Messages, Image, ViewSpinner) {
+    .controller('PullImageController', ['$scope', '$log', 'Messages', 'Image', 'ViewSpinner', 'Swarm', 'ConsulPrimarySwarm', 'errorMsgFilter', 'Repositories',
+        function ($scope, $log, Messages, Image, ViewSpinner, Swarm, ConsulPrimarySwarm, errorMsgFilter, Repositories) {
             $scope.template = 'app/components/pullImage/pullImage.html';
+            $scope.searchResult = false;
+            $scope.searchTagResult = false;
+            $scope.swarmUrl = '';
+            $scope.selected = [];
+            $scope.Nodes = [];
+            $scope.ImagesResult = [];
+            $scope.TagsResult = [];
 
-            $scope.init = function () {
-                $scope.config = {
-                    registry: '',
-                    repo: '',
-                    fromImage: '',
-                    tag: 'latest'
-                };
+            ConsulPrimarySwarm.get({}, function (d){
+              $scope.swarmUrl = atob(d[0].Value); 
+              Swarm.info({node: $scope.swarmUrl}, function (d) {
+                var n = 0;
+                for (var i = 4; i < d['SystemStatus'].length;i += 8) {
+                  $scope.Nodes[n] = d['SystemStatus'][i];
+                  n++;
+                }
+              });
+            });
+
+            $scope.config = {
+                registry: '',
+                repo: '',
+                searchImage: '',
+                fromImage: '',
+                tag: 'latest'
             };
 
-            $scope.init();
 
             function failedRequestHandler(e, Messages) {
                 Messages.error('Error', errorMsgFilter(e));
             }
+
+            $scope.searchDockerCont = function () {
+                // Copy the config before transforming fields to the remote API format
+                var config = angular.copy($scope.config);
+                ViewSpinner.spin();
+                // Set Swarm Manager Host
+                config.SwarmHost = $scope.swarmUrl;
+                Image.search({node: config.SwarmHost, term: config.searchImage}, function (d){
+                    ViewSpinner.stop();
+                    for (var i = 0; i < d.length; i++) {
+                        $scope.ImagesResult[i] = d[i].name;
+                    }
+                    $scope.searchResult = true;
+                }, function (e) {
+                    ViewSpinner.stop();
+                });
+
+            };
+
+            $scope.getRepositoriesTags = function() {
+                ViewSpinner.spin();
+                var splitUser = $scope.selected.Image.split("/");
+                console.log('splituser: ' + splitUser[1]);
+                if (!splitUser[1]) {
+                  imageName = 'library/' + $scope.selected.Image;
+                } else {
+                  imageName = $scope.selected.Image;
+                }
+                Repositories.get({image: imageName, n: 25}, function (d) {
+                    for (var i = 0; i < d.results.length; i++) {
+                        $scope.TagsResult[i] = d.results[i].name;
+                    }
+                    ViewSpinner.stop();
+                    $scope.searchTagResult = true;
+                }, function (e) {
+                    ViewSpinner.stop();
+                });
+            };
 
             $scope.pull = function () {
                 $('#error-message').hide();

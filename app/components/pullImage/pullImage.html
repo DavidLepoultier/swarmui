@@ -6,37 +6,48 @@
                 <h3>Pull Image</h3>
             </div>
             <div class="modal-body">
-                <form novalidate role="form" name="pullForm">
-                    <!--<div class="input-group">
-                        <span class="input-group-addon" id="basic-addon1">Image name</span>
-                        <input type="text" class="form-control" placeholder="imageName" aria-describedby="basic-addon1">
-                    </div>-->
+                <form role="form" name="pullForm">
                     <div class="form-group">
                         <label>Registry:</label>
                         <input type="text" ng-model="config.registry" class="form-control"
                                placeholder="Registry. Leave empty to user docker hub"/>
                     </div>
-                    <div class="form-group">
-                        <label>Repo:</label>
-                        <input type="text" ng-model="config.repo" class="form-control"
-                               placeholder="Repository - usually your username."/>
+                    <div class="input-group">
+                        <input type="text" ng-model="config.searchImage" class="form-control" 
+                            placeholder="Search image..." />
+                        <span class="input-group-btn">
+                            <button ng-click="searchDockerCont()" class="btn btn-default glyphicon glyphicon-search" style="top: 0;" type="button"></button>
+                        </span>
                     </div>
-                    <div class="form-group">
-                        <label>Image Name:</label>
-                        <input type="text" ng-model="config.fromImage" class="form-control" placeholder="Image name"
-                               required/>
-                    </div>
-                    <div class="form-group">
-                        <label>Tag Name:</label>
-                        <input type="text" ng-model="config.tag" class="form-control"
-                               placeholder="Tag name. If empty it will download ALL tags."/>
+                    <div ng-if="searchResult">
+                        <div class="form-group">
+                            <label>Select Image:</label>
+                            <select class="form-control" ng-change="getRepositoriesTags()" ng-model="selected.Image">
+                                <option ng-repeat="image in ImagesResult" value="{{ image }}">
+                                {{ image }}
+                                </option>
+                            </select>
+                        </div>
+                        <div ng-if="searchTagResult">
+                            <div class="form-group">
+                                <label>Select Tag:</label>
+                                <select class="form-control" ng-change="getRepositoriesTags()" ng-model="selected.Tag">
+                                    <option ng-repeat="tag in TagsResult" value="{{ tag }}">
+                                    {{ tag }}
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
                     </div>
                 </form>
             </div>
             <div class="alert alert-error" id="error-message" style="display:none">
                 {{ error }}
             </div>
-            <div class="modal-footer">
+            <div ng-if="!searchResult" class="modal-footer">
+                <a href="" class="btn btn-primary disabled">Pull</a>
+            </div>
+            <div ng-if="searchResult" class="modal-footer">
                 <a href="" class="btn btn-primary" ng-click="pull()">Pull</a>
             </div>
         </div>

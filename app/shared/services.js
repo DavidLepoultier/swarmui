@@ -81,7 +81,7 @@ angular.module('swarmui.services', ['ngResource'])
       return $resource(Settings.url + '/:node/images/:id/:action', {}, {
           query: {method: 'GET', params: {all: 0, action: 'json'}, isArray: true},
           get: {method: 'GET', params: {action: 'json'}},
-          search: {method: 'GET', params: {action: 'search'}},
+          search: {method: 'GET', params: {node: '@node', action: 'search', term: '@term'}, isArray: true},
           history: {method: 'GET', params: {action: 'history'}, isArray: true},
           create: {
               method: 'POST', isArray: true, transformResponse: [function f(data) {
