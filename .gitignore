@@ -1,11 +1,6 @@
 logs/*
-!.gitkeep
-*.esproj/*
 node_modules
 bower_components
-.idea
-dist
 dist.ori
 dockerui
-*.iml
 bin
