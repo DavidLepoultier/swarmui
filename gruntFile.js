@@ -279,7 +279,7 @@ module.exports = function (grunt) {
                 command: [
                     'docker stop swarmui',
                     'docker rm sawrmui',
-                    'docker run --privileged -d -p 9000:9000 -v /var/run/docker.sock:/var/run/docker.sock --name swarmui swarmui'
+                    'docker run --privileged -d -p 9000:9000 --name swarmui swarmui swarmui http://192.168.99.100:8500'
                 ].join(';')
             },
             runSwarm: {

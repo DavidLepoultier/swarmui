@@ -1,4 +1,4 @@
-package main 
+package main // import "github.com/Ptimagos/swarmui"
 
 import (
 	"crypto/tls"
@@ -107,8 +107,6 @@ func sendHttp(w http.ResponseWriter, r *http.Request, client *http.Client) {
 }
 
 func sendHttps(w http.ResponseWriter, r *http.Request, client *http.Client) {
-	fmt.Printf("Value de r.URL.Path : %s\n", r.URL.Path)
-	fmt.Printf("Value de client : %s\n", client)
     req, err := http.NewRequest(r.Method, "https:/" + r.URL.Path + "?" + r.URL.RawQuery, r.Body)
     if err != nil {
         log.Println(err)
@@ -171,31 +169,33 @@ func docker() {
 func dockerRepo() {
 	repo := http.NewServeMux()
 	if len(os.Args) > 3 {
-    	myProxy := os.Args[3]
-	    url_i := url.URL{}
-	    url_proxy, _ := url_i.Parse(myProxy)
+  	myProxy := os.Args[3]
+    url_i := url.URL{}
+    url_proxy, _ := url_i.Parse(myProxy)
 
-	    tr := &http.Transport{
-	        DisableCompression: false,
-	        DisableKeepAlives: false,
-	        Proxy: http.ProxyURL(url_proxy),
-	    }
-	    client := &http.Client{Transport: tr}
-
-	    repo.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-        	sendHttps(w, r, client)
-    	})
+    tr := &http.Transport{
+      DisableCompression: false,
+      DisableKeepAlives: false,
+      Proxy: http.ProxyURL(url_proxy),
+      TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
+    }
+    clientRepo := &http.Client{Transport: tr}
+    fmt.Printf("Value de client : %s\n", tr)
+    repo.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+      	sendHttps(w, r, clientRepo)
+  	})
 		log.Fatal(http.ListenAndServe(":9003", repo))
 	} else {
 		tr := &http.Transport{
-	        DisableCompression: false,
-	        DisableKeepAlives: false,
-	    }
-	    client := &http.Client{Transport: tr}
-
+      DisableCompression: false,
+      DisableKeepAlives: false,
+      TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
+    }
+    clientRepo := &http.Client{Transport: tr}
+    fmt.Printf("Value de client : %s\n", tr)
 		repo.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-        	sendHttps(w, r, client)
-    	})
+        	sendHttps(w, r, clientRepo)
+  	})
 		log.Fatal(http.ListenAndServe(":9003", repo))
 	}
 }
@@ -234,7 +234,7 @@ func dockerTls() {
         TLSClientConfig: tlsConfig,
     }
     client := &http.Client{Transport: tr}
-
+    fmt.Printf("Value de client : %s\n", tr)
     tls := http.NewServeMux()
 
     tls.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
