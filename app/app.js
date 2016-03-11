@@ -14,10 +14,7 @@ angular.module('swarmui', [
     'pullImage',
     'hosts',
     'wrapperHosts',
-    'wrapperDashboard',
-    'tasks',
-    'tasksHosts',
-    'tasksDashboard'])
+    'wrapperDashboard'])
     .config(['$routeProvider', function ($routeProvider) {
         'use strict';
         $routeProvider.when('/', {

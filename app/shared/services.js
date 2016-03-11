@@ -1,118 +1,59 @@
 angular.module('swarmui.services', ['ngResource'])
-  .factory('ConsulContainers', ['$resource', 'SettingsConsul', function ContainerFactory($resource, Settings) {
-      'use strict';
-      // Resource for interacting with the docker containers
-      // http://docs.docker.com/reference/api/docker_remote_api_<%= remoteApiVersion %>/#2-1-containers
-      return $resource(Settings.url + '/v1/kv/docker/swarm-ui/containers/:idContainer', {
-          idContainer: '@idConsul'
-      }, {
-          query: {method: 'GET', params: {recurse: 0}, isArray: true},
-          get: {method: 'GET', params: {action: 'json'}},
-          update: {method: 'PUT', params: {action: 'json'}},
-          setalarm: {method: 'PUT', params: {action: 'json'}}
-      });
-  }])
-  .factory('ConsulTasks', ['$resource', 'SettingsConsul', function ContainerFactory($resource, Settings) {
-      'use strict';
-      // Resource for interacting with the docker containers
-      // http://docs.docker.com/reference/api/docker_remote_api_<%= remoteApiVersion %>/#2-1-containers
-      return $resource(Settings.url + '/v1/kv/docker/swarm-ui/tasks/:id', {
-          task: '@id'
-      }, {
-          query: {method: 'GET', params: {recurse: 0}, isArray: true},
-          get: {method: 'GET', params: {action: 'json'}},
-          createTask: {method: 'PUT', params: {id: '@id', action: 'json'}}
-      });
-  }])
-  .factory('ConsulNodes', ['$resource', 'SettingsConsul', function ContainerFactory($resource, Settings) {
-      'use strict';
-      // Resource for interacting with the docker containers
-      // http://docs.docker.com/reference/api/docker_remote_api_<%= remoteApiVersion %>/#2-1-containers
-      return $resource(Settings.url + '/v1/kv/docker/swarm-ui/nodes/:node', {
-          node: '@name'
-      }, {
-          query: {method: 'GET', params: {recurse: 0}, isArray: true},
-          get: {method: 'GET', params: {action: 'json'}, isArray: true},
-          setalarm: {method: 'PUT', params: {action: 'json'}}
-      });
-  }])
   .factory('ConsulPrimarySwarm', ['$resource', 'SettingsConsul', function ContainerFactory($resource, Settings) {
-      'use strict';
-      // Resource for interacting with the docker containers
-      // http://docs.docker.com/reference/api/docker_remote_api_<%= remoteApiVersion %>/#2-1-containers
-      return $resource(Settings.url + '/v1/kv/docker/swarm/leader', {
-          node: '@name'
-      }, {
-          get: {method: 'GET', isArray: true}
-      });
-  }])
-  .factory('ConsulSwarmManager', ['$resource', 'SettingsConsul', function ContainerFactory($resource, Settings) {
-      'use strict';
-      // Resource for interacting with the docker containers
-      // http://docs.docker.com/reference/api/docker_remote_api_<%= remoteApiVersion %>/#2-1-containers
-      return $resource(Settings.url + '/v1/kv/docker/swarm-ui/swarm-manager/:node', {
-          node: '@nodeName'
-      }, {
-          query: {method: 'GET', params: {recurse: 0}, isArray: true},
-          get: {method: 'GET', params: {action: 'json'}}
-      });
-  }])
-  .factory('ConsulSwarmAgent', ['$resource', 'SettingsConsul', function ContainerFactory($resource, Settings) {
-      'use strict';
-      // Resource for interacting with the docker containers
-      // http://docs.docker.com/reference/api/docker_remote_api_<%= remoteApiVersion %>/#2-1-containers
-      return $resource(Settings.url + '/v1/kv/docker/swarm-ui/swarm-agent/:node', {
-          node: '@nodeName'
-      }, {
-          query: {method: 'GET', params: {recurse: 0}, isArray: true},
-          get: {method: 'GET', params: {action: 'json'}}
-      });
+    'use strict';
+    // Resource for interacting with the docker containers
+    // http://docs.docker.com/reference/api/docker_remote_api_<%= remoteApiVersion %>/#2-1-containers
+    return $resource(Settings.url + '/v1/kv/docker/swarm/leader', {
+        node: '@name'
+    }, {
+        get: {method: 'GET', isArray: true}
+    });
   }])
   .factory('Swarm', ['$resource', 'Settings', function ContainerFactory($resource, Settings) {
-      'use strict';
-      // Resource for interacting with the docker containers
-      // http://docs.docker.com/reference/api/docker_remote_api_<%= remoteApiVersion %>/#2-1-containers
-      return $resource(Settings.url + '/:node/:action', {
-          name: '@name'
-      }, {
-          info: {method: 'GET', params: {action: 'info'}}
-      });
+    'use strict';
+    // Resource for interacting with the docker containers
+    // http://docs.docker.com/reference/api/docker_remote_api_<%= remoteApiVersion %>/#2-1-containers
+    return $resource(Settings.url + '/:node/:action', {
+      name: '@name'
+    }, {
+      info: {method: 'GET', params: {action: 'info'}}
+    });
   }])
   .factory('Container', ['$resource', 'Settings', function ContainerFactory($resource, Settings) {
-      'use strict';
-      // Resource for interacting with the docker containers
-      // http://docs.docker.com/reference/api/docker_remote_api_<%= remoteApiVersion %>/#2-1-containers
-      return $resource(Settings.url + '/:node/containers/:id/:action', {
-          name: '@name'
-      }, {
-          query: {method: 'GET', params: {node: '@node', all: 0, action: 'json'}, isArray: true},
-          get: {method: 'GET', params: {node: '@node', action: 'json'}},
-          actionCont: {method: 'POST', params: {id: '@id', node: '@node', t: 5, action: '@action'}},
-          changes: {method: 'GET', params: {node: '@node', action: 'changes'}, isArray: true},
-          create: {method: 'POST', params: {node: '@SwarmHost', action: 'create'}},
-          remove: {method: 'DELETE', params: {id: '@id', node: '@node', v: 0}},
-          rename: {method: 'POST', params: {id: '@id', node: '@node', action: 'rename'}, isArray: false},
-          top: {method: 'GET', params: {id: '@id', node: '@node', ps_args: '@ps_args', action: 'top'}},
-          stats: {method: 'GET', params: {id: '@id', node: '@node', stream: false, action: 'stats'}, timeout: 5000}
-      });
+    'use strict';
+    // Resource for interacting with the docker containers
+    // http://docs.docker.com/reference/api/docker_remote_api_<%= remoteApiVersion %>/#2-1-containers
+    return $resource(Settings.url + '/:node/containers/:id/:action', {
+      name: '@name'
+    }, {
+      query: {method: 'GET', params: {node: '@node', all: 0, action: 'json'}, isArray: true},
+      get: {method: 'GET', params: {node: '@node', action: 'json'}},
+      actionCont: {method: 'POST', params: {id: '@id', node: '@node', t: 5, action: '@action'}},
+      changes: {method: 'GET', params: {node: '@node', action: 'changes'}, isArray: true},
+      create: {method: 'POST', params: {node: '@SwarmHost', action: 'create'}},
+      remove: {method: 'DELETE', params: {id: '@id', node: '@node', v: 0}},
+      rename: {method: 'POST', params: {id: '@id', node: '@node', action: 'rename'}, isArray: false},
+      top: {method: 'GET', params: {id: '@id', node: '@node', ps_args: '@ps_args', action: 'top'}},
+      stats: {method: 'GET', params: {id: '@id', node: '@node', stream: false, action: 'stats'}, timeout: 5000}
+    });
   }])
   .factory('ContainerCommit', ['$resource', '$http', 'Settings', function ContainerCommitFactory($resource, $http, Settings) {
-      'use strict';
-      // http://docs.docker.com/reference/api/docker_remote_api_<%= remoteApiVersion %>/#create-a-new-image-from-a-container-s-changes
-      return {
-          commit: function (params, callback) {
-              $http({
-                  method: 'POST',
-                  url: Settings.url + '/:node/commit',
-                  params: {
-                      'container': params.id,
-                      'repo': params.repo
-                  }
-              }).success(callback).error(function (data, status, headers, config) {
-                  console.log(error, data);
-              });
+    'use strict';
+    // http://docs.docker.com/reference/api/docker_remote_api_<%= remoteApiVersion %>/#create-a-new-image-from-a-container-s-changes
+    return {
+      commit: function (params, callback) {
+        $http({
+          method: 'POST',
+          url: Settings.url + '/:node/commit',
+          params: {
+            'container': params.id,
+            'repo': params.repo
           }
-      };
+        }).success(callback).error(function (data, status, headers, config) {
+          console.log(error, data);
+        });
+      }
+    };
   }])
   .factory('ContainerLogs', ['$resource', '$http', 'Settings', function ContainerLogsFactory($resource, $http, Settings) {
       'use strict';

@@ -1,7 +1,7 @@
 angular.module('hosts', [])
-.controller('HostsController', ['$scope', '$routeParams', 'ConsulNodes', 'Swarm', 'Container', 
+.controller('HostsController', ['$scope', '$routeParams', 'Swarm', 'Container', 
   'ConsulPrimarySwarm', 'SettingsConsul', 'Settings', 'Messages', 'ViewSpinner',
-  function ($scope, $routeParams, ConsulNodes, Swarm, Container, ConsulPrimarySwarm, SettingsConsul, Settings, Messages, ViewSpinner) {
+  function ($scope, $routeParams, Swarm, Container, ConsulPrimarySwarm, SettingsConsul, Settings, Messages, ViewSpinner) {
     $scope.swarms = [];
     $scope.dashboard = '1';
     $scope.containers = [];

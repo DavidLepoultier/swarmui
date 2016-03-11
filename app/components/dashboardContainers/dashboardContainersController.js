@@ -1,7 +1,7 @@
 angular.module('dashboardContainers', [])
 .controller('DashboardContainersController', ['$scope', '$routeParams', 'Container', 
-  'ConsulPrimarySwarm', 'SettingsConsul', 'Settings', 'Messages', 'ViewSpinner', 'ConsulTasks',
-  function ($scope, $routeParams, Container, ConsulPrimarySwarm, SettingsConsul, Settings, Messages, ViewSpinner, ConsulTasks) {
+  'ConsulPrimarySwarm', 'SettingsConsul', 'Settings', 'Messages', 'ViewSpinner',
+  function ($scope, $routeParams, Container, ConsulPrimarySwarm, SettingsConsul, Settings, Messages, ViewSpinner) {
     $scope.toggle = false;
     $scope.displayAll = Settings.displayAll;
     $scope.dashboard = '3';
@@ -31,7 +31,6 @@ angular.module('dashboardContainers', [])
     };
 
     $scope.actionContainer = function (id,container,status){
-      var startDate = new Date().getTime();
       var actionCont = '';
       if (status === 'Ghost') {
           return;
@@ -52,15 +51,9 @@ angular.module('dashboardContainers', [])
       var logs = "";
       Container.actionCont({id: id, node: url, action: actionCont}, function (d) {
         update();
-        var stat = "success";
-        var endDate = new Date().getTime();
-        ConsulTasks.createTask({id: idConsul,logs: logs,progress: 100,stat: stat,nodeName: node,action: actionCont,containerID: idShort,describe: actionTask,startDate: startDate,endDate: endDate});
         Messages.send(actionTask + " on " + node, id);
       }, function (e) {
         Messages.error("Failure", "Container failed to " + actionCont + "." + $routeParams.id);
-        var stat = "failed";
-        var endDate = new Date().getTime();
-        ConsulTasks.createTask({id: idConsul,logs: logs,progress: 100,stat: stat,nodeName: node,action: actionCont,containerID: idShort,describe: actionTask,startDate: startDate,endDate: endDate});
       });
        ViewSpinner.stop();
     };    

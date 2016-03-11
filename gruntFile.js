@@ -265,7 +265,7 @@ module.exports = function (grunt) {
         },
         shell: {
             buildImage: {
-                command: 'docker build --rm -t swarmui .'
+                command: 'docker build --rm -t ptimagos/swarmui:0.1.0 .'
             },
             buildBinary: {
                 command: [
