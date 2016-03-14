@@ -5,7 +5,6 @@ angular.module('pullImage', [])
             $scope.searchResult = false;
             $scope.searchTagResult = false;
             $scope.swarmUrl = '';
-            $scope.selected = [];
             $scope.Nodes = [];
             $scope.ImagesResult = [];
             $scope.TagsResult = [];
@@ -21,14 +20,17 @@ angular.module('pullImage', [])
               });
             });
 
-            $scope.config = {
-                registry: '',
-                repo: '',
-                searchImage: '',
-                fromImage: '',
-                tag: 'latest'
+            $scope.init = function () {
+                $scope.config = {
+                    selectedImage: '',
+                    searchImage: '',
+                    image: '',
+                    tag: '',
+                    node: ''
+                };
             };
 
+            $scope.init();
 
             function failedRequestHandler(e, Messages) {
                 Messages.error('Error', errorMsgFilter(e));
@@ -38,10 +40,10 @@ angular.module('pullImage', [])
                 // Copy the config before transforming fields to the remote API format
                 var config = angular.copy($scope.config);
                 ViewSpinner.spin();
-                // Set Swarm Manager Host
-                config.SwarmHost = $scope.swarmUrl;
-                Image.search({node: config.SwarmHost, term: config.searchImage}, function (d){
+                Image.search({node: $scope.swarmUrl, term: config.searchImage}, function (d){
                     ViewSpinner.stop();
+                    $scope.ImagesResult = [];
+                    $scope.TagsResult = [];
                     for (var i = 0; i < d.length; i++) {
                         $scope.ImagesResult[i] = d[i].name;
                     }
@@ -54,16 +56,16 @@ angular.module('pullImage', [])
 
             $scope.getRepositoriesTags = function() {
                 ViewSpinner.spin();
-                var splitUser = $scope.selected.Image.split("/");
-                console.log('splituser: ' + splitUser[1]);
+                var splitUser = $scope.config.image.split("/");
                 if (!splitUser[1]) {
-                  imageName = 'library/' + $scope.selected.Image;
+                  imageName = 'library/' + $scope.config.image;
                 } else {
-                  imageName = $scope.selected.Image;
+                  imageName = $scope.config.image;
                 }
                 Repositories.get({image: imageName, n: 25}, function (d) {
+                    $scope.TagsResult = [];
                     for (var i = 0; i < d.results.length; i++) {
-                        $scope.TagsResult[i] = d.results[i].name;
+                        $scope.TagsResult[i] = d.results[i];
                     }
                     ViewSpinner.stop();
                     $scope.searchTagResult = true;
@@ -77,11 +79,11 @@ angular.module('pullImage', [])
                 var config = angular.copy($scope.config);
                 var imageName = (config.registry ? config.registry + '/' : '' ) +
                     (config.repo ? config.repo + '/' : '') +
-                    (config.fromImage) +
+                    (config.image) +
                     (config.tag ? ':' + config.tag : '');
 
-                ViewSpinner.spin();
                 $('#pull-modal').modal('hide');
+                Messages.send("Pull image started", imageName);
                 Image.create(config, function (data) {
                     ViewSpinner.stop();
                     if (data.constructor === Array) {
@@ -95,13 +97,14 @@ angular.module('pullImage', [])
                         } else {
                             Messages.send("Image Added", imageName);
                             $scope.init();
+                            $scope.searchResult = false;
                         }
                     } else {
                         Messages.send("Image Added", imageName);
                         $scope.init();
+                        $scope.searchResult = false;
                     }
                 }, function (e) {
-                    ViewSpinner.stop();
                     $scope.error = "Cannot pull image " + imageName + " Reason: " + e.data;
                     $('#pull-modal').modal('show');
                     $('#error-message').show();

@@ -219,11 +219,15 @@ angular.module('swarmui.filters', [])
 .filter('getdate', function () {
   'use strict';
   return function (data) {
-    var options = { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit' };
-    var language = navigator.browserLanguage;
-    //Multiply by 1000 for the unix format
-    var date = new Date(data);
-    return date.toLocaleDateString(language, options);
+    if (data) {
+      var options = { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit' };
+      var language = navigator.browserLanguage;
+      //Multiply by 1000 for the unix format
+      var date = new Date(data);
+      return date.toLocaleDateString(language, options);
+    } else {
+      return;
+    }
   };
 })
 .filter('getdate1000', function () {

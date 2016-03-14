@@ -57,17 +57,9 @@ angular.module('swarmui', [
             templateUrl: 'app/components/image/image.html',
             controller: 'ImageController'
         });
-        $routeProvider.when('/dashboard/tasks/', {
-            templateUrl: 'app/components/tasks/tasksDashboard.html',
-            controller: 'TasksDashboardController'
-        });
         $routeProvider.when('/hosts/', {
             templateUrl: 'app/components/hosts/hosts.html',
             controller: 'HostsController'
-        });
-        $routeProvider.when('/hosts/tasks/', {
-            templateUrl: 'app/components/tasks/tasksHosts.html',
-            controller: 'TasksHostsController'
         });
         $routeProvider.otherwise({redirectTo: '/'});
     }])

@@ -8,9 +8,12 @@
             <div class="modal-body">
                 <form role="form" name="pullForm">
                     <div class="form-group">
-                        <label>Registry:</label>
-                        <input type="text" ng-model="config.registry" class="form-control"
-                               placeholder="Registry. Leave empty to user docker hub"/>
+                        <label>Select host:</label>
+                        <select class="form-control" ng-model="config.node">
+                            <option ng-repeat="Node in Nodes" value="{{ Node | nodeurl }}">
+                                {{ Node | nodename }}
+                              </option>
+                        </select>
                     </div>
                     <div class="input-group">
                         <input type="text" ng-model="config.searchImage" class="form-control" 
@@ -19,10 +22,11 @@
                             <button ng-click="searchDockerCont()" class="btn btn-default glyphicon glyphicon-search" style="top: 0;" type="button"></button>
                         </span>
                     </div>
+                    <br/>
                     <div ng-if="searchResult">
                         <div class="form-group">
                             <label>Select Image:</label>
-                            <select class="form-control" ng-change="getRepositoriesTags()" ng-model="selected.Image">
+                            <select class="form-control" ng-change="getRepositoriesTags()" ng-model="config.image">
                                 <option ng-repeat="image in ImagesResult" value="{{ image }}">
                                 {{ image }}
                                 </option>
@@ -31,9 +35,9 @@
                         <div ng-if="searchTagResult">
                             <div class="form-group">
                                 <label>Select Tag:</label>
-                                <select class="form-control" ng-change="getRepositoriesTags()" ng-model="selected.Tag">
-                                    <option ng-repeat="tag in TagsResult" value="{{ tag }}">
-                                    {{ tag }}
+                                <select class="form-control" ng-model="config.tag">
+                                    <option ng-repeat="tag in TagsResult" value="{{ tag.name }}">
+                                    {{ tag.name }} - {{ tag.last_updated | getdate }}
                                     </option>
                                 </select>
                             </div>

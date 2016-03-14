@@ -25,10 +25,19 @@ angular.module('dashboard', [])
   function addText(d, total) {
     var canvas = document.getElementById(d);
     var ctx = document.getElementById(d).getContext("2d");
+    var cx = '';
+    var cy = '';
 
-    var cx = canvas.width / 4;
-    var cy = canvas.height / 4;
-
+    switch(screen.availWidth){
+        case 1280:
+          cx = canvas.width / 4;
+          cy = canvas.height / 4;
+          break;
+        default:
+          cx = canvas.width / 2;
+          cy = canvas.height / 2;
+          break;
+    }
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
     ctx.font = 'bold 50px Helvetica Neue';

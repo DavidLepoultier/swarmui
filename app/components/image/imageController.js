@@ -102,7 +102,6 @@ angular.module('image', [])
         var splitName = RepoTags[0].split(":");
         var imageName = splitName[0];
         var splitUser = RepoTags[0].split("/");
-        console.log('splituser: ' + splitUser[2]);
         if (!splitUser[1]) {
           imageName = 'library/' + imageName;
         }
@@ -133,7 +132,7 @@ angular.module('image', [])
                 return new Date(c.Created * 1000).toLocaleDateString();
               });
           });
-          $scope.getRepositoriesTags($scope.RepoTags);
+          //$scope.getRepositoriesTags($scope.RepoTags);
           $scope.getHistory($scope.swarmUrl);
         }, function (e) {
             if (e.status === 404) {

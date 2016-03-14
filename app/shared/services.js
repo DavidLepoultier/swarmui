@@ -88,7 +88,7 @@ angular.module('swarmui.services', ['ngResource'])
                   var str = data.replace(/\n/g, " ").replace(/\}\W*\{/g, "}, {");
                   return angular.fromJson("[" + str + "]");
               }],
-              params: {action: 'create', fromImage: '@fromImage', repo: '@repo', tag: '@tag', registry: '@registry'}
+              params: {node: '@node', action: 'create', fromImage: '@image', repo: '@repo', tag: '@tag', registry: '@registry'}
           },
           insert: {method: 'POST', params: {id: '@id', action: 'insert'}},
           push: {method: 'POST', params: {id: '@id', action: 'push'}},

@@ -277,15 +277,17 @@ module.exports = function (grunt) {
             },
             run: {
                 command: [
+                    'id=`docker ps -a | grep swarmui | awk \'{print $1}\'`',
                     'docker stop swarmui',
-                    'docker rm sawrmui',
-                    'docker run --privileged -d -p 9000:9000 --name swarmui swarmui swarmui http://192.168.99.100:8500'
+                    'docker rm $id',
+                    'docker run --privileged -d -p 9000:9000 --name swarmui ptimagos/swarmui:0.1.0 http://192.168.99.100:8500'
                 ].join(';')
             },
             runSwarm: {
                 command: [
+                    'id=`docker ps -a | grep swarmui | awk "{print $1}"`',
                     'docker stop swarmui',
-                    'docker rm swarmui',
+                    'docker rm $id',
                     'docker run --net=host -d --name swarmui swarmui -e http://127.0.0.1:2374'
                 ].join(';')
             },

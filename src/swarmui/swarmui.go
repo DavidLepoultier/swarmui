@@ -127,8 +127,8 @@ func sendHttps(w http.ResponseWriter, r *http.Request, client *http.Client) {
 }
 
 func swarmui() {
-	if len(os.Args) > 2 {
-		consul := os.Args[2]
+	if len(os.Args) > 1 {
+		consul := os.Args[1]
 
 		var (
 			endpoint = flag.String("e", consul, "Consul endpoint")
@@ -168,8 +168,8 @@ func docker() {
 
 func dockerRepo() {
 	repo := http.NewServeMux()
-	if len(os.Args) > 3 {
-  	myProxy := os.Args[3]
+	if len(os.Args) > 2 {
+  	myProxy := os.Args[2]
     url_i := url.URL{}
     url_proxy, _ := url_i.Parse(myProxy)
 
@@ -192,7 +192,7 @@ func dockerRepo() {
       TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
     }
     clientRepo := &http.Client{Transport: tr}
-    fmt.Printf("Value de client : %s\n", tr)
+
 		repo.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
         	sendHttps(w, r, clientRepo)
   	})
@@ -234,7 +234,7 @@ func dockerTls() {
         TLSClientConfig: tlsConfig,
     }
     client := &http.Client{Transport: tr}
-    fmt.Printf("Value de client : %s\n", tr)
+
     tls := http.NewServeMux()
 
     tls.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
@@ -249,30 +249,16 @@ func dockerTls() {
 func main() {
 
 	if len(os.Args) > 1 {
-		starting := os.Args[1]
 
 		flag.Parse()
 
-		switch starting {
-			case "docker":
-				fmt.Printf("Starting Dockers endpoint\n")
-				docker()
-			case "dockerTls":
-				fmt.Printf("Starting Dockers Tls endpoint\n")
-				dockerTls()
-			case "dockerRepo":
-				fmt.Printf("Starting Dockers Repo endpoint\n")
-				dockerRepo()
-			case "swarmui":
-				fmt.Printf("Starting %s server\n", starting)
-				swarmui()
-				fmt.Printf("Starting Dockers Tls endpoint\n")
-				dockerTls()
-				fmt.Printf("Starting Dockers Repo endpoint\n")
-				dockerRepo()
-			default:
-				msg()
-		}
+		fmt.Printf("Starting swarmui server\n")
+		swarmui()
+		fmt.Printf("Starting Dockers Tls endpoint\n")
+		dockerTls()
+		fmt.Printf("Starting Dockers Repo endpoint\n")
+		dockerRepo()
+
 	} else {
 		msg()
 	}
