@@ -20,7 +20,6 @@ do
   echo "Create Docker machine $serv..."
   docker-machine create -d virtualbox $machine_opt $serv
   echo "Copy certFile Docker $serv in /certs..."
-  set -x
   docker-machine ssh $serv "sudo mkdir /certs; sudo cp /var/lib/boot2docker/ca.pem /certs; sudo cp /var/lib/boot2docker/server.pem /certs/cert.pem; sudo cp /var/lib/boot2docker/server-key.pem /certs/key.pem"
 done
 

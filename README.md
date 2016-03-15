@@ -193,9 +193,8 @@ You can create manually the cluster or by the lowest script...
 
 1. Get and run the script createCluster.sh:
 
-
 	```
-	wget -O - https://raw.githubusercontent.com/Ptimagos/swarmui/0.1.0/scripts/createCluster.sh | bash master1 master2 master3
+	curl -sL https://raw.githubusercontent.com/Ptimagos/swarmui/0.1.0/scripts/createCluster.sh | bash -s master1 master2 master3
 	```
 	
 
