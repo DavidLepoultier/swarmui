@@ -18,12 +18,21 @@ SwarmUI is a web interface for the Docker and Swarm Remote API. The goal is to p
  - cert.pem
  - key.pem
 
+## Using the container
+
 ### Container Quickstart 
 1. Run: `docker run -d -p 9000:9000 -v /certs:/certs ptimagos/swarmui http://<consul host ip>:8500`
 
 2. Open your browser to `http://<dockerd host ip>:9000`
 
-### License - MIT
+## Testing SwarmUI with a cluster on a single host power by docker-machine
+
+Here we used docker-machine and virtualbox to create the host environment. In this way, the docker deamon start with TCP and TLS options.
+
+1. Create host : `docker-machine create -d virtualbox master`
+If you are behind a proxy, you can create the machine with like this : `docker-machine create -d virtualbox master --engine-env HTTP_PROXY=http://<proxy ip>:<proxy port>/ --engine-env HTTPS_PROXY=http://<proxy ip>:<proxy port>/`
+
+## License - MIT
 The SwarmUI code is licensed under the MIT license.
 
 
