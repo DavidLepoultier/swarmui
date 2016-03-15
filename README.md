@@ -104,6 +104,94 @@ Here we will used docker-machine and virtualbox to create the host environment. 
 	Check again the web interface, you must have 5 containers, 3 images and 2 hosts now.
 
 
+## Testing SwarmUI with a clustering docker-machine
+
+You can create manually the cluster or by the lowest script...
+
+#### Manually
+
+1. Create 3 docker-machine:
+	```
+	docker-machine create -d virtualbox master1
+	docker-machine create -d virtualbox master2
+	docker-machine create -d virtualbox master3
+	```
+
+	We will suppose than the IPs address for these machines are "**192.168.99.100** - **192.168.99.101** - **192.168.99.102**"
+
+2. Start a consul server container on each node:
+	```
+	eval "$(docker-machine env master1)"
+	docker run -d --name consul-server -h master1 -v /mnt:/data -p 8300:8300 -p 8301:8301 \
+      -p 8301:8301/udp -p 8302:8302 -p 8302:8302/udp -p 8400:8400 -p 8500:8500 -p 53:53/udp \
+      progrium/consul -server -advertise 192.168.99.100 -bootstrap-expect 3
+
+  eval "$(docker-machine env master2)"
+	docker run -d --name consul-server -h master2 -v /mnt:/data -p 8300:8300 -p 8301:8301 \
+      -p 8301:8301/udp -p 8302:8302 -p 8302:8302/udp -p 8400:8400 -p 8500:8500 -p 53:53/udp \
+      progrium/consul -server -advertise 192.168.99.101 -join 192.168.99.100
+
+  eval "$(docker-machine env master3)"
+	docker run -d --name consul-server -h master3 -v /mnt:/data -p 8300:8300 -p 8301:8301 \
+      -p 8301:8301/udp -p 8302:8302 -p 8302:8302/udp -p 8400:8400 -p 8500:8500 -p 53:53/udp \
+      progrium/consul -server -advertise 192.168.99.102 -join 192.168.99.100
+	```
+
+3. Copy the certificats in the directory "/certs"
+	```
+	docker-machine ssh master1 "sudo mkdir /certs; sudo cp /var/lib/boot2docker/ca.pem /certs; sudo cp /var/lib/boot2docker/server.pem /certs/cert.pem; sudo cp /var/lib/boot2docker/server-key.pem /certs/key.pem"
+	docker-machine ssh master2 "sudo mkdir /certs; sudo cp /var/lib/boot2docker/ca.pem /certs; sudo cp /var/lib/boot2docker/server.pem /certs/cert.pem; sudo cp /var/lib/boot2docker/server-key.pem /certs/key.pem"
+	docker-machine ssh master3 "sudo mkdir /certs; sudo cp /var/lib/boot2docker/ca.pem /certs; sudo cp /var/lib/boot2docker/server.pem /certs/cert.pem; sudo cp /var/lib/boot2docker/server-key.pem /certs/key.pem"
+	```
+
+4. Start a Manager and Agent Swarm:
+	```
+	eval "$(docker-machine env master1)"
+	docker run -d --name swarm-manager --dns 192.168.99.100 --dns 192.168.99.101 --dns 192.168.99.102 \
+		-p 3376:3376 -v /certs:/certs swarm manage --tls --tlscacert=/certs/ca.pem --tlscert=/certs/cert.pem \
+    --tlskey=/certs/key.pem -H tcp://0.0.0.0:3376 --replication --addr 192.168.99.100:3376 \
+    consul://consul:8500
+
+  docker run -d --name swarm-agent --dns 192.168.99.100 --dns 192.168.99.101 --dns 192.168.99.102 \
+  	swarm join --addr 192.168.99.100:2376 consul://consul:8500
+
+
+	eval "$(docker-machine env master2)"
+   docker run -d --name swarm-manager --dns 192.168.99.100 --dns 192.168.99.101 --dns 192.168.99.102 \
+		-p 3376:3376 -v /certs:/certs swarm manage --tls --tlscacert=/certs/ca.pem --tlscert=/certs/cert.pem \
+    --tlskey=/certs/key.pem -H tcp://0.0.0.0:3376 --replication --addr 192.168.99.101:3376 \
+    consul://consul:8500
+	
+	docker run -d --name swarm-agent --dns 192.168.99.100 --dns 192.168.99.101 --dns 192.168.99.102 \
+  	swarm join --addr 192.168.99.101:2376 consul://consul:8500
+
+
+	eval "$(docker-machine env master3)"
+   docker run -d --name swarm-manager --dns 192.168.99.100 --dns 192.168.99.101 --dns 192.168.99.102 \
+		-p 3376:3376 -v /certs:/certs swarm manage --tls --tlscacert=/certs/ca.pem --tlscert=/certs/cert.pem \
+    --tlskey=/certs/key.pem -H tcp://0.0.0.0:3376 --replication --addr 192.168.99.102:3376 \
+    consul://consul:8500
+
+	docker run -d --name swarm-agent --dns 192.168.99.100 --dns 192.168.99.101 --dns 192.168.99.102 \
+  	swarm join --addr 192.168.99.100:2376 consul://consul:8500
+	```
+
+5. Start SwarmUI:
+	```
+	eval "$(docker-machine env master1)"
+	docker run -d -name=swarmui --dns 192.168.99.100 --dns 192.168.99.101 --dns 192.168.99.102 \
+		-v /certs:/certs -p 9000:9000 ptimagos/swarmui http://consul:8500
+	```
+
+	Now you can connect to the SwarmUI web interface: `http://192.168.99.100:9000`
+
+	At this point, you must have, in the dashboard, 9 containers, 3 images and 3 host.
+
+	You can install SwarmUI on each node...
+
+#### By scripting
+
+
 ## License - MIT
 The SwarmUI code is licensed under the MIT license.
 
