@@ -30,48 +30,48 @@ SwarmUI is a web interface for the Docker and Swarm Remote API. The goal is to p
 Here we will used docker-machine and virtualbox to create the host environment. In this way, the dockers deamons started with TCP and TLS options.
 
 1. Create host: 
-```
-docker-machine create -d virtualbox master
-```
+	```
+	docker-machine create -d virtualbox master
+	```
 
-We will suppose than the IP address for this machine is "**192.168.99.100**"
+	We will suppose than the IP address for this machine is "**192.168.99.100**"
 
-If you are behind a proxy, you can create the machine like this: 
-```
-docker-machine create -d virtualbox master --engine-env HTTP_PROXY=http://<proxy ip>:<proxy port>/ --engine-env HTTPS_PROXY=http://<proxy ip>:<proxy port>/
-```
+	If you are behind a proxy, you can create the machine like this: 
+	```
+	docker-machine create -d virtualbox master --engine-env HTTP_PROXY=http://<proxy ip>:<proxy port>/ --engine-env HTTPS_PROXY=http://<proxy ip>:<proxy port>/
+	```
 
 2. Load the environment of the new machine: 
-```
-eval "$(docker-machine env master)"
-```
+	```
+	eval "$(docker-machine env master)"
+	```
 
 3. Start a consul container that will be used by Swarm: 
-```
-docker run -p 8400:8400 -p 8500:8500 -p 53:53/udp --name consul-server -h master progrium/consul -server -bootstrap
-```
+	```
+	docker run -p 8400:8400 -p 8500:8500 -p 53:53/udp --name consul-server -h master progrium/consul -server -bootstrap
+	```
 
-The [Web UI](https://www.consul.io/intro/getting-started/ui.html) can be enabled by adding the -ui-dir flag:
-```
-docker run -p 8400:8400 -p 8500:8500 -p 53:53/udp --name consul-server -h master progrium/consul -server -bootstrap -ui-dir /ui
-```
+	The [Web UI](https://www.consul.io/intro/getting-started/ui.html) can be enabled by adding the -ui-dir flag:
+	```
+	docker run -p 8400:8400 -p 8500:8500 -p 53:53/udp --name consul-server -h master progrium/consul -server -bootstrap -ui-dir /ui
+	```
 
 4. Copy the certificats in the directory "/certs":
-```
-docker-machine ssh master
-sudo mkdir /certs 
-sudo cp /var/lib/boot2docker/ca.pem /certs
-sudo cp /var/lib/boot2docker/server.pem /certs/cert.pem
-sudo cp /var/lib/boot2docker/server-key.pem /certs/key.pem
-exit
-```
+	```
+	docker-machine ssh master
+	sudo mkdir /certs 
+	sudo cp /var/lib/boot2docker/ca.pem /certs
+	sudo cp /var/lib/boot2docker/server.pem /certs/cert.pem
+	sudo cp /var/lib/boot2docker/server-key.pem /certs/key.pem
+	exit
+	```
 
 5. Start a Swarm Manager container, with TLS option:
-```
-docker run -d --name swarm-manager -p 3376:3376 -v /certs:/certs \
-	swarm:${swarm_tags} manage --tls --tlscacert=/certs/ca.pem --tlscert=/certs/cert.pem \
-	--tlskey=/certs/key.pem -H tcp://0.0.0.0:3376 consul://192.168.99.100:8500
-```
+	```
+	docker run -d --name swarm-manager -p 3376:3376 -v /certs:/certs \
+		swarm:${swarm_tags} manage --tls --tlscacert=/certs/ca.pem --tlscert=/certs/cert.pem \
+		--tlskey=/certs/key.pem -H tcp://0.0.0.0:3376 consul://192.168.99.100:8500
+	```
 
 
 ## License - MIT
