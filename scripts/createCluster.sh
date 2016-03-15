@@ -83,9 +83,9 @@ do
   machine_ip=`docker-machine ls | grep $serv | awk '{print $5}' | awk -F"/" '{print $3}' | awk -F":" '{print $1}'`
   echo "Ip public for $serv : - $machine_ip -"
   echo "Start Swarm manager on $serv..."
-  docker run -d --name swarm-manager -p 3376:3376 $dns_consul -v /var/lib/boot2docker:/certs \
-    swarm:${swarm_tags} manage --tls --tlscacert=/certs/ca.pem --tlscert=/certs/server.pem \
-    --tlskey=/certs/server-key.pem -H tcp://0.0.0.0:3376 --replication --addr $machine_ip:3376 \
+  docker run -d --name swarm-manager -p 3376:3376 $dns_consul -v /certs:/certs \
+    swarm:${swarm_tags} manage --tls --tlscacert=/certs/ca.pem --tlscert=/certs/cert.pem \
+    --tlskey=/certs/key.pem -H tcp://0.0.0.0:3376 --replication --addr $machine_ip:3376 \
     consul://consul.service.consul:8500
   docker run -d --name swarm-agent $dns_consul swarm:${swarm_tags} join --addr $machine_ip:2376 consul://consul.service.consul:8500
 done
@@ -93,9 +93,10 @@ echo "###########################################"
 firstServer=`echo $servers | awk '{print $1}'`
 echo "Install SwarmUI on ${firstServer}:"
 eval "$(docker-machine env $firstServer)"
-docker run -d --name swarmui:${swarmui_tags} $dns_consul swarmui http://consul.service.consul:8500 $HTTP_PROXY
+docker run -d --name swarmui $dns_consul ptimagos/swarmui:${swarmui_tags} http://consul.service.consul:8500 $HTTP_PROXY
 
 echo "Script ended"
+echo "You can connect to web interface now : http://${master_ip}:9000"
 echo "###########################################"
 
 
