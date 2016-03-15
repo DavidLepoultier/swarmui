@@ -4,8 +4,6 @@ SwarmUI is a web interface for the Docker and Swarm Remote API. The goal is to p
 
 ![Container](/dashboards.png)
 
-![Container](/image-container.png)
-
 ### Goals
 * Minimal dependencies - I really want to keep this project a pure html/js app.
 * Consistency - The web UI should be consistent with the commands found on the docker / swarm CLI.
