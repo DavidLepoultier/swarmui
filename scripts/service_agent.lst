@@ -1,6 +1,0 @@
-my-cluster-cons1 192.168.99.101 swarm-agent 2376
-my-cluster-cons2 192.168.99.102 swarm-agent 2376
-my-cluster-cons3 192.168.99.100 swarm-agent 2376
-my-cluster-cons1 192.168.99.101 swarm-server 3376
-my-cluster-cons2 192.168.99.102 swarm-server 3376
-my-cluster-cons3 192.168.99.100 swarm-server 3376
