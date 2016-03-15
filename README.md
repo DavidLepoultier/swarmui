@@ -25,7 +25,7 @@ SwarmUI is a web interface for the Docker and Swarm Remote API. The goal is to p
 
 2. Open your browser to `http://<dockerd host ip>:9000`
 
-## Testing SwarmUI with a cluster on a single docker-machine
+## Testing SwarmUI on a single docker-machine
 
 Here we will used docker-machine and virtualbox to create the host environment. In this way, the dockers deamons started with TCP and TLS options.
 
