@@ -93,7 +93,7 @@ echo "###########################################"
 firstServer=`echo $servers | awk '{print $1}'`
 echo "Install SwarmUI on ${firstServer}:"
 eval "$(docker-machine env $firstServer)"
-docker run -d --name swarmui $dns_consul ptimagos/swarmui:${swarmui_tags} http://consul.service.consul:8500 $HTTP_PROXY
+docker run -d --name swarmui $dns_consul -p 9000:9000 ptimagos/swarmui:${swarmui_tags} http://consul.service.consul:8500 $HTTP_PROXY
 
 echo "Script ended"
 echo "You can connect to web interface now : http://${master_ip}:9000"

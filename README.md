@@ -185,7 +185,7 @@ You can create manually the cluster or by the lowest script...
 
 	Now you can connect to the SwarmUI web interface: `http://192.168.99.100:9000`
 
-	At this point, you must have, in the dashboard, 9 containers, 3 images and 3 host.
+	At this point, you must have, in the dashboard, 10 containers, 3 images and 3 host.
 
 	You can install SwarmUI on each node...
 
