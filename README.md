@@ -36,7 +36,10 @@ docker-machine create -d virtualbox master
 
 We will suppose than the IP address for this machine is "**192.168.99.100**"
 
-If you are behind a proxy, you can create the machine like this: `docker-machine create -d virtualbox master --engine-env HTTP_PROXY=http://<proxy ip>:<proxy port>/ --engine-env HTTPS_PROXY=http://<proxy ip>:<proxy port>/`
+If you are behind a proxy, you can create the machine like this: 
+```
+docker-machine create -d virtualbox master --engine-env HTTP_PROXY=http://<proxy ip>:<proxy port>/ --engine-env HTTPS_PROXY=http://<proxy ip>:<proxy port>/
+```
 
 2. Load the environment of the new machine: 
 ```
@@ -59,15 +62,15 @@ docker-machine ssh master
 sudo mkdir /certs 
 sudo cp /var/lib/boot2docker/ca.pem /certs
 sudo cp /var/lib/boot2docker/server.pem /certs/cert.pem
-sudo cp /var/lib/boot2docker/server-key.pem /certs/key.pem'
+sudo cp /var/lib/boot2docker/server-key.pem /certs/key.pem
+exit
 ```
 
 5. Start a Swarm Manager container, with TLS option:
 ```
-docker run -d --name swarm-manager -p 3376:3376 -v /var/lib/boot2docker:/certs \
-    swarm:${swarm_tags} manage --tls --tlscacert=/certs/ca.pem --tlscert=/certs/server.pem \
-    --tlskey=/certs/server-key.pem -H tcp://0.0.0.0:3376 --replication --addr $machine_ip:3376 \
-    consul://<ip host master>:8500
+docker run -d --name swarm-manager -p 3376:3376 -v /certs:/certs \
+	swarm:${swarm_tags} manage --tls --tlscacert=/certs/ca.pem --tlscert=/certs/cert.pem \
+	--tlskey=/certs/key.pem -H tcp://0.0.0.0:3376 consul://192.168.99.100:8500
 ```
 
 
