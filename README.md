@@ -87,7 +87,22 @@ Here we will used docker-machine and virtualbox to create the host environment. 
 	```
 	docker run -d -name=swarmui -v /certs:/certs -p 9000:9000 ptimagos/swarmui http://192.168.99.100:8500 http://<proxy ip>:<proxy port>
 	```
+	
+	Now you can connect to the web interface swarmui: `http://192.168.99.100:9000`
+	At this point, you must have, in the dashboard, 4 containers, 3 images and 1 host
 
+8. Add new host in the cluster:
+	```
+	docker-machine create -d virtualbox app
+
+	eval "$(docker-machine env app)"
+
+	docker run -d --name=swarm-agent swarm join --addr <ip address host app>:2376 consul://192.168.99.100:8500
+	```
+
+	Check again the web interface, you must have 5 containers, 3 images and 2 hosts now.
+
+	
 ## License - MIT
 The SwarmUI code is licensed under the MIT license.
 
