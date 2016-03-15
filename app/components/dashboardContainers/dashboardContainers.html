@@ -1,0 +1,139 @@
+<div id="wrapper">     
+  <!-- Include Sidebar -->
+  <div ng-include="template" ng-controller="WrapperDashboardController"></div>
+  <!-- Main component for a primary marketing message or call to action -->
+  <div class="container-fluid">
+    <div class="row">
+      <!-- Middle Container -->
+      <div class="col-xs-12" id="body-middle-container">
+        <h1 class="page-header">Containers Docker</h1>
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <h3 class="panel-title">
+              <span class="col-xs-11" style="margin-top: 5px; font-size: 18px;">Containers's List</span>
+              <div class="btn-group">
+                <button type="button" class="btn btn-default dropdown-toggle" style="margin: 0;" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  Action <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu">
+                  <li>
+                    <button type="button" class="btn-link btn-block btn-dropdown"
+                      ng-click="startAction()">Start
+                    </button>
+                  </li>
+                  <li>
+                    <button type="button" class="btn-link btn-block btn-dropdown"
+                      ng-click="stopAction()">Stop
+                    </button>
+                  </li>
+                  <li>
+                    <button type="button" class="btn-link btn-block btn-dropdown"
+                      ng-click="killAction()">Kill
+                    </button>
+                  </li>
+                  <li>
+                    <button type="button" class="btn-link btn-block btn-dropdown"
+                      ng-click="pauseAction()">Pause
+                    </button>
+                  </li>
+                  <li>
+                    <button type="button" class="btn-link btn-block btn-dropdown"
+                      ng-click="unpause()">Unpause
+                    </button>
+                  </li>
+                  <li>
+                    <button type="button" class="btn-link btn-block btn-dropdown"
+                      ng-click="restartAction()">Restart
+                    </button>
+                  </li>
+                  <li role="separator" ng-show="!container.State.Running" class="divider"></li>
+                  <li>
+                    <button type="button" class="btn-link btn-block btn-dropdown"
+                      ng-click="removeAction()">Remove Container
+                    </button>
+                  </li>
+                </ul>
+              </div>
+            </h3>
+          </div>
+          <!-- Table -->
+          <table class="table table-striped">
+            <tr>
+              <th><input type="checkbox" ng-model="toggle" ng-change="toggleSelectAll()" style="margin-top: 35px;"/></th>
+              <th>
+                <button type="button" class="btn-link btn-block btn-dropdown" ng-click="order('NodeName')">
+                  Hostname
+                  <span class="sortorder" ng-show="predicate === 'NodeName'" ng-class="{reverse:reverse}"></span>
+                </button>
+                <input class="form-control input-filter" ng-model="search.NodeName" placeholder="Filter...">
+              </th>
+              <th>
+                <button class="btn-link btn-block btn-dropdown" ng-click="order('Id')">
+                  Container ID
+                  <span class="sortorder" ng-show="predicate === 'Id'" ng-class="{reverse:reverse}"></span>
+                </button>
+                <input class="form-control input-filter" ng-model="search.Id" placeholder="Filter...">
+              </th>
+              <th>
+                <button class="btn-link btn-block btn-dropdown" ng-click="order('ContainerName')">
+                  Name
+                  <span class="sortorder" ng-show="predicate === 'ContainerName'" ng-class="{reverse:reverse}"></span>
+                </button>
+                <input class="form-control input-filter" ng-model="search.ContainerName" placeholder="Filter...">
+              </th>
+              <th>
+                <button class="btn-link btn-block btn-dropdown" ng-click="order('Image')">
+                  Image
+                  <span class="sortorder" ng-show="predicate === 'Image'" ng-class="{reverse:reverse}"></span>
+                </button>
+                <input class="form-control input-filter" ng-model="search.Image" placeholder="Filter...">
+              </th>
+              <th>
+                <button class="btn-link btn-block btn-dropdown" ng-click="order('Status')">
+                  Container Status
+                  <span class="sortorder" ng-show="predicate === 'Status'" ng-class="{reverse:reverse}"></span>
+                </button>
+                <input class="form-control input-filter" ng-model="search.Status" placeholder="Filter...">
+              </th>
+              <th>Actions</th>
+            </tr>
+            <tr ng-repeat="container in containers | filter:search:strict | orderBy:predicate:reverse">
+              <td><input type="checkbox" ng-model="container.Checked" /></td>
+              <td>
+                &nbsp;&nbsp;&nbsp;
+                {{ container.NodeName }}
+              </td>
+              <td>
+                &nbsp;&nbsp;&nbsp;
+                <a href="#/dashboard/{{ container.NodeName }}/containers/{{ container.Id }}">
+                  {{ container.Id|truncate:15 }}
+                </a>
+              </td>
+              <td>
+                &nbsp;&nbsp;&nbsp;
+                {{ container.ContainerName }}
+              </td>
+              <td>
+                &nbsp;&nbsp;&nbsp;
+                {{ container.Image }}
+              </td>
+              <td>
+                &nbsp;&nbsp;&nbsp;
+                <span class="label label-{{ container.Status|statusBadge }}" style="font-size: 95%">
+                  {{ container.Status|statusControle }}
+                </span>
+              </td>
+              <td>
+                <a href="#/dashboard/containers/" type="button" id="button_agent_action" ng-click="actionContainer(container.Id, container, container.Status)" class="btn btn-sm btn-default {{ container.Status|statusButtonActive }}" style="padding: 4px;" autocomplete="off">
+                  <span class="label label-{{ container.Status|statusInverseBadge }} {{ container.Status|statusIconsStartStop }}" style="font-size: 100%;top: 1.5px;"> </span>
+                </a>
+              </td>
+            </tr>
+          </table>
+        </div>
+        <!-- Middle Container -->   
+      </div>
+    </div>
+  </div>
+  <!-- Main component for a primary marketing message or call to action -->
+</div>

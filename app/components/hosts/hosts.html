@@ -1,0 +1,89 @@
+<div id="wrapper">     
+  <!-- Include Sidebar -->
+  <div ng-include="template" ng-controller="WrapperHostsController"></div>
+  <!-- Main component for a primary marketing message or call to action -->
+  <div class="container-fluid">
+    <div class="row">
+      <!-- Middle Container -->
+      <div class="col-xs-12" id="body-middle-container">
+        <h1 class="page-header">Hosts Docker</h1>
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <h3 class="panel-title">Hosts's List</h3>
+          </div>
+          <!-- Table -->
+          <table class="table table-striped">
+            <tr>
+              <th>
+                <button type="button" class="btn-link btn-block btn-dropdown" ng-click="order('nodename')">
+                  Hostname
+                  <span class="sortorder" ng-show="predicate === 'nodename'" ng-class="{reverse:reverse}"></span>
+                </button>
+                <input class="form-control input-filter" ng-model="search.nodename" placeholder="Filter...">
+              </th>
+              <th>
+                <button type="button" class="btn-link btn-block btn-dropdown" ng-click="order('url')">
+                  Url
+                  <span class="sortorder" ng-show="predicate === 'url'" ng-class="{reverse:reverse}"></span>
+                </button>
+                <input class="form-control input-filter" ng-model="search.url" placeholder="Filter...">
+              </th>
+              <th>
+                <button type="button" class="btn-link btn-block btn-dropdown" ng-click="order('version')">
+                  Docker version
+                  <span class="sortorder" ng-show="predicate === 'version'" ng-class="{reverse:reverse}"></span>
+                </button>
+                <input class="form-control input-filter" ng-model="search.version" placeholder="Filter...">
+              </th>
+              <th>
+                <button type="button" class="btn-link btn-block btn-dropdown" ng-click="order('health')">
+                  Status
+                  <span class="sortorder" ng-show="predicate === 'health'" ng-class="{reverse:reverse}"></span>
+                </button>
+                <input class="form-control input-filter" ng-model="search.health" placeholder="Filter...">
+              </th>
+              <th>
+                <button type="button" class="btn-link btn-block btn-dropdown" ng-click="order('running')">
+                  Containers Status
+                  <span class="sortorder" ng-show="predicate === 'running'" ng-class="{reverse:reverse}"></span>
+                </button>
+                <input class="form-control input-filter" ng-model="search.running" placeholder="Filter...">
+              </th>
+            </tr>
+            <tr ng-repeat="swarm in swarms | filter:search:strict | orderBy:predicate:reverse">
+              <td>
+                &nbsp;&nbsp;&nbsp;
+                <a href="">{{ swarm.nodename }}</a>
+              </td>
+              <td>&nbsp;&nbsp;&nbsp;
+                {{ swarm.url }}
+              </td>
+              <td>
+                &nbsp;&nbsp;&nbsp;
+                {{ swarm.version }}
+              </td>
+              <td>
+                &nbsp;&nbsp;&nbsp;
+                <span class="label label-{{ swarm.health|statusbadgeNode }}" style="font-size: 95%">{{ swarm.health }}</span>
+              </td>
+              <td>
+                &nbsp;&nbsp;&nbsp;
+                <a href="" style="text-decoration: none;" data-toggle="tooltip" data-placement="top" title="Container(s) running">
+                  <span class="label label-success" style="font-size: 95%;">{{ swarm.running }}</span>
+                </a>
+                <a href="" style="text-decoration: none;" data-toggle="tooltip" data-placement="top" title="Container(s) stopped">
+                  <span class="label label-warning" style="font-size: 95%;">{{ swarm.stopped }}</span>
+                </a>
+                <a href="" style="text-decoration: none;" data-toggle="tooltip" data-placement="top" title="Container(s) created">
+                  <span class="label label-default" style="font-size: 95%;">{{ swarm.created }}</span>
+                </a>
+              </td>
+            </tr>
+          </table>
+        </div>
+        <!-- Middle Container --> 
+      </div>
+    </div>
+  </div>
+  <!-- Main component for a primary marketing message or call to action -->
+</div>

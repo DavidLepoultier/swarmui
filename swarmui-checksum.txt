@@ -1,0 +1,1 @@
+99d2c3d7e6b8839b8e0ade0e5af551650273715c  /Users/david/Documents/Docker/swarmui/src/swarmui/swarmui

@@ -1,0 +1,46 @@
+<nav class="navbar navbar-inverse navbar-fixed-top">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="#/">SwarmUI</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav navbar-right">
+        <li id="navbar_0001" class="active">
+          <a ng-click="updateMasthead(1)" href="#/">Dashboards</a>
+        </li>
+        <li id="navbar_0002">
+          <a ng-click="updateMasthead(2)" href="#/hosts/">
+            Hosts
+          </a>
+        </li>
+        <li id="navbar_0003" ng-if="showAdmin">
+          <a ng-click="updateMasthead(3)" href="#/admin/">Admin</a>
+        </li>
+        <li id="navbar_0004" ng-if="showLogout">
+          <a ng-click="updateMasthead(3)" href="#/logout/">
+            <span class="glyphicon glyphicon-off" style="font-size: 14px;"></span>
+          </a>
+        </li>
+        <li id="navbar_0004">
+          <button type="button" class="btn-link"  ng-click="open()"
+            data-toggle="modal" data-target="#about-modal" style="margin-top: 11px;">
+              <span class="glyphicon glyphicon-info-sign" style="font-size: 18px;"></span>
+          </button>
+        </li>      
+        <li>
+          <button class="btn btn-primary" style="margin-top:8px; margin-right:10px;" ng-click="refresh()">
+            <span class="glyphicon glyphicon-refresh" aria-hidden="true"></span>
+            Refresh
+          </button>
+        </li>
+      </ul>
+    </div>
+    <!--/.nav-collapse -->
+  </div>
+</nav>
