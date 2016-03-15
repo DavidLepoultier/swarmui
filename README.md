@@ -197,8 +197,8 @@ You can create manually the cluster or by the lowest script...
 	curl -sL https://raw.githubusercontent.com/Ptimagos/swarmui/0.1.0/scripts/createCluster.sh | bash -s master1 master2 master3
 	```
 	```
-	*
-	###########################################
+	
+	*###########################################
 	Create VM to docker:
 	-------------------------------------------
 	Create Docker machine master1...
@@ -329,8 +329,7 @@ You can create manually the cluster or by the lowest script...
 	543008c5265fbc1916649dcbca44d65df9389068cd778e4a3650887293fa2d6a
 	Script ended
 	You can connect to web interface now : http://192.168.99.100:9000
-	###########################################
-	*
+	###########################################*
 	```
 
 ## License - MIT
