@@ -25,11 +25,12 @@ SwarmUI is a web interface for the Docker and Swarm Remote API. The goal is to p
 
 2. Open your browser to `http://<dockerd host ip>:9000`
 
-## Testing SwarmUI with a cluster on a single host power by docker-machine
+## Testing SwarmUI with a cluster on a single docker-machine
 
-Here we used docker-machine and virtualbox to create the host environment. In this way, the docker deamon start with TCP and TLS options.
+Here we will used docker-machine and virtualbox to create the host environment. In this way, the dockers deamons started with TCP and TLS options.
 
 1. Create host : `docker-machine create -d virtualbox master`
+
 If you are behind a proxy, you can create the machine with like this : `docker-machine create -d virtualbox master --engine-env HTTP_PROXY=http://<proxy ip>:<proxy port>/ --engine-env HTTPS_PROXY=http://<proxy ip>:<proxy port>/`
 
 ## License - MIT
