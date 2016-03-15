@@ -1,6 +1,13 @@
 #! /bin/bash 
 servers=$1
-. ./createAppServer.conf
+# machine_opt is used to set option for the docker-machine
+# exemple: machine_opt="--engine-env HTTP_PROXY=http://proxy:3128/ --engine-env HTTPS_PROXY=http://proxy:3128/"
+machine_opt=""
+# docker_opt is used to set option for the container
+# exemple: docke
+master_server="master1 master2 master3"
+dns=""
+swarm_tags="1.1.2"
 
 for master_serv in $master_server
 do

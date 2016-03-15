@@ -1,9 +1,19 @@
 #! /bin/bash 
 servers=$@
-. ./createCluster.conf
+# machine_opt is used to set option for the docker-machine
+# exemple: machine_opt="--engine-env HTTP_PROXY=http://proxy:3128/ --engine-env HTTPS_PROXY=http://proxy:3128/"
+machine_opt=""
+# docker_opt is used to set option for the container
+# exemple: docker_opt="-e HTTP_PROXY=http://proxy:3128/ -e HTTPS_PROXY=http://proxy:3128/" 
+docker_opt="" 
+master=""
+HTTP_PROXY=""
+consul_tags="latest"
+swarm_tags="1.1.2"
+swarmui_tags="0.1.0"
 
 echo "###########################################"
-echo "Create VM to docker :"
+echo "Create VM to docker:"
 for serv in $servers
 do
   echo "-------------------------------------------"
@@ -17,7 +27,7 @@ done
 echo "###########################################"
 echo ""
 echo "###########################################"
-echo "Install Consul and start at server mode :"
+echo "Install Consul and start at server mode:"
 
 for serv in $servers
 do
@@ -60,10 +70,10 @@ done
 echo "###########################################"
 
 dns_consul="$dns_consul --dns 8.8.8.8 --dns-search service.consul"
-echo "DNS Used for the containers : - $dns_consul -"
+echo "DNS Used for the containers: - $dns_consul -"
 
 echo "###########################################"
-echo "Install Swarm and start server and agent :"
+echo "Install Swarm and start server and agent:"
 
 for serv in $servers
 do
@@ -73,12 +83,20 @@ do
   docker pull swarm:${swarm_tags}
   machine_ip=`docker-machine ls | grep $serv | awk '{print $5}' | awk -F"/" '{print $3}' | awk -F":" '{print $1}'`
   echo "Ip public for $serv : - $machine_ip -"
-  echo "Start Swarm manager on $serv ..."
+  echo "Start Swarm manager on $serv..."
   docker run -d --name swarm-manager -p 3376:3376 $dns_consul -v /var/lib/boot2docker:/certs \
     swarm:${swarm_tags} manage --tls --tlscacert=/certs/ca.pem --tlscert=/certs/server.pem \
     --tlskey=/certs/server-key.pem -H tcp://0.0.0.0:3376 --replication --addr $machine_ip:3376 \
-    consul://consul:8500
-  docker run -d --name swarm-agent $dns_consul swarm:${swarm_tags} join --addr $machine_ip:2376 consul://consul:8500
+    consul://consul.service.consul:8500
+  docker run -d --name swarm-agent $dns_consul swarm:${swarm_tags} join --addr $machine_ip:2376 consul://consul.service.consul:8500
 done
 echo "###########################################"
+firstServer=`echo $servers | awk '{print $1}'`
+echo "Install SwarmUI on ${firstServer}:"
+eval "$(docker-machine env $firstServer)"
+docker run -d --name swarmui:${swarmui_tags} $dns_consul swarmui http://consul.service.consul:8500 $HTTP_PROXY
+
+echo "Script ended"
+echo "###########################################"
+
 

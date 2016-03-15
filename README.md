@@ -149,38 +149,38 @@ You can create manually the cluster or by the lowest script...
 	eval "$(docker-machine env master1)"
 	docker run -d --name swarm-manager --dns 192.168.99.100 --dns 192.168.99.101 --dns 192.168.99.102 \
 		-p 3376:3376 -v /certs:/certs swarm manage --tls --tlscacert=/certs/ca.pem --tlscert=/certs/cert.pem \
-    --tlskey=/certs/key.pem -H tcp://0.0.0.0:3376 --replication --addr 192.168.99.100:3376 \
-    consul://consul:8500
+		--tlskey=/certs/key.pem -H tcp://0.0.0.0:3376 --replication --addr 192.168.99.100:3376 \
+		consul://consul.service.consul:8500
 
   docker run -d --name swarm-agent --dns 192.168.99.100 --dns 192.168.99.101 --dns 192.168.99.102 \
-  	swarm join --addr 192.168.99.100:2376 consul://consul:8500
+		swarm join --addr 192.168.99.100:2376 consul://consul.service.consul:8500
 
 
 	eval "$(docker-machine env master2)"
    docker run -d --name swarm-manager --dns 192.168.99.100 --dns 192.168.99.101 --dns 192.168.99.102 \
 		-p 3376:3376 -v /certs:/certs swarm manage --tls --tlscacert=/certs/ca.pem --tlscert=/certs/cert.pem \
-    --tlskey=/certs/key.pem -H tcp://0.0.0.0:3376 --replication --addr 192.168.99.101:3376 \
-    consul://consul:8500
+		--tlskey=/certs/key.pem -H tcp://0.0.0.0:3376 --replication --addr 192.168.99.101:3376 \
+		consul://consul.service.consul:8500
 	
 	docker run -d --name swarm-agent --dns 192.168.99.100 --dns 192.168.99.101 --dns 192.168.99.102 \
-  	swarm join --addr 192.168.99.101:2376 consul://consul:8500
+		swarm join --addr 192.168.99.101:2376 consul://consul.service.consul:8500
 
 
 	eval "$(docker-machine env master3)"
    docker run -d --name swarm-manager --dns 192.168.99.100 --dns 192.168.99.101 --dns 192.168.99.102 \
 		-p 3376:3376 -v /certs:/certs swarm manage --tls --tlscacert=/certs/ca.pem --tlscert=/certs/cert.pem \
-    --tlskey=/certs/key.pem -H tcp://0.0.0.0:3376 --replication --addr 192.168.99.102:3376 \
-    consul://consul:8500
+		--tlskey=/certs/key.pem -H tcp://0.0.0.0:3376 --replication --addr 192.168.99.102:3376 \
+		consul://consul.service.consul:8500
 
 	docker run -d --name swarm-agent --dns 192.168.99.100 --dns 192.168.99.101 --dns 192.168.99.102 \
-  	swarm join --addr 192.168.99.100:2376 consul://consul:8500
+		swarm join --addr 192.168.99.100:2376 consul://consul.service.consul:8500
 	```
 
 5. Start SwarmUI:
 	```
 	eval "$(docker-machine env master1)"
 	docker run -d -name=swarmui --dns 192.168.99.100 --dns 192.168.99.101 --dns 192.168.99.102 \
-		-v /certs:/certs -p 9000:9000 ptimagos/swarmui http://consul:8500
+		-v /certs:/certs -p 9000:9000 ptimagos/swarmui http://consul.service.consul:8500
 	```
 
 	Now you can connect to the SwarmUI web interface: `http://192.168.99.100:9000`
@@ -191,6 +191,10 @@ You can create manually the cluster or by the lowest script...
 
 #### By scripting
 
+1. Get and run the script createCluster.sh
+	````
+	wget -O - https://raw.githubusercontent.com/Ptimagos/swarmui/0.1.0/scripts/createCluster.sh | bash master1 master2 master3
+	````
 
 ## License - MIT
 The SwarmUI code is licensed under the MIT license.
