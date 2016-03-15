@@ -1,7 +1,8 @@
 ## SwarmUI
 
-![Containers](/dashboards.png)
 SwarmUI is a web interface for the Docker and Swarm Remote API. The goal is to provide a pure client side implementation so it is effortless to connect and manage docker. This project is based on [DockerUI](https://github.com/crosbymichael/dockerui) project, and is not complete. This's still under heavy development.
+
+![Container](/dashboards.png)
 
 ![Container](/image-container.png)
 
@@ -20,6 +21,6 @@ SwarmUI is a web interface for the Docker and Swarm Remote API. The goal is to p
  - key.pem
 
 ### Container Quickstart 
-1. Run: `docker run -d -p 9000:9000 --privileged -v /certs:/certs dockerui/dockerui`
+1. Run: `docker run -d -p 9000:9000 -v /certs:/certs ptimagos/swarmui http://<consul host ip>:8500`
 
 2. Open your browser to `http://<dockerd host ip>:9000`
