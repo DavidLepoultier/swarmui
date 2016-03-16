@@ -1,4 +1,4 @@
-package main // import "github.com/Ptimagos/swarmui"
+package main
 
 import (
 	"crypto/tls"
@@ -169,33 +169,33 @@ func docker() {
 func dockerRepo() {
 	repo := http.NewServeMux()
 	if len(os.Args) > 2 {
-  	myProxy := os.Args[2]
-    url_i := url.URL{}
-    url_proxy, _ := url_i.Parse(myProxy)
+	  	myProxy := os.Args[2]
+	    url_i := url.URL{}
+	    url_proxy, _ := url_i.Parse(myProxy)
 
-    tr := &http.Transport{
-      DisableCompression: false,
-      DisableKeepAlives: false,
-      Proxy: http.ProxyURL(url_proxy),
-      TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
-    }
-    clientRepo := &http.Client{Transport: tr}
-    fmt.Printf("Value de client : %s\n", tr)
-    repo.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-      	sendHttps(w, r, clientRepo)
-  	})
+	    tr := &http.Transport{
+	      DisableCompression: false,
+	      DisableKeepAlives: false,
+	      Proxy: http.ProxyURL(url_proxy),
+	      TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
+	    }
+	    clientRepo := &http.Client{Transport: tr}
+	    
+	    repo.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+	      	sendHttps(w, r, clientRepo)
+	  	})
 		log.Fatal(http.ListenAndServe(":9003", repo))
 	} else {
 		tr := &http.Transport{
-      DisableCompression: false,
-      DisableKeepAlives: false,
-      TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
-    }
-    clientRepo := &http.Client{Transport: tr}
+	      DisableCompression: false,
+	      DisableKeepAlives: false,
+	      TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
+	    }
+	    clientRepo := &http.Client{Transport: tr}
 
 		repo.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-        	sendHttps(w, r, clientRepo)
-  	})
+	    	sendHttps(w, r, clientRepo)
+	  	})
 		log.Fatal(http.ListenAndServe(":9003", repo))
 	}
 }
