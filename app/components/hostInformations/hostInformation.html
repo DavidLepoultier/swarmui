@@ -1,0 +1,78 @@
+<div id="wrapper">     
+  <!-- Include Sidebar -->
+  <div ng-include="template" ng-controller="WrapperHostsController"></div>
+  <!-- Main component for a primary marketing message or call to action -->
+	<div class="container-fluid">
+		<div class="row">
+			<!-- Middle Container -->
+			<div class="col-xs-12" id="body-middle-container">
+				<h1 class="page-header">Host information</h1>
+				<a href='/#/hosts/'><- Return Hosts</a><br/><br/>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">
+							<span class="col-xs-11" style="margin-top: 5px; font-size: 18px;">TOTO</span>
+              <div class="btn-group">
+                <button type="button" class="btn btn-default dropdown-toggle" style="margin: 0;" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  Action <span class="caret"></span>
+                </button>
+								<ul class="dropdown-menu">
+									<li><a href="#" data-toggle="modal" data-target="#addImage">Pull Image</a></li>
+									<li><a href='#' data-toggle='modal' data-target='#createCont'>Create Container</a></li>
+									<li role="separator" class="divider"></li>
+									<li class='disabled'><a href="#">Start Container</a></li>
+									<li class='disabled'><a href="#">Stop Container</a></li>
+								</ul>
+							</div>
+						</h3>
+					</div>
+					<div class="panel-body">
+						<div class='col-xs-8 well'>
+							<h5><b>System :</b></h5>
+							<b>Os : </b>
+							<br/>
+							<b>Kernel : </b>
+							<br/>
+						</div>
+						<div class='col-xs-1'>
+							<br/>
+						</div>
+						<div class='col-xs-3 well'>
+							<b>Docker Daemon</b> version : <br/><br/>
+							<center><span class='label label-success' style='font-size: 16px;'>VERSION</span></center>
+						</div>
+					</div>
+					<ul class="nav nav-tabs" role="tablist">
+						<li role="presentation" class="active"><a href="#list-containers" aria-controls="containers" role="tab" data-toggle="tab">Containers</a></li>
+						<li role="presentation"><a href="#list-images" aria-controls="images" role="tab" data-toggle="tab">Images</a></li>
+					</ul>
+					<!-- Tab panes -->
+					<div class="tab-content">
+						<div role="tabpanel" class="tab-pane active" id="list-containers">
+							<!-- Table -->
+							<table class="table table-striped no-margin-bottom">
+								<tr>
+									<th class='col-xs-2'>Container ID</th>
+									<th class='col-xs-3'>Container Image</th>
+									<th class='col-xs-3'>Name</th>
+									<th class='col-xs-2'>Action</th>
+									<th class='col-xs-2'>Status</th>
+								</tr>
+							</table>
+						</div>
+						<div role="tabpanel" class="tab-pane" id="list-images">
+							<table class="table table-striped no-margin-bottom">
+								<tr>
+									<th class='col-xs-2'>Imager ID</th>
+									<th class='col-xs-4'>Image RepoTags</th>
+									<th class='col-xs-3'>Created</th>
+									<th class='col-xs-3'>VirtualSize</th>
+								</tr>
+							</table>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

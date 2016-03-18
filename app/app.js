@@ -13,6 +13,7 @@ angular.module('swarmui', [
     'startContainer',
     'pullImage',
     'hosts',
+    'hostsInforamtion',
     'wrapperHosts',
     'wrapperDashboard'])
     .config(['$routeProvider', function ($routeProvider) {
@@ -60,6 +61,10 @@ angular.module('swarmui', [
         $routeProvider.when('/hosts/', {
             templateUrl: 'app/components/hosts/hosts.html',
             controller: 'HostsController'
+        });
+        $routeProvider.when('/hosts/:node/', {
+            templateUrl: 'app/components/hostInformations/hostInformation.html',
+            controller: 'HostsInformationController'
         });
         $routeProvider.otherwise({redirectTo: '/'});
     }])
