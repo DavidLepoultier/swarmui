@@ -11,7 +11,7 @@
 				<div class="panel panel-default">
 					<div class="panel-heading">
 						<h3 class="panel-title">
-							<span class="col-xs-11" style="margin-top: 5px; font-size: 18px;">TOTO</span>
+							<span class="col-xs-11" style="margin-top: 5px; font-size: 18px;">{{ hostInfo.Name }}</span>
               <div class="btn-group">
                 <button type="button" class="btn btn-default dropdown-toggle" style="margin: 0;" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                   Action <span class="caret"></span>
@@ -29,47 +29,148 @@
 					<div class="panel-body">
 						<div class='col-xs-8 well'>
 							<h5><b>System :</b></h5>
-							<b>Os : </b>
+							<b>OSType : </b>
+							{{ hostInfo.OSType }}
 							<br/>
 							<b>Kernel : </b>
+							{{ hostInfo.KernelVersion }}
 							<br/>
+							<br/>
+							<b>IP : </b>
+							{{ hostUrl }}
+							<br/>
+              <br/>
 						</div>
 						<div class='col-xs-1'>
 							<br/>
 						</div>
 						<div class='col-xs-3 well'>
 							<b>Docker Daemon</b> version : <br/><br/>
-							<center><span class='label label-success' style='font-size: 16px;'>VERSION</span></center>
+							<center><span class='label label-success' style='font-size: 16px;'> {{ hostInfo.ServerVersion }} </span></center>
+							<br/>
 						</div>
 					</div>
-					<ul class="nav nav-tabs" role="tablist">
-						<li role="presentation" class="active"><a href="#list-containers" aria-controls="containers" role="tab" data-toggle="tab">Containers</a></li>
-						<li role="presentation"><a href="#list-images" aria-controls="images" role="tab" data-toggle="tab">Images</a></li>
-					</ul>
-					<!-- Tab panes -->
-					<div class="tab-content">
-						<div role="tabpanel" class="tab-pane active" id="list-containers">
+					<uib-tabset active="active">
+            <uib-tab index="0" heading="Containers">
+            <!-- Tabs 1 container info -->
 							<!-- Table -->
 							<table class="table table-striped no-margin-bottom">
 								<tr>
-									<th class='col-xs-2'>Container ID</th>
-									<th class='col-xs-3'>Container Image</th>
-									<th class='col-xs-3'>Name</th>
-									<th class='col-xs-2'>Action</th>
-									<th class='col-xs-2'>Status</th>
+									<th><input type="checkbox" ng-model="toggle" ng-change="toggleSelectAll()" style="margin-top: 35px;"/></th>
+									<th>
+										<button type="button" class="btn-link btn-block btn-dropdown" ng-click="order('Names')">
+		                  Names
+		                  <span class="sortorder" ng-show="predicate === 'Names'" ng-class="{reverse:reverse}"></span>
+		                </button>
+		                <input class="form-control input-filter" ng-model="search.Names" placeholder="Filter...">
+	                </th>
+									<th>
+										<button class="btn-link btn-block btn-dropdown" ng-click="order('Id')">
+		                  Container ID
+		                  <span class="sortorder" ng-show="predicate === 'Id'" ng-class="{reverse:reverse}"></span>
+		                </button>
+		                <input class="form-control input-filter" ng-model="search.Id" placeholder="Filter...">
+									</th>
+									<th>
+										<button class="btn-link btn-block btn-dropdown" ng-click="order('Image')">
+		                  Image
+		                  <span class="sortorder" ng-show="predicate === 'Image'" ng-class="{reverse:reverse}"></span>
+		                </button>
+		                <input class="form-control input-filter" ng-model="search.Image" placeholder="Filter...">
+									</th>
+									<th>
+										<button class="btn-link btn-block btn-dropdown" ng-click="order('Status')">
+		                  Container Status
+		                  <span class="sortorder" ng-show="predicate === 'Status'" ng-class="{reverse:reverse}"></span>
+		                </button>
+		                <input class="form-control input-filter" ng-model="search.Status" placeholder="Filter...">
+									</th>
+									<th>Action</th>
+								</tr>
+								<tr ng-repeat="container in containers | filter:search:strict | orderBy:predicate:reverse">
+									<td><input type="checkbox" ng-model="container.Checked" /></td>
+									<td>
+										&nbsp;&nbsp;&nbsp;
+										{{ container | containername }}
+									</td>
+									<td>
+										&nbsp;&nbsp;&nbsp;
+										<a href="#/hosts/{{ hostInfo.Name }}/containers/{{ container.Id }}">
+										{{ container.Id|truncate:15 }}
+										</a>
+									</td>
+									<td>
+										&nbsp;&nbsp;&nbsp;
+										{{ container.Image }}
+									</td>
+									<td>
+										&nbsp;&nbsp;&nbsp;
+										<span class="label label-{{ container.Status|statusBadge }}" style="font-size: 95%">
+										{{ container.Status|statusControle }}
+										</span>
+									</td>
+									<td>
+										<a href="#/dashboard/containers/" type="button" id="button_agent_action" ng-click="actionContainer(container.Id, container, container.Status)" class="btn btn-sm btn-default {{ container.Status|statusButtonActive }}" style="padding: 4px;" autocomplete="off">
+										<span class="label label-{{ container.Status|statusInverseBadge }} {{ container.Status|statusIconsStartStop }}" style="font-size: 100%;top: 1.5px;"> </span>
+										</a>
+									</td>
 								</tr>
 							</table>
-						</div>
-						<div role="tabpanel" class="tab-pane" id="list-images">
+						</uib-tab>
+            <uib-tab index="1" heading="Images">
 							<table class="table table-striped no-margin-bottom">
 								<tr>
-									<th class='col-xs-2'>Imager ID</th>
-									<th class='col-xs-4'>Image RepoTags</th>
-									<th class='col-xs-3'>Created</th>
-									<th class='col-xs-3'>VirtualSize</th>
+									<th><input type="checkbox" ng-model="toggle" ng-change="toggleSelectAll()" style="margin-top: 35px;"/></th>
+									<th>
+										<button type="button" class="btn-link btn-block btn-dropdown" ng-click="order('RepoTag')">
+											Tags
+											<span class="sortorder" ng-show="predicate === 'RepoTag'" ng-class="{reverse:reverse}"></span>
+										</button>
+										<input class="form-control input-filter" ng-model="search.RepoTag" placeholder="Filter...">
+									</th>
+									<th>
+										<button type="button" class="btn-link btn-block btn-dropdown" ng-click="order('Id')">
+											Id
+											<span class="sortorder" ng-show="predicate === 'Id'" ng-class="{reverse:reverse}"></span>
+										</button>
+										<input class="form-control input-filter" ng-model="search.Id" placeholder="Filter...">
+									</th>
+									<th>
+										<button type="button" class="btn-link btn-block btn-dropdown" ng-click="order('Created')">
+											Created
+											<span class="sortorder" ng-show="predicate === 'Created'" ng-class="{reverse:reverse}"></span>
+										</button>
+										<input class="form-control input-filter" ng-model="search.Create" placeholder="Filter...">
+								</th>
+								<th>
+									<button type="button" class="btn-link btn-block btn-dropdown" ng-click="order('VirtualSize')">
+										VirtualSize
+										<span class="sortorder" ng-show="predicate === 'VirtualSize'" ng-class="{reverse:reverse}"></span>
+									</button>
+								<input class="form-control input-filter" ng-model="search.VirtualSize" placeholder="Filter...">
+								</th>
+								</tr>
+								<tr ng-repeat="image in images | filter:search:strict | orderBy:predicate:reverse">
+									<td><input type="checkbox" ng-model="image.Checked" /></td>
+									<td>
+										&nbsp;&nbsp;&nbsp;
+										<a href="#/hosts/{{ hostInfo.Name }}/images/{{ image.Id }}">{{ image | repotag }}</a>
+									</td>
+									<td>
+										&nbsp;&nbsp;&nbsp;
+										{{ image.Id | truncate:15  }}
+									</td>
+									<td>
+										&nbsp;&nbsp;&nbsp;
+										{{ image.Created | getdate1000 }}
+									</td>
+									<td>
+										&nbsp;&nbsp;&nbsp;
+										{{ image.VirtualSize | humansize }}
+									</td>
 								</tr>
 							</table>
-						</div>
+						</uib-tab>
 					</div>
 				</div>
 			</div>

@@ -30,6 +30,10 @@ angular.module('swarmui', [
             templateUrl: 'app/components/image/image.html',
             controller: 'ImageController'
         });
+            $routeProvider.when('/:from/:node/images/:id/', {
+            templateUrl: 'app/components/image/image.html',
+            controller: 'ImageController'
+        });
         $routeProvider.when('/dashboard/containers/', {
             templateUrl: 'app/components/dashboardContainers/dashboardContainers.html',
             controller: 'DashboardContainersController'
@@ -74,4 +78,4 @@ angular.module('swarmui', [
     .constant('DOCKER_ENDPOINT', 'swarmuiapitls')
     .constant('DOCKERREPO_ENDPOINT', 'swarmuiapirepo')
     .constant('DOCKER_PORT', '') // Docker port, leave as an empty string if no port is requred.  If you have a port, prefix it with a ':' i.e. :4243
-    .constant('UI_VERSION', '0.1.0');
+    .constant('UI_VERSION', '0.2.0');

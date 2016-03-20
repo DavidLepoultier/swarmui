@@ -12,10 +12,22 @@ angular.module('container', [])
     $scope.tailLines = 200;
     $scope.logIntervalId = '';
     $scope.ps_args = '';
-    // TODO: Force scale to 0-100 for cpu, fix charts on dashboard,
-    // TODO: Force memory scale to 0 - max memory
 
 
+    switch($routeParams.from){
+      case 'dashboard':
+        $scope.fromTo = '/' + $routeParams.from + '/containers/';
+        $scope.returnTo = "to containers list";
+        break;
+      case 'hosts':
+        $scope.fromTo = '/' + $routeParams.from + '/' + $routeParams.node + '/';
+        $scope.returnTo = 'to ' + $routeParams.node;
+        break;
+      default:
+        $scope.from = '/';
+        $scope.returnTo = '';
+        break;
+    }
 
 // ****** START CONTAINERS ****** //
 

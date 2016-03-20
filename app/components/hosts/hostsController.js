@@ -88,6 +88,5 @@ angular.module('hosts', [])
       });
     };
     
-  //update({all: Settings.displayAll ? 1 : 0});
   update();
 }]);
