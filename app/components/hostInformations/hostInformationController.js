@@ -3,7 +3,9 @@ angular.module('hostsInforamtion', [])
   'ConsulPrimarySwarm', 'SettingsConsul', 'Settings', 'Messages', 'ViewSpinner', 'Image',
   function ($scope, $routeParams, Swarm, Container, ConsulPrimarySwarm, SettingsConsul, Settings, Messages, ViewSpinner, Image) {
     $scope.dashboard = '1';
-		$scope.toggle = false;
+    $scope.toggle = false;
+    $scope.toggleImg = false;
+    $scope.newToggle = true;
     $scope.swarmUrl = '';
     $scope.hostUrl = '';
     $scope.containers = [];
@@ -17,8 +19,24 @@ angular.module('hostsInforamtion', [])
     };
 
 		$scope.toggleSelectAll = function () {
+			if ( $scope.toggle === $scope.newToggle ){
+				$scope.toggle = false;
+			} else {
+				$scope.toggle = true;
+			}
 			angular.forEach($scope.containers, function (i) {
 				i.Checked = $scope.toggle;
+			});
+		};
+
+		$scope.toggleSelectAllImage = function () {
+			if ( $scope.toggleImg === $scope.newToggle ){
+				$scope.toggleImg = false;
+			} else {
+				$scope.toggleImg = true;
+			}
+			angular.forEach($scope.images, function (i) {
+				i.Checked = $scope.toggleImg;
 			});
 		};
 
@@ -50,7 +68,7 @@ angular.module('hostsInforamtion', [])
 					});
 				});
 			});
-      ViewSpinner.stop();
+		ViewSpinner.stop();
     };
     
   update();

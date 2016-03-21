@@ -24,6 +24,7 @@ function SwarmViewModel(data) {
     this.version = data.version;
     this.health = data.health;
     this.url = data.url;
+    this.Checked = false;
 }
 function SwarmHostViewModel(data) {
     this.nodename = data.nodename;

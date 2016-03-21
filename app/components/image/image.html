@@ -1,6 +1,7 @@
 <div id="wrapper">     
   <!-- Include Sidebar -->
-  <div ng-include="template" ng-controller="WrapperDashboardController"></div>
+  <div ng-if="dashOn" ng-include="template" ng-controller="WrapperDashboardController"></div>
+  <div ng-if="hostOn" ng-include="template" ng-controller="WrapperHostsController"></div>
   <!-- Main component for a primary marketing message or call to action -->
   <div class="container-fluid">
     <div class="row">

@@ -3,6 +3,7 @@ angular.module('hosts', [])
   'ConsulPrimarySwarm', 'SettingsConsul', 'Settings', 'Messages', 'ViewSpinner',
   function ($scope, $routeParams, Swarm, Container, ConsulPrimarySwarm, SettingsConsul, Settings, Messages, ViewSpinner) {
     $scope.swarms = [];
+    $scope.toggle = false;
     $scope.dashboard = '1';
     $scope.containers = [];
 
@@ -87,6 +88,12 @@ angular.module('hosts', [])
         });
       });
     };
+
+    $scope.toggleSelectAll = function () {
+      angular.forEach($scope.swarms, function (i) {
+        i.Checked = $scope.toggle;
+      });
+    };
     
-  update();
+    update();
 }]);

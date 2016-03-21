@@ -2,7 +2,6 @@ angular.module('image', [])
 .controller('ImageController', ['$scope', '$q', '$routeParams', '$location', 'Image', 'Container',
   'Messages', 'LineChart', 'Swarm', 'ConsulPrimarySwarm', 'Repositories',
     function ($scope, $q, $routeParams, $location, Image, Container, Messages, LineChart, Swarm, ConsulPrimarySwarm, Repositories) {
-      $scope.dashboard = '2';
       $scope.history = [];
       $scope.containerchart = true;
       $scope.addTags = false;
@@ -11,14 +10,38 @@ angular.module('image', [])
       $scope.repoTags = [];
       $scope.swarmUrl = '';
 
-      if ($routeParams.containerId){
-        $scope.from = '/' + $routeParams.from + '/' + $routeParams.node + '/containers/' + $routeParams.containerId;
-        $scope.toParent = $scope.from + '/image/';
-        $scope.returnTo = "to container";
-      } else {
-        $scope.from = '/' + $routeParams.from + '/images/';
-        $scope.toParent = $scope.from;
-        $scope.returnTo = "to images list";
+      switch($routeParams.from){
+        case 'dashboard':
+          if ($routeParams.containerId){
+            $scope.from = '/' + $routeParams.from + '/' + $routeParams.node + '/containers/' + $routeParams.containerId;
+            $scope.toParent = $scope.from + '/image/';
+            $scope.returnTo = "to container";
+            $scope.dashboard = '3';
+          } else {
+            $scope.from = '/' + $routeParams.from + '/images/';
+            $scope.toParent = $scope.from;
+            $scope.returnTo = "to images list";
+            $scope.dashboard = '2';
+          }
+          $scope.dashOn = true;
+          break;
+        case 'hosts':
+          if ($routeParams.containerId){
+            $scope.from = '/' + $routeParams.from + '/' + $routeParams.node + '/containers/' + $routeParams.containerId;
+            $scope.toParent = $scope.from + '/image/';
+            $scope.returnTo = "to container";
+          } else {
+            $scope.from = '/' + $routeParams.from + '/' + $routeParams.node;
+            $scope.toParent = $scope.from;
+            $scope.returnTo = 'to ' + $routeParams.node;
+          }
+          $scope.dashboard = '1';
+          $scope.hostOn = true;
+          break;
+        default:
+          $scope.from = '/';
+          $scope.returnTo = '';
+          break;
       }
 
       $scope.removeImage = function (id) {

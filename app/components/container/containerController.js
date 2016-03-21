@@ -2,9 +2,10 @@ angular.module('container', [])
 .controller('ContainerController', ['ConsulPrimarySwarm', 'Settings', '$scope', 'Messages', '$timeout', 'Container', 
     '$routeParams', 'ViewSpinner', 'humansizeFilter', '$sce', '$location', 'Swarm', 'ContainerLogs',
     function (ConsulPrimarySwarm, Settings, $scope, Messages, $timeout, Container, $routeParams, ViewSpinner, humansizeFilter, $sce, $location, Swarm, ContainerLogs) {
-    $scope.dashboard = '3';
     $scope.primaryUrl = '';
     $scope.changes = [];
+    $scope.dashOn = false;
+    $scope.hostOn = false;
     $scope.edit = false;
     $scope.stdout = '';
     $scope.stderr = '';
@@ -18,10 +19,14 @@ angular.module('container', [])
       case 'dashboard':
         $scope.fromTo = '/' + $routeParams.from + '/containers/';
         $scope.returnTo = "to containers list";
+        $scope.dashboard = '3';
+        $scope.dashOn = true;
         break;
       case 'hosts':
         $scope.fromTo = '/' + $routeParams.from + '/' + $routeParams.node + '/';
         $scope.returnTo = 'to ' + $routeParams.node;
+        $scope.dashboard = '1';
+        $scope.hostOn = true;
         break;
       default:
         $scope.from = '/';
