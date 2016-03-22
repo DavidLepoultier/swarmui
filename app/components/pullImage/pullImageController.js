@@ -1,24 +1,16 @@
 angular.module('pullImage', [])
-    .controller('PullImageController', ['$scope', '$log', 'Messages', 'Image', 'ViewSpinner', 'Swarm', 'ConsulPrimarySwarm', 'errorMsgFilter', 'Repositories',
-        function ($scope, $log, Messages, Image, ViewSpinner, Swarm, ConsulPrimarySwarm, errorMsgFilter, Repositories) {
+    .controller('PullImageController', ['$scope', '$rootScope', '$routeParams', '$log', 'Messages', 'Image', 'Swarm', 'ViewSpinner', 'ConsulPrimarySwarm', 'errorMsgFilter', 'Repositories',
+        function ($scope, $rootScope, $routeParams, $log, Messages, Image, Swarm, ViewSpinner, ConsulPrimarySwarm, errorMsgFilter, Repositories) {
             $scope.template = 'app/components/pullImage/pullImage.html';
             $scope.searchResult = false;
             $scope.searchTagResult = false;
-            $scope.swarmUrl = '';
-            $scope.Nodes = [];
+            $scope.fromNode = true;
             $scope.ImagesResult = [];
             $scope.TagsResult = [];
 
-            ConsulPrimarySwarm.get({}, function (d){
-              $scope.swarmUrl = atob(d[0].Value); 
-              Swarm.info({node: $scope.swarmUrl}, function (d) {
-                var n = 0;
-                for (var i = 4; i < d['SystemStatus'].length;i += 8) {
-                  $scope.Nodes[n] = d['SystemStatus'][i];
-                  n++;
-                }
-              });
-            });
+            if ($routeParams.from){
+              $scope.fromNode = false;
+            }
 
             $scope.init = function () {
                 $scope.config = {
@@ -77,6 +69,9 @@ angular.module('pullImage', [])
             $scope.pull = function () {
                 $('#error-message').hide();
                 var config = angular.copy($scope.config);
+                if ($routeParams.node){
+                  config.node = $scope.hostUrl;
+                }
                 var imageName = (config.registry ? config.registry + '/' : '' ) +
                     (config.repo ? config.repo + '/' : '') +
                     (config.image) +
@@ -95,6 +90,7 @@ angular.module('pullImage', [])
                             $('#pull-modal').modal('show');
                             $('#error-message').show();
                         } else {
+                            $rootScope.$emit("CallUpdateImage", {});
                             Messages.send("Image Added", imageName);
                             $scope.init();
                             $scope.searchResult = false;

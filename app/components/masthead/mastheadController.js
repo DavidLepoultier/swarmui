@@ -3,13 +3,20 @@ angular.module('masthead', [])
   function ($scope, Settings, Version, ConsulPrimarySwarm, $uibModal) {
     $scope.template = 'app/components/masthead/masthead.html';
     $scope.showNetworksVolumes = false;
+    $scope.dashOn = false;
+    $scope.hostOn = false;
     $scope.animationsEnabled = true;
     $scope.endpoint = Settings.endpoint;
     $scope.uiVersion = Settings.uiVersion;
     $scope.docker = {};
 
+    if ( window.location.hash.indexOf('/hosts/') !== -1 ) {
+      $scope.hostOn = true;
+    } else {
+      $scope.dashOn = true;
+    }
+    
     $scope.updateMasthead = function(page) {
-  
       var containerWrapperName="#navbar_000";
       var totalDashElem=5+1;
       var currentContainer=page;
@@ -41,7 +48,7 @@ angular.module('masthead', [])
     };
 
     $scope.refresh = function() {
-        location.reload();
+      location.reload();
     };
   }
 ]);

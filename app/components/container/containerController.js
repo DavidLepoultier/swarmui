@@ -43,15 +43,6 @@ angular.module('container', [])
         ConsulPrimarySwarm.get({}, function (d){
           var url = atob(d[0].Value);
           $scope.primarySwarm = url;
-          Swarm.info({node: $scope.primarySwarm}, function (d) {
-            for (var i = 4; i < d['SystemStatus'].length;i += 8){
-              var nodename = d['SystemStatus'][i][0].split(" ");
-              if ( nodename[1] === $routeParams.node ) {
-                $scope.hostUrl = d['SystemStatus'][i][1];
-                break;
-              }
-            }
-          });
           Container.get({id: $routeParams.id, node: $scope.primarySwarm}, function (d) {
             $scope.container = d;
             $scope.container.edit = false;
@@ -375,10 +366,6 @@ angular.module('container', [])
             },
             pointDot : false,
             responsive: true
-            //scaleOverride: true,
-            //scaleSteps: 10,
-            //scaleStepWidth: Math.ceil(initialStats.memory_stats.limit / 10),
-            //scaleStartValue: 0
         });
     var networkChart = new Chart($('#network-stats-chart').get(0).getContext("2d")).Line({
         labels: networkLabels,

@@ -73,7 +73,10 @@ angular.module('swarmui.filters', [])
     if (text === 'Ghost') {
       return 'important';
     } 
-    if (text.indexOf('Exit') !== -1 && text !== 'Exit 0' || text.indexOf('exited') !== -1 ) {
+    if ( text.indexOf('Paused') !== -1 ) {
+      return 'primary';
+    }
+    if ( text.indexOf('Exit') !== -1 && text !== 'Exit 0' || text.indexOf('exited') !== -1 ) {
       return 'warning';
     }
     return 'success';

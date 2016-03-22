@@ -1,7 +1,7 @@
 angular.module('hostsInforamtion', [])
-.controller('HostsInformationController', ['$scope', '$routeParams', 'Swarm', 'Container', 
+.controller('HostsInformationController', ['$scope', '$rootScope', '$routeParams', 'Swarm', 'Container', 
   'ConsulPrimarySwarm', 'SettingsConsul', 'Settings', 'Messages', 'ViewSpinner', 'Image',
-  function ($scope, $routeParams, Swarm, Container, ConsulPrimarySwarm, SettingsConsul, Settings, Messages, ViewSpinner, Image) {
+  function ($scope, $rootScope, $routeParams, Swarm, Container, ConsulPrimarySwarm, SettingsConsul, Settings, Messages, ViewSpinner, Image) {
     $scope.dashboard = '1';
     $scope.toggle = false;
     $scope.toggleImg = false;
@@ -10,6 +10,14 @@ angular.module('hostsInforamtion', [])
     $scope.hostUrl = '';
     $scope.containers = [];
     $scope.images = [];
+
+    $rootScope.$on("CallUpdateContainer", function(){
+      containerQuery();
+    });
+
+    $rootScope.$on("CallUpdateImage", function(){
+      containerQuery();
+    });
 
     $scope.predicate = 'Names';
     $scope.reverse = false;
@@ -37,6 +45,23 @@ angular.module('hostsInforamtion', [])
 			}
 			angular.forEach($scope.images, function (i) {
 				i.Checked = $scope.toggleImg;
+			});
+		};
+
+		var containerQuery = function (){
+			Container.query({all: 1, node: $scope.hostUrl}, function (d) {
+				$scope.containers = d.map(function (item) {
+					return new ContainerViewModel(item);
+				});
+			});
+		};
+
+		var imageQuery = function (){
+			Image.query({node: $scope.hostUrl}, function (d) {
+				console.log(d);
+				$scope.images = d.map(function (item) {
+					return new ImageViewModel(item);
+				});
 			});
 		};
 
@@ -70,6 +95,5 @@ angular.module('hostsInforamtion', [])
 			});
 		ViewSpinner.stop();
     };
-    
-  update();
+    update();
 }]);

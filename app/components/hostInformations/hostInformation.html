@@ -17,15 +17,54 @@
                   Action <span class="caret"></span>
                 </button>
 								<ul class="dropdown-menu">
-									<li><a href="#" data-toggle="modal" data-target="#addImage">Pull Image</a></li>
+									<li>
+                    <button type="button" class="btn-link btn-block btn-dropdown"
+                      data-toggle="modal" data-target="#pull-modal">Pull image
+                    </button>
+                  </li>
 									<li><a href='#' data-toggle='modal' data-target='#createCont'>Create Container</a></li>
 									<li role="separator" class="divider"></li>
-									<li class='disabled'><a href="#">Start Container</a></li>
-									<li class='disabled'><a href="#">Stop Container</a></li>
+									<li>
+                    <button ng-controller="ContainersActionsController" type="button" class="btn-link btn-block btn-dropdown"
+                      ng-click="startAction()">Start Container
+                    </button>
+                  </li>
+									<li>
+                    <button ng-controller="ContainersActionsController" type="button" class="btn-link btn-block btn-dropdown"
+                      ng-click="stopAction()">Stop Container
+                    </button>
+                  </li>
+                  <li>
+                    <button ng-controller="ContainersActionsController" type="button" class="btn-link btn-block btn-dropdown"
+                      ng-click="killAction()">Kill Container
+                    </button>
+                  </li>
+                  <li>
+                    <button ng-controller="ContainersActionsController" type="button" class="btn-link btn-block btn-dropdown"
+                      ng-click="pauseAction()">Pause Container
+                    </button>
+                  </li>
+                  <li>
+                    <button ng-controller="ContainersActionsController" type="button" class="btn-link btn-block btn-dropdown"
+                      ng-click="unpauseAction()">Unpause Container
+                    </button>
+                  </li>
+                  <li>
+                    <button ng-controller="ContainersActionsController" type="button" class="btn-link btn-block btn-dropdown"
+                      ng-click="restartAction()">Restart Container
+                    </button>
+                  </li>
+                  <li role="separator" ng-show="!container.State.Running" class="divider"></li>
+                  <li>
+                    <button ng-controller="ContainersActionsController" type="button" class="btn-link btn-block btn-dropdown"
+                      ng-click="removeAction()">Remove Container
+                    </button>
+                  </li>
 								</ul>
 							</div>
 						</h3>
 					</div>
+					<div ng-include="template" ng-controller="PullImageController"></div>
 					<div class="panel-body">
 						<div class='col-xs-8 well'>
 							<h5><b>System :</b></h5>
@@ -46,7 +85,7 @@
 						</div>
 						<div class='col-xs-3 well'>
 							<b>Docker Daemon</b> version : <br/><br/>
-							<center><span class='label label-success' style='font-size: 16px;'> {{ hostInfo.ServerVersion }} </span></center>
+							<center><span class='label label-primary' style='font-size: 16px;'> {{ hostInfo.ServerVersion }} </span></center>
 							<br/>
 						</div>
 					</div>
@@ -110,7 +149,7 @@
 										</span>
 									</td>
 									<td>
-										<a href="#/dashboard/containers/" type="button" id="button_agent_action" ng-click="actionContainer(container.Id, container, container.Status)" class="btn btn-sm btn-default {{ container.Status|statusButtonActive }}" style="padding: 4px;" autocomplete="off">
+										<a ng-controller="ContainersActionsController" href="#/hosts/{{ hostInfo.Name }}/" type="button" id="button_agent_action" ng-click="actionContainer(container.Id, container, container.Status)" class="btn btn-sm btn-default {{ container.Status|statusButtonActive }}" style="padding: 4px;" autocomplete="off">
 										<span class="label label-{{ container.Status|statusInverseBadge }} {{ container.Status|statusIconsStartStop }}" style="font-size: 100%;top: 1.5px;"> </span>
 										</a>
 									</td>

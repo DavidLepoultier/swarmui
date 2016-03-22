@@ -13,13 +13,17 @@
     </div>
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav navbar-right">
-        <li id="navbar_0001" class="active">
+        <li ng-if="dashOn" id="navbar_0001" class="active">
           <a ng-click="updateMasthead(1)" href="#/">Dashboards</a>
         </li>
-        <li id="navbar_0002">
-          <a ng-click="updateMasthead(2)" href="#/hosts/">
-            Hosts
-          </a>
+        <li ng-if="!dashOn" id="navbar_0001">
+          <a ng-click="updateMasthead(1)" href="#/">Dashboards</a>
+        </li>
+        <li ng-if="hostOn" id="navbar_0002" class="active">
+          <a ng-click="updateMasthead(2)" href="#/hosts/">Hosts</a>
+        </li>
+        <li ng-if="!hostOn" id="navbar_0002">
+          <a ng-click="updateMasthead(2)" href="#/hosts/">Hosts</a>
         </li>
         <li id="navbar_0003" ng-if="showAdmin">
           <a ng-click="updateMasthead(3)" href="#/admin/">Admin</a>

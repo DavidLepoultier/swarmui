@@ -11,6 +11,7 @@ angular.module('swarmui', [
     'container',
     'image',
     'startContainer',
+    'containersActions',
     'pullImage',
     'hosts',
     'hostsInforamtion',
