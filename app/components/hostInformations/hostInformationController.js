@@ -15,8 +15,8 @@ angular.module('hostsInforamtion', [])
       containerQuery();
     });
 
-    $rootScope.$on("CallUpdateImage", function(){
-      containerQuery();
+    $rootScope.$on("CallUpdateImageNode", function(){
+      imageQuery();
     });
 
     $scope.predicate = 'Names';
@@ -26,73 +26,80 @@ angular.module('hostsInforamtion', [])
       $scope.predicate = predicate;
     };
 
-		$scope.toggleSelectAll = function () {
-			if ( $scope.toggle === $scope.newToggle ){
-				$scope.toggle = false;
-			} else {
-				$scope.toggle = true;
-			}
-			angular.forEach($scope.containers, function (i) {
-				i.Checked = $scope.toggle;
-			});
-		};
+    $scope.predicateImage = 'RepoTags';
+    $scope.reverse = false;
+    $scope.orderImage = function(predicateImage) {
+      $scope.reverse = ($scope.predicateImage === predicateImage) ? !$scope.reverse : false;
+      $scope.predicateImage = predicateImage;
+    };
 
-		$scope.toggleSelectAllImage = function () {
-			if ( $scope.toggleImg === $scope.newToggle ){
-				$scope.toggleImg = false;
-			} else {
-				$scope.toggleImg = true;
-			}
-			angular.forEach($scope.images, function (i) {
-				i.Checked = $scope.toggleImg;
-			});
-		};
+	$scope.toggleSelectAll = function () {
+		if ( $scope.toggle === $scope.newToggle ){
+			$scope.toggle = false;
+		} else {
+			$scope.toggle = true;
+		}
+		angular.forEach($scope.containers, function (i) {
+			i.Checked = $scope.toggle;
+		});
+	};
 
-		var containerQuery = function (){
-			Container.query({all: 1, node: $scope.hostUrl}, function (d) {
-				$scope.containers = d.map(function (item) {
-					return new ContainerViewModel(item);
-				});
-			});
-		};
+	$scope.toggleSelectAllImage = function () {
+		if ( $scope.toggleImg === $scope.newToggle ){
+			$scope.toggleImg = false;
+		} else {
+			$scope.toggleImg = true;
+		}
+		angular.forEach($scope.images, function (i) {
+			i.Checked = $scope.toggleImg;
+		});
+	};
 
-		var imageQuery = function (){
-			Image.query({node: $scope.hostUrl}, function (d) {
-				console.log(d);
-				$scope.images = d.map(function (item) {
-					return new ImageViewModel(item);
-				});
+	var containerQuery = function (){
+		Container.query({all: 1, node: $scope.hostUrl}, function (d) {
+			$scope.containers = d.map(function (item) {
+				return new ContainerViewModel(item);
 			});
-		};
+		});
+	};
 
-		var update = function (data) {
-			ViewSpinner.spin();
-			ConsulPrimarySwarm.get({}, function (d){
-				$scope.swarmUrl = atob(d[0].Value); 
-				Swarm.info({node: $scope.swarmUrl}, function (d) {
-					for (var i = 4; i < d['SystemStatus'].length;i += 8){
-						var nodename = d['SystemStatus'][i][0].split(" ");
-						if ( nodename[1] === $routeParams.node ) {
-							$scope.hostUrl = d['SystemStatus'][i][1];
-							break;
-						}
+	var imageQuery = function (){
+		Image.query({node: $scope.hostUrl}, function (d) {
+			console.log(d);
+			$scope.images = d.map(function (item) {
+				return new ImageViewModel(item);
+			});
+		});
+	};
+
+	var update = function (data) {
+		ViewSpinner.spin();
+		ConsulPrimarySwarm.get({}, function (d){
+			$scope.swarmUrl = atob(d[0].Value); 
+			Swarm.info({node: $scope.swarmUrl}, function (d) {
+				for (var i = 4; i < d['SystemStatus'].length;i += 8){
+					var nodename = d['SystemStatus'][i][0].split(" ");
+					if ( nodename[1] === $routeParams.node ) {
+						$scope.hostUrl = d['SystemStatus'][i][1];
+						break;
 					}
-					Swarm.info({node: $scope.hostUrl}, function (d){
-						$scope.hostInfo = d;
+				}
+				Swarm.info({node: $scope.hostUrl}, function (d){
+					$scope.hostInfo = d;
+				});
+				Container.query({all: 1, node: $scope.hostUrl}, function (d) {
+					$scope.containers = d.map(function (item) {
+						return new ContainerViewModel(item);
 					});
-					Container.query({all: 1, node: $scope.hostUrl}, function (d) {
-						$scope.containers = d.map(function (item) {
-							return new ContainerViewModel(item);
-						});
-					});
-					Image.query({node: $scope.hostUrl}, function (d) {
-						console.log(d);
-						$scope.images = d.map(function (item) {
-							return new ImageViewModel(item);
-						});
+				});
+				Image.query({node: $scope.hostUrl}, function (d) {
+					console.log(d);
+					$scope.images = d.map(function (item) {
+						return new ImageViewModel(item);
 					});
 				});
 			});
+		});
 		ViewSpinner.stop();
     };
     update();

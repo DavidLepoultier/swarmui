@@ -90,10 +90,16 @@ angular.module('pullImage', [])
                             $('#pull-modal').modal('show');
                             $('#error-message').show();
                         } else {
-                            $rootScope.$emit("CallUpdateImage", {});
-                            Messages.send("Image Added", imageName);
-                            $scope.init();
-                            $scope.searchResult = false;
+                            setTimeout(function(){
+                                if ($routeParams.node){
+                                    $rootScope.$emit("CallUpdateImageNode", {});
+                                } else {
+                                    $rootScope.$emit("CallUpdateImage", {});
+                                }
+                                Messages.send("Image Added", imageName);
+                                $scope.init();
+                                $scope.searchResult = false;
+                            }, 20000);  
                         }
                     } else {
                         Messages.send("Image Added", imageName);
