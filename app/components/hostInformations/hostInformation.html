@@ -22,7 +22,11 @@
                       data-toggle="modal" data-target="#pull-modal">Pull image
                     </button>
                   </li>
-									<li><a href='#' data-toggle='modal' data-target='#createCont'>Create Container</a></li>
+									<li>
+                    <button type="button" class="btn-link btn-block btn-dropdown"
+                      data-toggle="modal" data-target="#create-modal">Create Container
+                    </button>
+                  </li>
 									<li role="separator" class="divider"></li>
 									<li>
                     <button ng-controller="ContainersActionsController" type="button" class="btn-link btn-block btn-dropdown"
@@ -65,6 +69,7 @@
 						</h3>
 					</div>
 					<div ng-include="template" ng-controller="PullImageController"></div>
+					<div ng-include="template" ng-controller="StartContainerController"></div>
 					<div class="panel-body">
 						<div class='col-xs-8 well'>
 							<h5><b>System :</b></h5>

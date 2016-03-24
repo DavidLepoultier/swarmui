@@ -3,7 +3,7 @@
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-        <h3>Create And Start Container From Image</h3>
+        <h3>Create And Start Container From Image {{ hostInfo.Name }}</h3>
       </div>
       <div class="modal-body">
         <form role="form">
@@ -15,20 +15,22 @@
                           <div class="form-group">
                             <label>Tag version:</label>
                             <select class="form-control" ng-model="config.Image">
-                              <option ng-repeat="Tag in RepoTags" value="{{ Tag }}">
-                                {{ Tag }}
+                              <option ng-repeat="Tag in images" value="{{ Tag | repotag }}">
+                                {{ Tag | repotag }}
                               </option>
                             </select>
                           </div>
                         </div>
-                        <div class="col-xs-12">
-                          <div class="form-group">
-                            <label>Server host:</label>
-                            <select class="form-control" ng-model="selected.Host">
-                              <option ng-repeat="Node in Nodes" value="{{ Node | nodename }}">
-                                {{ Node | nodename }}
-                              </option>
-                            </select>
+                        <div ng-if="!fromNode" class="form-group">
+                          <div class="col-xs-12">
+                            <div class="form-group">
+                              <label>Server host:</label>
+                              <select class="form-control" ng-model="selected.Host">
+                                <option ng-repeat="Node in Nodes" value="{{ Node | nodename }}">
+                                  {{ Node | nodename }}
+                                </option>
+                              </select>
+                            </div>
                           </div>
                         </div>
                         <div class="col-xs-6">
@@ -323,9 +325,10 @@
 
                           <div ng-repeat="volume in config.HostConfig.VolumesFrom">
                               <div class="form-group form-inline">
-                                  <select ng-model="volume.name"
-                                          ng-options="name for name in containerNames track by name"
-                                          class="form-control">
+                                  <select ng-model="volume.name" class="form-control">
+                                    <option ng-repeat="name in containers" value="{{ name | containername }}">
+                                      {{ name | containername }}
+                                    </option>   
                                   </select>
                                   <button class="btn btn-danger btn-xs form-control"
                                           ng-click="rmEntry(config.HostConfig.VolumesFrom, volume)">
