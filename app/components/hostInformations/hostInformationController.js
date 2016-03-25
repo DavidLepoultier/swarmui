@@ -94,8 +94,8 @@ angular.module('hostsInforamtion', [])
 						return new ContainerViewModel(item);
 					});
 					$scope.containerNames = d.map(function (item) {
-              return containernameFilter(item);
-          });
+						return containernameFilter(item);
+					});
 				});
 				Image.query({node: $scope.hostUrl}, function (d) {
 					console.log(d);

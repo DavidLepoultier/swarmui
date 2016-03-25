@@ -1,12 +1,16 @@
 angular.module('startContainer', ['ui.bootstrap'])
-.controller('StartContainerController', ['$scope', '$routeParams', '$location', 'Container', 'Messages', 
-  'containernameFilter', 'errorMsgFilter', 'Swarm', 'ConsulPrimarySwarm',
-function ($scope, $routeParams, $location, Container, Messages, containernameFilter, errorMsgFilter, Swarm, ConsulPrimarySwarm) {
+.controller('StartContainerController', ['$scope', '$rootScope', '$routeParams', '$location', 'Container', 'Messages', 
+ 'errorMsgFilter', 'Swarm', 'ConsulPrimarySwarm',
+function ($scope, $rootScope, $routeParams, $location, Container, Messages, errorMsgFilter, Swarm, ConsulPrimarySwarm) {
     $scope.template = 'app/components/startContainer/startcontainer.html';
-    $scope.swarmUrl = '';
     $scope.selected = [];
-    $scope.Nodes = [];
+    $scope.fromNode = false;
 
+    if ($routeParams.node){
+        $scope.fromNode = true;
+    }
+
+/*
     ConsulPrimarySwarm.get({}, function (d){
       $scope.swarmUrl = atob(d[0].Value); 
       Container.query({all: 1, node: $scope.swarmUrl}, function (d) {
@@ -22,7 +26,7 @@ function ($scope, $routeParams, $location, Container, Messages, containernameFil
         }
       });
     });
-
+*/
     $scope.config = {
         Env: [],
         Labels: [],
@@ -151,6 +155,9 @@ function ($scope, $routeParams, $location, Container, Messages, containernameFil
         $('#create-modal').modal('hide');
         Container.create(config, function (d) {
             Messages.send('Container Created', d.Id);
+            if ($routeParams.node){
+                $rootScope.$emit("CallUpdateContainer", {});
+            }
             delete $scope.config;
             delete $scope.selected;
             $scope.selected = [];

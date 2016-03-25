@@ -1,5 +1,6 @@
 angular.module('pullImage', [])
-    .controller('PullImageController', ['$scope', '$rootScope', '$routeParams', '$log', 'Messages', 'Image', 'Swarm', 'ViewSpinner', 'ConsulPrimarySwarm', 'errorMsgFilter', 'Repositories',
+    .controller('PullImageController', ['$scope', '$rootScope', '$routeParams', '$log', 'Messages', 'Image', 'Swarm', 
+        'ViewSpinner', 'ConsulPrimarySwarm', 'errorMsgFilter', 'Repositories',
         function ($scope, $rootScope, $routeParams, $log, Messages, Image, Swarm, ViewSpinner, ConsulPrimarySwarm, errorMsgFilter, Repositories) {
             $scope.template = 'app/components/pullImage/pullImage.html';
             $scope.searchResult = false;

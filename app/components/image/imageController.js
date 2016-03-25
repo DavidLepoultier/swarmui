@@ -139,6 +139,13 @@ angular.module('image', [])
 
       ConsulPrimarySwarm.get({}, function (d){
         $scope.swarmUrl = atob(d[0].Value); 
+        Swarm.info({node: $scope.swarmUrl}, function (d) {
+          var n = 0;
+          for (var i = 4; i < d['SystemStatus'].length;i += 8) {
+            $scope.Nodes[n] = d['SystemStatus'][i];
+            n++;
+          }
+        });
         Image.get({id: $routeParams.id, node: $scope.swarmUrl}, function (d) {
           $scope.image = d;
           $scope.id = d.Id;

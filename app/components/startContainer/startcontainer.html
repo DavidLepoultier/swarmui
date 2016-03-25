@@ -12,13 +12,25 @@
                 <fieldset>
                     <div class="row">
                         <div class="col-xs-12">
-                          <div class="form-group">
-                            <label>Tag version:</label>
-                            <select class="form-control" ng-model="config.Image">
-                              <option ng-repeat="Tag in images" value="{{ Tag | repotag }}">
-                                {{ Tag | repotag }}
-                              </option>
-                            </select>
+                          <div ng-if="fromNode">
+                            <div class="form-group">
+                              <label>Tag version:</label>
+                              <select class="form-control" ng-model="config.Image">
+                                <option ng-repeat="Tag in images" value="{{ Tag | repotag }}">
+                                  {{ Tag | repotag }}
+                                </option>
+                              </select>
+                            </div>
+                          </div>
+                          <div ng-if="!fromNode">
+                            <div class="form-group">
+                              <label>Tag version:</label>
+                              <select class="form-control" ng-model="config.Image">
+                                <option ng-repeat="Tag in RepoTags" value="{{ Tag }}">
+                                  {{ Tag }}
+                                </option>
+                              </select>
+                            </div>
                           </div>
                         </div>
                         <div class="col-xs-12">
