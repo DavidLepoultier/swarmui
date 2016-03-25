@@ -1,48 +1,27 @@
 angular.module('startContainer', ['ui.bootstrap'])
-.controller('StartContainerController', ['$scope', '$rootScope', '$routeParams', '$location', 'Container', 'Messages', 
+.controller('StartContainerController', ['$scope', '$routeParams', '$location', 'Container', 'Messages', 
   'containernameFilter', 'errorMsgFilter', 'Swarm', 'ConsulPrimarySwarm',
-function ($scope, $rootScope, $routeParams, $location, Container, Messages, containernameFilter, errorMsgFilter, Swarm, ConsulPrimarySwarm) {
+function ($scope, $routeParams, $location, Container, Messages, containernameFilter, errorMsgFilter, Swarm, ConsulPrimarySwarm) {
     $scope.template = 'app/components/startContainer/startcontainer.html';
+    $scope.swarmUrl = '';
     $scope.selected = [];
     $scope.Nodes = [];
 
-/*
     ConsulPrimarySwarm.get({}, function (d){
-      $scope.swarmUrl = atob(d[0].Value);  
-      if ($routeParams.from){
-        $scope.fromNode = false;
-        Container.query({all: 1, node: $scope.swarmUrl}, function (d) {
-          $scope.containerNames = d.map(function (container) {
-              return containernameFilter(container);
-          });
+      $scope.swarmUrl = atob(d[0].Value); 
+      Container.query({all: 1, node: $scope.swarmUrl}, function (d) {
+        $scope.containerNames = d.map(function (container) {
+            return containernameFilter(container);
         });
-        Swarm.info({node: $scope.swarmUrl}, function (d) {
-          var n = 0;
-          for (var i = 4; i < d['SystemStatus'].length;i += 8) {
-            $scope.Nodes[n] = d['SystemStatus'][i];
-            n++;
-          }
-        });
-      } else {
-        Swarm.info({node: $scope.swarmUrl}, function (d) {
-          for (var i = 4; i < d['SystemStatus'].length;i += 8){
-            var nodename = d['SystemStatus'][i][0].split(" ");
-            if ( nodename[1] === $routeParams.node ) {
-              $scope.hostUrl = d['SystemStatus'][i][1];
-              break;
-            }
-          }
-          Container.query({all: 1, node: $scope.hostUrl}, function (d) {
-            $scope.containerNames = d.map(function (container) {
-                return containernameFilter(container);
-            });
-          });
-        });
-      }
+      });
+      Swarm.info({node: $scope.swarmUrl}, function (d) {
+        var n = 0;
+        for (var i = 4; i < d['SystemStatus'].length;i += 8) {
+          $scope.Nodes[n] = d['SystemStatus'][i];
+          n++;
+        }
+      });
     });
-*/
-
-    
 
     $scope.config = {
         Env: [],

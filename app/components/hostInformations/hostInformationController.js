@@ -1,7 +1,7 @@
 angular.module('hostsInforamtion', [])
-.controller('HostsInformationController', ['$scope', '$rootScope', '$routeParams', 'Swarm', 'Container', 
-  'ConsulPrimarySwarm', 'SettingsConsul', 'Settings', 'Messages', 'ViewSpinner', 'Image',
-  function ($scope, $rootScope, $routeParams, Swarm, Container, ConsulPrimarySwarm, SettingsConsul, Settings, Messages, ViewSpinner, Image) {
+.controller('HostsInformationController', ['$scope', '$rootScope', '$routeParams', 'Swarm', 'Container', 'containernameFilter',
+  'errorMsgFilter', 'ConsulPrimarySwarm', 'SettingsConsul', 'Settings', 'Messages', 'ViewSpinner', 'Image',
+  function ($scope, $rootScope, $routeParams, Swarm, Container, containernameFilter, errorMsgFilter, ConsulPrimarySwarm, SettingsConsul, Settings, Messages, ViewSpinner, Image) {
     $scope.dashboard = '1';
     $scope.toggle = false;
     $scope.toggleImg = false;
@@ -10,6 +10,7 @@ angular.module('hostsInforamtion', [])
     $scope.hostUrl = '';
     $scope.containers = [];
     $scope.images = [];
+    $scope.Nodes = [];
 
     $rootScope.$on("CallUpdateContainer", function(){
       containerQuery();
@@ -81,6 +82,7 @@ angular.module('hostsInforamtion', [])
 					var nodename = d['SystemStatus'][i][0].split(" ");
 					if ( nodename[1] === $routeParams.node ) {
 						$scope.hostUrl = d['SystemStatus'][i][1];
+						$scope.Nodes[0] = d['SystemStatus'][i];
 						break;
 					}
 				}
@@ -91,6 +93,9 @@ angular.module('hostsInforamtion', [])
 					$scope.containers = d.map(function (item) {
 						return new ContainerViewModel(item);
 					});
+					$scope.containerNames = d.map(function (item) {
+              return containernameFilter(item);
+          });
 				});
 				Image.query({node: $scope.hostUrl}, function (d) {
 					console.log(d);
