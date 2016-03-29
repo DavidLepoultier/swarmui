@@ -10,6 +10,7 @@ angular.module('swarmui', [
     'dashboardImages',
     'container',
     'image',
+    'imagesActions',
     'startContainer',
     'containersActions',
     'pullImage',

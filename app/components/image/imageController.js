@@ -8,6 +8,7 @@ angular.module('image', [])
       $scope.tagInfo = {repo: '', version: '', force: false};
       $scope.id = '';
       $scope.repoTags = [];
+      $scope.Nodes = [];
       $scope.swarmUrl = '';
 
       switch($routeParams.from){

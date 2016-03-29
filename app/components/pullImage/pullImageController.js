@@ -92,11 +92,7 @@ angular.module('pullImage', [])
                             $('#error-message').show();
                         } else {
                             setTimeout(function(){
-                                if ($routeParams.node){
-                                    $rootScope.$emit("CallUpdateImageNode", {});
-                                } else {
-                                    $rootScope.$emit("CallUpdateImage", {});
-                                }
+                                $rootScope.$emit("CallUpdateImage", {});
                                 Messages.send("Image Added", imageName);
                                 $scope.init();
                                 $scope.searchResult = false;

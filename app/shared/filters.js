@@ -67,7 +67,7 @@ angular.module('swarmui.filters', [])
 .filter('statusBadge', function () {
   'use strict';
   return function (text) {
-    if (text === 'created') {
+    if (text === 'created' || text === 'Created') {
       return 'default';
     } 
     if (text === 'Ghost') {
@@ -94,7 +94,7 @@ angular.module('swarmui.filters', [])
 .filter('statusInverseBadge', function () {
   'use strict';
   return function (text) {
-    if (text === 'created') {
+    if (text === 'created' || text === 'Created') {
       return 'success';
     }
     if (text === 'Ghost') {
@@ -109,7 +109,7 @@ angular.module('swarmui.filters', [])
 .filter('statusIconsStartStop', function () {
   'use strict';
   return function (text) {
-    if (text === 'created') {
+    if (text === 'created' || text === 'Created') {
       return 'glyphicon glyphicon-play';
     }
     if (text === 'Ghost') {

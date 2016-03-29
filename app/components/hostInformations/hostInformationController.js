@@ -3,6 +3,8 @@ angular.module('hostsInforamtion', [])
   'errorMsgFilter', 'ConsulPrimarySwarm', 'SettingsConsul', 'Settings', 'Messages', 'ViewSpinner', 'Image',
   function ($scope, $rootScope, $routeParams, Swarm, Container, containernameFilter, errorMsgFilter, ConsulPrimarySwarm, SettingsConsul, Settings, Messages, ViewSpinner, Image) {
     $scope.dashboard = '1';
+    $scope.actContainer = true;
+    $scope.actImage = false;
     $scope.toggle = false;
     $scope.toggleImg = false;
     $scope.newToggle = true;
@@ -16,7 +18,7 @@ angular.module('hostsInforamtion', [])
       containerQuery();
     });
 
-    $rootScope.$on("CallUpdateImageNode", function(){
+    $rootScope.$on("CallUpdateImage", function(){
       imageQuery();
     });
 
@@ -32,6 +34,16 @@ angular.module('hostsInforamtion', [])
     $scope.orderImage = function(predicateImage) {
       $scope.reverse = ($scope.predicateImage === predicateImage) ? !$scope.reverse : false;
       $scope.predicateImage = predicateImage;
+    };
+
+    $scope.activeContainer = function (){
+      $scope.actContainer = true;
+      $scope.actImage = false;
+    };
+
+    $scope.activeImage = function (){
+      $scope.actContainer = false;
+      $scope.actImage = true;
     };
 
 	$scope.toggleSelectAll = function () {
@@ -66,11 +78,24 @@ angular.module('hostsInforamtion', [])
 
 	var imageQuery = function (){
 		Image.query({node: $scope.hostUrl}, function (d) {
-			console.log(d);
 			$scope.images = d.map(function (item) {
 				return new ImageViewModel(item);
 			});
-		});
+		
+		for (var n = 0; n < $scope.images.length; n++){
+			var countContainer = 0;
+      for (var c = 0; c < $scope.containers.length; c++) {
+        if ( $scope.images[n].RepoTags[0] === $scope.containers[c].Image ) {
+          countContainer++;
+        }
+      }
+      if (countContainer !== 0) {
+        $scope.images[n].ContainerCreate = countContainer;
+      } else {
+        $scope.images[n].ContainerCreate = '';
+      }
+    }
+    });
 	};
 
 	var update = function (data) {
@@ -98,11 +123,24 @@ angular.module('hostsInforamtion', [])
 					});
 				});
 				Image.query({node: $scope.hostUrl}, function (d) {
-					console.log(d);
 					$scope.images = d.map(function (item) {
 						return new ImageViewModel(item);
 					});
-				});
+				
+				for (var n = 0; n < $scope.images.length; n++){
+					var countContainer = 0;
+          for (var c = 0; c < $scope.containers.length; c++) {
+            if ( $scope.images[n].RepoTags[0] === $scope.containers[c].Image ) {
+              countContainer++;
+            }
+          }
+          if (countContainer !== 0) {
+            $scope.images[n].ContainerCreate = countContainer;
+          } else {
+            $scope.images[n].ContainerCreate = '';
+          }
+        }
+        });
 			});
 		});
 		ViewSpinner.stop();

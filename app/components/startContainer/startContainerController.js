@@ -158,6 +158,9 @@ function ($scope, $rootScope, $routeParams, $location, Container, Messages, erro
             if ($routeParams.node){
                 $rootScope.$emit("CallUpdateContainer", {});
             }
+            if ($scope.dashContainer){
+                $rootScope.$emit("CallUpdateContainer", {});
+            }
             delete $scope.config;
             delete $scope.selected;
             $scope.selected = [];

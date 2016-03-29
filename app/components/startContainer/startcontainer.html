@@ -3,7 +3,7 @@
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-        <h3>Create And Start Container From Image</h3>
+        <h3>Create Container</h3>
       </div>
       <div class="modal-body">
         <form role="form">
@@ -14,7 +14,7 @@
                         <div class="col-xs-12">
                           <div ng-if="fromNode">
                             <div class="form-group">
-                              <label>Tag version:</label>
+                              <label>Image Tag version:</label>
                               <select class="form-control" ng-model="config.Image">
                                 <option ng-repeat="Tag in images" value="{{ Tag | repotag }}">
                                   {{ Tag | repotag }}
@@ -24,7 +24,7 @@
                           </div>
                           <div ng-if="!fromNode">
                             <div class="form-group">
-                              <label>Tag version:</label>
+                              <label>Image Tag version:</label>
                               <select class="form-control" ng-model="config.Image">
                                 <option ng-repeat="Tag in RepoTags" value="{{ Tag }}">
                                   {{ Tag }}

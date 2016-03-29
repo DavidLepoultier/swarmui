@@ -1,11 +1,18 @@
 angular.module('dashboardContainers', [])
-.controller('DashboardContainersController', ['$scope', '$rootScope', '$routeParams', 'Container', 
+.controller('DashboardContainersController', ['$scope', '$rootScope', '$routeParams', 'Container', 'Swarm', 'Image',
   'ConsulPrimarySwarm', 'SettingsConsul', 'Settings', 'Messages', 'ViewSpinner',
-  function ($scope, $rootScope, $routeParams, Container, ConsulPrimarySwarm, SettingsConsul, Settings, Messages, ViewSpinner) {
+  function ($scope, $rootScope, $routeParams, Container, Swarm, Image, ConsulPrimarySwarm, SettingsConsul, Settings, Messages, ViewSpinner) {
     $scope.toggle = false;
+    $scope.dashContainer = true;
     $scope.displayAll = Settings.displayAll;
     $scope.dashboard = '3';
     $scope.swarmUrl = '';
+    $scope.Nodes = [];
+
+
+    $rootScope.$on("CallUpdateContainer", function(){
+      update();
+    });
 
     $scope.predicate = 'NodeName';
     $scope.reverse = false;
@@ -62,9 +69,22 @@ angular.module('dashboardContainers', [])
     };
 
     var update = function (data) {
+      $scope.RepoTags = [];
       ViewSpinner.spin();
       ConsulPrimarySwarm.get({}, function (d){
         $scope.swarmUrl = atob(d[0].Value); 
+        Swarm.info({node: $scope.swarmUrl}, function (d) {
+          var n = 0;
+          for (var i = 4; i < d['SystemStatus'].length;i += 8) {
+            $scope.Nodes[n] = d['SystemStatus'][i];
+            n++;
+          }
+        });
+        Image.query({node: $scope.swarmUrl}, function (d) {
+          d.map(function (item) {
+            $scope.RepoTags.push(item.RepoTags[0]);
+          });
+        });
         Container.query({all: 1, node: $scope.swarmUrl}, function (d) {
           $scope.containers = d.map(function (item) {
               return new ContainerViewModel(item);

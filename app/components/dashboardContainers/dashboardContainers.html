@@ -17,6 +17,12 @@
                 </button>
                 <ul class="dropdown-menu">
                   <li>
+                    <button type="button" class="btn-link btn-block btn-dropdown"
+                      data-toggle="modal" data-target="#create-modal">Create Container
+                    </button>
+                  </li>
+                  <li role="separator" ng-show="!container.State.Running" class="divider"></li>
+                  <li>
                     <button ng-controller="ContainersActionsController" type="button" class="btn-link btn-block btn-dropdown"
                       ng-click="startAction()">Start
                     </button>
@@ -56,6 +62,7 @@
               </div>
             </h3>
           </div>
+          <div ng-include="template" ng-controller="StartContainerController"></div>
           <!-- Table -->
           <table class="table table-striped">
             <tr>
@@ -125,7 +132,7 @@
               </td>
               <td>
                 <a ng-controller="ContainersActionsController" href="#/dashboard/containers/" type="button" id="button_agent_action" ng-click="actionContainer(container.Id, container, container.Status)" class="btn btn-sm btn-default {{ container.Status|statusButtonActive }}" style="padding: 4px;" autocomplete="off">
-                  <span class="label label-{{ container.Status|statusInverseBadge }} {{ container.Status|statusIconsStartStop }}" style="font-size: 100%;top: 1.5px;"> </span>
+                  <span class="label label-{{ container.Status|statusInverseBadge }} {{ container.Status|statusIconsStartStop }}" style="font-size: 100%;top: 1px;"> </span>
                 </a>
               </td>
             </tr>

@@ -1,12 +1,13 @@
 angular.module('dashboardImages', [])
-.controller('DashboardImagesController', ['$scope', '$rootScope', '$routeParams', 'Image', 'Swarm', 
+.controller('DashboardImagesController', ['$scope', '$rootScope', '$routeParams', 'Image', 'Container', 'Swarm', 
   'ConsulPrimarySwarm', 'SettingsConsul', 'Settings', 'Messages', 'ViewSpinner',
-  function ($scope, $rootScope, $routeParams, Image, Swarm, ConsulPrimarySwarm, SettingsConsul, Settings, Messages, ViewSpinner) {
+  function ($scope, $rootScope, $routeParams, Image, Container, Swarm, ConsulPrimarySwarm, SettingsConsul, Settings, Messages, ViewSpinner) {
     $scope.images = [];
     $scope.toggle = false;
     $scope.swarmUrl = '';
     $scope.dashboard = '2';
     $scope.Nodes = [];
+    $scope.containers = [];
 
     $scope.predicate = 'RepoTag';
     $scope.reverse = false;
@@ -31,6 +32,17 @@ angular.module('dashboardImages', [])
           var language = navigator.browserLanguage;
           var date = new Date($scope.images[i].Created*1000);
           $scope.images[i].Create = date.toLocaleDateString(language, options);
+          var countContainer = 0;
+          for (var c = 0; c < $scope.containers.length; c++) {
+            if ( $scope.images[i].RepoTag === $scope.containers[c].Image ) {
+              countContainer++;
+            }
+          }
+          if (countContainer !== 0) {
+            $scope.images[i].ContainerCreate = countContainer;
+          } else {
+            $scope.images[i].ContainerCreate = '';
+          }
         }
       });
     };
@@ -46,6 +58,11 @@ angular.module('dashboardImages', [])
             n++;
           }
         });
+        Container.query({all: 1, node: $scope.swarmUrl, notruc: 1}, function (d) {
+          $scope.containers = d.map(function (item) {
+            return new ContainerViewModel(item);
+          });
+        });
         Image.query({node: $scope.swarmUrl}, function (d) {
           $scope.images = d.map(function (item) {
               return new ImageViewModel(item);
@@ -57,7 +74,19 @@ angular.module('dashboardImages', [])
             var language = navigator.browserLanguage;
             var date = new Date($scope.images[i].Created*1000);
             $scope.images[i].Create = date.toLocaleDateString(language, options);
+            var countContainer = 0;
+            for (var c = 0; c < $scope.containers.length; c++) {
+              if ( $scope.images[i].RepoTag === $scope.containers[c].Image ) {
+                countContainer++;
+              }
+            }
+            if (countContainer !== 0) {
+              $scope.images[i].ContainerCreate = countContainer;
+            } else {
+              $scope.images[i].ContainerCreate = '';
+            }
           }
+
           ViewSpinner.stop();
         });
       });

@@ -97,13 +97,6 @@
               <br/>
               <b>Created : </b>{{ container.Created | date: 'medium' }}
               <h4>Network</h4>
-              <b>Swarm-Agent</b>
-              <br/>
-              <b>IP : </b>{{ hostUrl }}
-              <br/>
-              <br/>
-              <b>Container :</b>
-              <br/>
               <b>IP : </b>{{ container.NetworkSettings.IPAddress }}
               <br/>
               <b>Gateway : </b>{{ container.NetworkSettings.Gateway }}

@@ -21,6 +21,12 @@
                       data-toggle="modal" data-target="#pull-modal">Pull image
                     </button>
                   </li>
+                  <li>
+                    <button type="button" class="btn-link btn-block btn-dropdown"
+                      ng-controller="ImagesActionsController"
+                      ng-click="removeImage()">Remove images
+                    </button>
+                  </li>
                 </ul>
               </div>
             </h3>
@@ -29,7 +35,7 @@
           <!-- Table -->
           <table class="table table-striped">
             <tr>
-              <th><input type="checkbox" ng-model="toggle" ng-change="toggleSelectAll()" style="margin-top: 35px;"/></th>
+              <th></th>
               <th>
                 <button type="button" class="btn-link btn-block btn-dropdown" ng-click="order('RepoTag')">
                   Tags
@@ -58,9 +64,16 @@
                 </button>
                 <input class="form-control input-filter" ng-model="search.VirtualSize" placeholder="Filter...">
               </th>
+              <th>
+                Containers
+              </th>
             </tr>
             <tr ng-repeat="image in images | filter:search:strict | orderBy:predicate:reverse">
-              <td><input type="checkbox" ng-model="image.Checked" /></td>
+              <td>
+                <div ng-if="!image.ContainerCreate">
+                  <input type="checkbox" ng-model="image.Checked" />
+                </div>
+              </td>
               <td>
                 &nbsp;&nbsp;&nbsp;
                 <a href="#/{{ image.From }}/images/{{ image.Id }}">{{ image.RepoTag }}</a>
@@ -75,6 +88,11 @@
               <td>
                 &nbsp;&nbsp;&nbsp;
                 {{ image.VirtualSize | humansize }}
+              </td>
+              <td>
+                <a href="" style="text-decoration: none;" data-toggle="tooltip" data-placement="top" title="Container(s) created">
+                  <span class="label label-success" style="font-size: 95%;">{{ image.ContainerCreate }}</span>
+                </a>
               </td>
             </tr>
           </table>

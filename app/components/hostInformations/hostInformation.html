@@ -17,53 +17,65 @@
                   Action <span class="caret"></span>
                 </button>
 								<ul class="dropdown-menu">
-									<li>
-                    <button type="button" class="btn-link btn-block btn-dropdown"
-                      data-toggle="modal" data-target="#pull-modal">Pull image
-                    </button>
-                  </li>
-									<li>
-                    <button type="button" class="btn-link btn-block btn-dropdown"
-                      data-toggle="modal" data-target="#create-modal">Create Container
-                    </button>
-                  </li>
-									<li role="separator" class="divider"></li>
-									<li>
-                    <button ng-controller="ContainersActionsController" type="button" class="btn-link btn-block btn-dropdown"
-                      ng-click="startAction()">Start Container
-                    </button>
-                  </li>
-									<li>
-                    <button ng-controller="ContainersActionsController" type="button" class="btn-link btn-block btn-dropdown"
-                      ng-click="stopAction()">Stop Container
-                    </button>
-                  </li>
-                  <li>
-                    <button ng-controller="ContainersActionsController" type="button" class="btn-link btn-block btn-dropdown"
-                      ng-click="killAction()">Kill Container
-                    </button>
-                  </li>
-                  <li>
-                    <button ng-controller="ContainersActionsController" type="button" class="btn-link btn-block btn-dropdown"
-                      ng-click="pauseAction()">Pause Container
-                    </button>
-                  </li>
-                  <li>
-                    <button ng-controller="ContainersActionsController" type="button" class="btn-link btn-block btn-dropdown"
-                      ng-click="unpauseAction()">Unpause Container
-                    </button>
-                  </li>
-                  <li>
-                    <button ng-controller="ContainersActionsController" type="button" class="btn-link btn-block btn-dropdown"
-                      ng-click="restartAction()">Restart Container
-                    </button>
-                  </li>
-                  <li role="separator" ng-show="!container.State.Running" class="divider"></li>
-                  <li>
-                    <button ng-controller="ContainersActionsController" type="button" class="btn-link btn-block btn-dropdown"
-                      ng-click="removeAction()">Remove Container
-                    </button>
-                  </li>
+								  <div ng-if="actImage">
+									  <li>
+                      <button type="button" class="btn-link btn-block btn-dropdown"
+                        data-toggle="modal" data-target="#pull-modal">Pull image
+                      </button>
+                    </li>
+                  </div>
+                  <div ng-if="actContainer">
+									  <li>
+                      <button type="button" class="btn-link btn-block btn-dropdown"
+                        data-toggle="modal" data-target="#create-modal">Create Container
+                      </button>
+                    </li>
+									  <li role="separator" class="divider"></li>
+									  <li>
+                      <button ng-controller="ContainersActionsController" type="button" class="btn-link btn-block btn-dropdown"
+                        ng-click="startAction()">Start Container
+                      </button>
+                    </li>
+									  <li>
+                      <button ng-controller="ContainersActionsController" type="button" class="btn-link btn-block btn-dropdown"
+                        ng-click="stopAction()">Stop Container
+                      </button>
+                    </li>
+                    <li>
+                      <button ng-controller="ContainersActionsController" type="button" class="btn-link btn-block btn-dropdown"
+                        ng-click="killAction()">Kill Container
+                      </button>
+                    </li>
+                    <li>
+                      <button ng-controller="ContainersActionsController" type="button" class="btn-link btn-block btn-dropdown"
+                        ng-click="pauseAction()">Pause Container
+                      </button>
+                    </li>
+                    <li>
+                      <button ng-controller="ContainersActionsController" type="button" class="btn-link btn-block btn-dropdown"
+                        ng-click="unpauseAction()">Unpause Container
+                      </button>
+                    </li>
+                    <li>
+                      <button ng-controller="ContainersActionsController" type="button" class="btn-link btn-block btn-dropdown"
+                        ng-click="restartAction()">Restart Container
+                      </button>
+                    </li>
+                    <li role="separator" ng-show="!container.State.Running" class="divider"></li>
+                    <li>
+                      <button ng-controller="ContainersActionsController" type="button" class="btn-link btn-block btn-dropdown"
+                        ng-click="removeAction()">Remove Container
+                      </button>
+                    </li>
+                  </div>
+                  <div ng-if="actImage">
+                    <li>
+                      <button type="button" class="btn-link btn-block btn-dropdown"
+                        ng-controller="ImagesActionsController"
+                        ng-click="removeImage()">Remove images
+                      </button>
+                    </li>
+                  </div>
 								</ul>
 							</div>
 						</h3>
@@ -95,7 +107,7 @@
 						</div>
 					</div>
 					<uib-tabset active="active">
-            <uib-tab index="0" heading="Containers">
+            <uib-tab index="0" heading="Containers" ng-click="activeContainer()">
             <!-- Tabs 1 container info -->
 							<!-- Table -->
 							<table class="table table-striped no-margin-bottom">
@@ -155,16 +167,16 @@
 									</td>
 									<td>
 										<a ng-controller="ContainersActionsController" href="#/hosts/{{ hostInfo.Name }}/" type="button" id="button_agent_action" ng-click="actionContainer(container.Id, container, container.Status)" class="btn btn-sm btn-default {{ container.Status|statusButtonActive }}" style="padding: 4px;" autocomplete="off">
-										<span class="label label-{{ container.Status|statusInverseBadge }} {{ container.Status|statusIconsStartStop }}" style="font-size: 100%;top: 1.5px;"> </span>
+										<span class="label label-{{ container.Status|statusInverseBadge }} {{ container.Status|statusIconsStartStop }}" style="font-size: 100%;top: 1px;"> </span>
 										</a>
 									</td>
 								</tr>
 							</table>
 						</uib-tab>
-            <uib-tab index="1" heading="Images">
+            <uib-tab index="1" heading="Images" ng-click="activeImage()">
 							<table class="table table-striped no-margin-bottom">
 								<tr>
-									<th><input type="checkbox" ng-model="toggleImg" ng-change="toggleSelectAllImage()" style="margin-top: 35px;"/></th>
+									<th></th>
 									<th>
 										<button type="button" class="btn-link btn-block btn-dropdown" ng-click="orderImage('RepoTags')">
 											Tags
@@ -193,9 +205,16 @@
 									</button>
 								<input class="form-control input-filter" ng-model="search.VirtualSize" placeholder="Filter...">
 								</th>
+								<th>
+                  Containers
+                </th>
 								</tr>
 								<tr ng-repeat="image in images | filter:search:strict | orderBy:predicateImage:reverse">
-									<td><input type="checkbox" ng-model="image.Checked" /></td>
+									<td>
+									  <div ng-if="!image.ContainerCreate">
+                      <input type="checkbox" ng-model="image.Checked" />
+                    </div>
+                  </td>
 									<td>
 										&nbsp;&nbsp;&nbsp;
 										<a href="#/hosts/{{ hostInfo.Name }}/images/{{ image.Id }}">{{ image | repotag }}</a>
@@ -212,6 +231,11 @@
 										&nbsp;&nbsp;&nbsp;
 										{{ image.VirtualSize | humansize }}
 									</td>
+									<td>
+                    <a href="" style="text-decoration: none;" data-toggle="tooltip" data-placement="top" title="Container(s) created">
+                      <span class="label label-success" style="font-size: 95%;">{{ image.ContainerCreate }}</span>
+                    </a>
+                  </td>
 								</tr>
 							</table>
 						</uib-tab>
