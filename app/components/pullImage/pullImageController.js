@@ -5,6 +5,7 @@ angular.module('pullImage', [])
             $scope.template = 'app/components/pullImage/pullImage.html';
             $scope.searchResult = false;
             $scope.searchTagResult = false;
+            $scope.searchTagSelected = false;
             $scope.fromNode = true;
             $scope.ImagesResult = [];
             $scope.TagsResult = [];
@@ -14,6 +15,9 @@ angular.module('pullImage', [])
             }
 
             $scope.init = function () {
+                $scope.searchResult = false;
+                $scope.searchTagResult = false;
+                $scope.searchTagSelected = false;
                 $scope.config = {
                     selectedImage: '',
                     searchImage: '',
@@ -67,6 +71,10 @@ angular.module('pullImage', [])
                 });
             };
 
+            $scope.selectedTags = function () {
+                $scope.searchTagSelected = true;
+            };
+
             $scope.pull = function () {
                 $('#error-message').hide();
                 var config = angular.copy($scope.config);
@@ -95,13 +103,11 @@ angular.module('pullImage', [])
                                 $rootScope.$emit("CallUpdateImage", {});
                                 Messages.send("Image Added", imageName);
                                 $scope.init();
-                                $scope.searchResult = false;
                             }, 20000);  
                         }
                     } else {
                         Messages.send("Image Added", imageName);
                         $scope.init();
-                        $scope.searchResult = false;
                     }
                 }, function (e) {
                     $scope.error = "Cannot pull image " + imageName + " Reason: " + e.data;

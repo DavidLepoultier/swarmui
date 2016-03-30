@@ -7,7 +7,7 @@ angular.module('containersActions', [])
       var actionCont = '';
       if (status === 'Ghost') {
           return;
-      } else if (status.indexOf('Exit') !== -1 && status !== 'Exit 0' || status === 'created' ) {
+      } else if (status.indexOf('Exit') !== -1 && status !== 'Exit 0' || status === 'created' || status === 'Created' ) {
         actionCont = 'start';
       } else {
         actionCont = 'stop';

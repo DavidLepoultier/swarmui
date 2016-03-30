@@ -37,11 +37,13 @@ angular.module('hostsInforamtion', [])
     };
 
     $scope.activeContainer = function (){
+      update();
       $scope.actContainer = true;
       $scope.actImage = false;
     };
 
     $scope.activeImage = function (){
+      update();
       $scope.actContainer = false;
       $scope.actImage = true;
     };

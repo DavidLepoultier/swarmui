@@ -38,6 +38,7 @@ angular.module('image', [])
           }
           $scope.dashboard = '1';
           $scope.hostOn = true;
+          $scope.node = $routeParams.node;
           break;
         default:
           $scope.from = '/';

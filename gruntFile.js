@@ -265,7 +265,7 @@ module.exports = function (grunt) {
         },
         shell: {
             buildImage: {
-                command: 'docker build --rm -t ptimagos/swarmui:0.1.0 .'
+                command: 'docker build --rm -t ptimagos/swarmui:<%= pkg.version %> .'
             },
             buildBinary: {
                 command: [
@@ -280,7 +280,7 @@ module.exports = function (grunt) {
                     'id=`docker ps -a | grep swarmui | awk \'{print $1}\'`',
                     'docker stop swarmui',
                     'docker rm $id',
-                    'docker run --privileged -d -p 9000:9000 --name swarmui ptimagos/swarmui:0.1.0 http://192.168.99.100:8500'
+                    'docker run --privileged -d -p 9000:9000 --name swarmui ptimagos/swarmui:<%= pkg.version %> http://192.168.99.100:8500'
                 ].join(';')
             },
             runSwarm: {

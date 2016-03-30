@@ -35,7 +35,7 @@
             <div ng-if="searchTagResult">
               <div class="form-group">
                 <label>Select Tag:</label>
-                <select class="form-control" ng-model="config.tag">
+                <select class="form-control" ng-model="config.tag" ng-change="selectedTags()">
                   <option ng-repeat="tag in TagsResult" value="{{ tag.name }}">
                     {{ tag.name }} - {{ tag.last_updated | getdate }}
                   </option>
@@ -48,10 +48,10 @@
       <div class="alert alert-error" id="error-message" style="display:none">
         {{ error }}
       </div>
-      <div ng-if="!searchResult" class="modal-footer">
+      <div ng-if="!searchTagSelected" class="modal-footer">
         <a href="" class="btn btn-primary disabled">Pull</a>
       </div>
-      <div ng-if="searchResult" class="modal-footer">
+      <div ng-if="searchTagSelected" class="modal-footer">
         <a href="" class="btn btn-primary" ng-click="pull()">Pull</a>
       </div>
     </div>

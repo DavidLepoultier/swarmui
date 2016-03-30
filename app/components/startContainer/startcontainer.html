@@ -12,33 +12,37 @@
                 <fieldset>
                     <div class="row">
                         <div class="col-xs-12">
-                          <div ng-if="fromNode">
-                            <div class="form-group">
-                              <label>Image Tag version:</label>
-                              <select class="form-control" ng-model="config.Image">
-                                <option ng-repeat="Tag in images" value="{{ Tag | repotag }}">
-                                  {{ Tag | repotag }}
-                                </option>
-                              </select>
-                            </div>
+                          <div ng-if="!RepoTags" class="form-group">
+                            <label>Image Tag version:</label>
+                            <select class="form-control" ng-model="config.Image">
+                              <option ng-repeat="Tag in images" value="{{ Tag | repotag }}">
+                                {{ Tag | repotag }}
+                              </option>
+                            </select>
                           </div>
-                          <div ng-if="!fromNode">
-                            <div class="form-group">
-                              <label>Image Tag version:</label>
-                              <select class="form-control" ng-model="config.Image">
-                                <option ng-repeat="Tag in RepoTags" value="{{ Tag }}">
-                                  {{ Tag }}
-                                </option>
-                              </select>
-                            </div>
+                          <div ng-if="RepoTags" class="form-group">
+                            <label>Image Tag version:</label>
+                            <select class="form-control" ng-model="config.Image">
+                              <option ng-repeat="Tag in RepoTags" value="{{ Tag }}">
+                                {{ Tag }}
+                              </option>
+                            </select>
                           </div>
                         </div>
                         <div class="col-xs-12">
-                          <div class="form-group">
+                          <div ng-if="!hostOn" class="form-group">
                             <label>Server host:</label>
                             <select class="form-control" ng-model="selected.Host">
                               <option ng-repeat="Node in Nodes" value="{{ Node | nodename }}">
                                 {{ Node | nodename }}
+                              </option>
+                            </select>
+                          </div>
+                          <div ng-if="hostOn" class="form-group">
+                            <label>Server host:</label>
+                            <select class="form-control" ng-model="selected.Host">
+                              <option value="{{ node }}">
+                                {{ node }}
                               </option>
                             </select>
                           </div>
