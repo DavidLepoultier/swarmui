@@ -244,7 +244,7 @@ func main() {
 
 	if *consulAddr == "" {
 		fmt.Fprintf(os.Stderr, "Consul Server URL unset !\n")
-		fmt.Fprintf(os.Stderr, "Use flag: -consul string\n")
+		fmt.Fprintf(os.Stderr, "Use flag: -consul <consul url>\n")
 		fmt.Fprintf(os.Stderr, "\tExemple: -consul http://localhost:8500\n")
 		os.Exit(1)
 	}
