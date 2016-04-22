@@ -9,13 +9,20 @@
         <form role="form" name="pullForm">
           <div ng-if="!fromNode" class="form-group">
             <label>Select host:</label>
-            <select class="form-control" ng-model="config.node">
+            <select class="form-control" ng-model="config.node" ng-change="selectedNode()">
               <option ng-repeat="Node in Nodes" value="{{ Node | nodeurl }}">
                 {{ Node | nodename }}
               </option>
             </select>
           </div>
-          <div class="input-group">
+          <div ng-if="fromNode" class="input-group">
+            <input type="text" ng-model="config.searchImage" class="form-control" 
+            placeholder="Search image..." />
+            <span class="input-group-btn">
+              <button ng-click="searchDockerCont()" class="btn btn-default glyphicon glyphicon-search" style="top: 0;" type="button"></button>
+            </span>
+          </div>
+          <div ng-if="nodeSelected" class="input-group">
             <input type="text" ng-model="config.searchImage" class="form-control" 
             placeholder="Search image..." />
             <span class="input-group-btn">
@@ -47,9 +54,6 @@
       </div>
       <div class="alert alert-error" id="error-message" style="display:none">
         {{ error }}
-      </div>
-      <div ng-if="!searchTagSelected" class="modal-footer">
-        <a href="" class="btn btn-primary disabled">Pull</a>
       </div>
       <div ng-if="searchTagSelected" class="modal-footer">
         <a href="" class="btn btn-primary" ng-click="pull()">Pull</a>

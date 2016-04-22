@@ -6,18 +6,21 @@ angular.module('pullImage', [])
             $scope.searchResult = false;
             $scope.searchTagResult = false;
             $scope.searchTagSelected = false;
+            $scope.nodeSelected = false;
             $scope.fromNode = true;
             $scope.ImagesResult = [];
             $scope.TagsResult = [];
 
             if ($routeParams.from){
               $scope.fromNode = false;
+              $scope.nodeSelected = true;
             }
 
             $scope.init = function () {
                 $scope.searchResult = false;
                 $scope.searchTagResult = false;
                 $scope.searchTagSelected = false;
+                $scope.nodeSelected = false;
                 $scope.config = {
                     selectedImage: '',
                     searchImage: '',
@@ -75,6 +78,10 @@ angular.module('pullImage', [])
                 $scope.searchTagSelected = true;
             };
 
+            $scope.selectedNode = function () {
+                $scope.nodeSelected = true;
+            };
+
             $scope.pull = function () {
                 $('#error-message').hide();
                 var config = angular.copy($scope.config);
@@ -103,7 +110,7 @@ angular.module('pullImage', [])
                                 $rootScope.$emit("CallUpdateImage", {});
                                 Messages.send("Image Added", imageName);
                                 $scope.init();
-                            }, 20000);  
+                            }, 1000);  
                         }
                     } else {
                         Messages.send("Image Added", imageName);
