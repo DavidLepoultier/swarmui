@@ -1,4 +1,4 @@
-package main // import "github.com/Ptimagos/swarmui"
+package main 
 
 import (
 	"crypto/tls"
@@ -63,24 +63,34 @@ func createTcpHandler(e string) http.Handler {
 	return httputil.NewSingleHostReverseProxy(u)
 }
 
-func createHandler(dir string, e string, e2 string, e3 string, e4 string) http.Handler {
+func swarmui(consulAddr string, DockerEndpoint string, RepoEndpoint string, addr string, dir string) {
+	handler := createHandler(dir, consulAddr, DockerEndpoint, RepoEndpoint)
+	go func() {
+		if err := http.ListenAndServe(addr, handler); err != nil {
+			log.Println(handler)
+			log.Fatal(err)
+		}
+	}()
+}
+
+func createHandler(dir string, consulAddr string, DockerEndpoint string, RepoEndpoint string) http.Handler {
 	var (
 		mux         = http.NewServeMux()
 		fileHandler = http.FileServer(http.Dir(dir))
 		dockerHandler http.Handler
-		dockerHandlerTls http.Handler
 		dockerHandlerRepo http.Handler
 		h           http.Handler
 	)
 
-	h = createTcpHandler(e)
-	dockerHandler = createTcpHandler(e2)
-	dockerHandlerTls = createTcpHandler(e3)
-	dockerHandlerRepo = createTcpHandler(e4)
+	DockerEndpoint = "http://" + DockerEndpoint
+	RepoEndpoint = "http://" + RepoEndpoint
+
+	h = createTcpHandler(consulAddr)
+	dockerHandler = createTcpHandler(DockerEndpoint)
+	dockerHandlerRepo = createTcpHandler(RepoEndpoint)
 
 	mux.Handle("/consulapi/", http.StripPrefix("/consulapi", h))
 	mux.Handle("/swarmuiapi/", http.StripPrefix("/swarmuiapi", dockerHandler))
-	mux.Handle("/swarmuiapitls/", http.StripPrefix("/swarmuiapitls", dockerHandlerTls))
 	mux.Handle("/swarmuiapirepo/", http.StripPrefix("/swarmuiapirepo", dockerHandlerRepo))
 	mux.Handle("/", fileHandler)
 	return mux
@@ -126,33 +136,7 @@ func sendHttps(w http.ResponseWriter, r *http.Request, client *http.Client) {
     }
 }
 
-func swarmui() {
-	if len(os.Args) > 1 {
-		consul := os.Args[1]
-
-		var (
-			endpoint = flag.String("e", consul, "Consul endpoint")
-			endpoint2 = flag.String("e2", "http://localhost:9001", "Dockers endpoint")
-			endpoint3 = flag.String("e3", "http://localhost:9002", "Dockers TLS endpoint")
-			endpoint4 = flag.String("e4", "http://localhost:9003", "Dockers REPO endpoint")
-			addr     = flag.String("p", ":9000", "Address and port to serve swarmui")
-			assets   = flag.String("a", ".", "Path to the assets")
-		)
-
-		handler := createHandler(*assets, *endpoint, *endpoint2, *endpoint3, *endpoint4)
-		go func() {
-			if err := http.ListenAndServe(*addr, handler); err != nil {
-				log.Println(handler)
-				log.Fatal(err)
-			}
-		}()
-	} else {
-		msg()
-	}
-
-}
-
-func docker() {
+func docker(DockerEndpoint string) {
     tr := &http.Transport{
         DisableCompression: true,
         DisableKeepAlives: false,
@@ -162,14 +146,15 @@ func docker() {
     http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
         sendHttp(w, r, client)
     })
-    log.Fatal(http.ListenAndServe(":9001", nil))
+    go func() {
+    	log.Fatal(http.ListenAndServe(DockerEndpoint, nil))
+    }()
 }
 
 
-func dockerRepo() {
+func dockerRepo(RepoEndpoint string, myProxy string) {
 	repo := http.NewServeMux()
-	if len(os.Args) > 2 {
-	  	myProxy := os.Args[2]
+	if myProxy != "" {
 	    url_i := url.URL{}
 	    url_proxy, _ := url_i.Parse(myProxy)
 
@@ -184,7 +169,7 @@ func dockerRepo() {
 	    repo.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 	      	sendHttps(w, r, clientRepo)
 	  	})
-		log.Fatal(http.ListenAndServe(":9003", repo))
+		log.Fatal(http.ListenAndServe(RepoEndpoint, repo))
 	} else {
 		tr := &http.Transport{
 	      DisableCompression: false,
@@ -196,25 +181,19 @@ func dockerRepo() {
 		repo.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 	    	sendHttps(w, r, clientRepo)
 	  	})
-		log.Fatal(http.ListenAndServe(":9003", repo))
+		log.Fatal(http.ListenAndServe(RepoEndpoint, repo))
 	}
 }
 
-func dockerTls() {
-    var (
-        certFile = flag.String("cert", "certs/cert.pem", "A PEM eoncoded certificate file.")
-        keyFile  = flag.String("key", "certs/key.pem", "A PEM encoded private key file.")
-        caFile   = flag.String("CA", "certs/ca.pem", "A PEM eoncoded CA's certificate file.")
-    )
-
+func dockerTls(DockerEndpoint string, certFile string, keyFile string, caFile string) {
     // Load client cert
-    cert, err := tls.LoadX509KeyPair(*certFile, *keyFile)
+    cert, err := tls.LoadX509KeyPair(certFile, keyFile)
     if err != nil {
         log.Fatal(err)
     }
 
     // Load CA cert
-    caCert, err := ioutil.ReadFile(*caFile)
+    caCert, err := ioutil.ReadFile(caFile)
     if err != nil {
         log.Fatal(err)
     }
@@ -241,25 +220,45 @@ func dockerTls() {
         sendHttps(w, r, client)
     })
     go func() {
-    	log.Fatal(http.ListenAndServe(":9002", tls))
+    	log.Fatal(http.ListenAndServe(DockerEndpoint, tls))
     }()
 
 }
 
 func main() {
 
-	if len(os.Args) > 1 {
+	var (
+		consulAddr  = flag.String("consul", "","Consul Server url. (Exemple http://localhost:8500)")
+		DockerEndpoint = flag.String("DockerEndpoint", "localhost:9001", "Access to Dockers services")
+		RepoEndpoint = flag.String("RepoEndpoint", "localhost:9002", "Access to Dockers REPO")
+		tls 	  = flag.Bool("tls", false, "Docker is in TLS mode")
+		addr      = flag.String("p", ":9000", "Address and port to serve swarmui")
+		assets    = flag.String("a", ".", "Path to the assets")
+		certFile  = flag.String("cert", "certs/cert.pem", "A PEM encoded certificate file.")
+        keyFile   = flag.String("key", "certs/key.pem", "A PEM encoded private key file.")
+        caFile    = flag.String("CA", "certs/ca.pem", "A PEM encoded CA's certificate file.")
+        myProxy	  = flag.String("proxy", "", "Http PROXY information")
+	)
 
-		flag.Parse()
+	flag.Parse()
 
-		fmt.Printf("Starting swarmui server\n")
-		swarmui()
-		fmt.Printf("Starting Dockers Tls endpoint\n")
-		dockerTls()
-		fmt.Printf("Starting Dockers Repo endpoint\n")
-		dockerRepo()
-
-	} else {
-		msg()
+	if *consulAddr == "" {
+		fmt.Fprintf(os.Stderr, "Consul Server URL unset !\n")
+		fmt.Fprintf(os.Stderr, "Use flag: -consul string\n")
+		fmt.Fprintf(os.Stderr, "\tExemple: -consul http://localhost:8500\n")
+		os.Exit(1)
 	}
+
+	fmt.Printf("Starting swarmui server\n")
+	swarmui(*consulAddr, *DockerEndpoint, *RepoEndpoint, *addr, *assets)
+	if *tls == true {
+		fmt.Printf("Starting Dockers Tls endpoint\n")
+		dockerTls(*DockerEndpoint, *certFile, *keyFile, *caFile)
+	} else {
+		fmt.Printf("Starting Dockers endpoint\n")
+		docker(*DockerEndpoint)
+	}
+	fmt.Printf("Starting Dockers Repo endpoint\n")
+	dockerRepo(*RepoEndpoint, *myProxy)
+
 }

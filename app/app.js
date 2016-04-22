@@ -74,10 +74,9 @@ angular.module('swarmui', [
         });
         $routeProvider.otherwise({redirectTo: '/'});
     }])
-    // This is your docker url that the api will use to make requests
-    // You need to set this to the api endpoint without the port i.e. http://192.168.1.9
+    // This is swarmui url path (without first "/") that will use to make requests
     .constant('CONSUL_ENDPOINT', 'consulapi')
-    .constant('DOCKER_ENDPOINT', 'swarmuiapitls')
+    .constant('DOCKER_ENDPOINT', 'swarmuiapi')
     .constant('DOCKERREPO_ENDPOINT', 'swarmuiapirepo')
     .constant('DOCKER_PORT', '') // Docker port, leave as an empty string if no port is requred.  If you have a port, prefix it with a ':' i.e. :4243
     .constant('UI_VERSION', '0.2.0');
