@@ -33,7 +33,7 @@ angular.module('image', [])
             $scope.returnTo = "to container";
           } else {
             $scope.from = '/' + $routeParams.from + '/' + $routeParams.node;
-            $scope.toParent = $scope.from;
+            $scope.toParent = '/' + $routeParams.from + '/' + $routeParams.node + '/images/';
             $scope.returnTo = 'to ' + $routeParams.node;
           }
           $scope.dashboard = '1';
@@ -56,7 +56,7 @@ angular.module('image', [])
           if (d[d.length-1].Deleted) {
             $location.path($scope.from);
           } else {
-            $location.path($scope.from + $scope.id); // Refresh the current page.
+            $location.path($scope.toParent + $scope.id); // Refresh the current page.
           } 
         }, function (e) {
             $scope.error = e.data;
@@ -80,7 +80,7 @@ angular.module('image', [])
             force: tag.force ? 1 : 0
         }, function (d) {
             Messages.send("Tag Added", $routeParams.id);
-            $location.path($scope.from + $scope.id);
+            $location.path($scope.toParent + $scope.id);
         }, function (e) {
             $scope.error = e.data;
             $('#error-message').show();
