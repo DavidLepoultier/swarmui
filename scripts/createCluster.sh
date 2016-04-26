@@ -10,7 +10,7 @@ master=""
 HTTP_PROXY=""
 consul_tags="latest"
 swarm_tags="1.1.2"
-swarmui_tags="0.1.0"
+swarmui_tags="0.2.0"
 
 echo "###########################################"
 echo "Create VM to docker:"
@@ -20,7 +20,7 @@ do
   echo "Create Docker machine $serv..."
   docker-machine create -d virtualbox $machine_opt $serv
   echo "Copy certFile Docker $serv in /certs..."
-  docker-machine ssh $serv "sudo mkdir /certs; sudo cp /var/lib/boot2docker/ca.pem /certs; sudo cp /var/lib/boot2docker/server.pem /certs/cert.pem; sudo cp /var/lib/boot2docker/server-key.pem /certs/key.pem"
+  docker-machine ssh $serv "sudo mkdir /certs; sudo cp /var/lib/boot2docker/ca.pem /certs; sudo cp /var/lib/boot2docker/server.pem /certs; sudo cp /var/lib/boot2docker/server-key.pem /certs"
 done
 
 echo "###########################################"
@@ -93,7 +93,8 @@ echo "###########################################"
 firstServer=`echo $servers | awk '{print $1}'`
 echo "Install SwarmUI on ${firstServer}:"
 eval "$(docker-machine env $firstServer)"
-docker run -d --name swarmui $dns_consul -p 9000:9000 ptimagos/swarmui:${swarmui_tags} http://consul.service.consul:8500 $HTTP_PROXY
+docker run -d --name swarmui $dns_consul -p 9000:9000 ptimagos/swarmui:${swarmui_tags} -consul http://consul.service.consul:8500 \
+    -tls -CA /certs/ca.pem -cert /certs/server.pem -key /certs/server-key.pem
 
 echo "Script ended"
 echo "You can connect to web interface now : http://${master_ip}:9000"

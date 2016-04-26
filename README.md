@@ -9,19 +9,15 @@ SwarmUI is a web interface for the Docker and Swarm Remote API. The goal is to p
 * Consistency - The web UI should be consistent with the commands found on the docker / swarm CLI.
 
 ## Constraints
-* You must start, on each node, the docker deamon with option TCP and TLS.
+* You must start, on each node, the docker deamon with option TCP.
 * One or many docker Swarm Manarger can be started in the cluster.
 * All Swarm Manager and agent must used consul to discover all the nodes.
 * On each node, docker swarm-agent must be started
-* The Tls certificats must be stored in the directory "/certs" on the host where swarmui be deployed. With this naming :
- - ca.pem
- - cert.pem
- - key.pem
 
 ## Using the container
 
 ### Container Quickstart 
-1. Run: `docker run -d -p 9000:9000 -v /certs:/certs ptimagos/swarmui http://<consul host ip>:8500`
+1. Run: `docker run -d -p 9000:9000 ptimagos/swarmui -consul http://<consul host ip>:8500`
 
 2. Open your browser to `http://<dockerd host ip>:9000`
 
@@ -61,16 +57,16 @@ Here we will used docker-machine and virtualbox to create the host environment. 
 	docker-machine ssh master
 	sudo mkdir /certs 
 	sudo cp /var/lib/boot2docker/ca.pem /certs
-	sudo cp /var/lib/boot2docker/server.pem /certs/cert.pem
-	sudo cp /var/lib/boot2docker/server-key.pem /certs/key.pem
+	sudo cp /var/lib/boot2docker/server.pem /certs/
+	sudo cp /var/lib/boot2docker/server-key.pem /certs/
 	exit
 	```
 
 5. Start a Swarm Manager container, with TLS option:
 	```
 	docker run -d --name swarm-manager -p 3376:3376 -v /certs:/certs \
-		swarm manage --tls --tlscacert=/certs/ca.pem --tlscert=/certs/cert.pem \
-		--tlskey=/certs/key.pem -H tcp://0.0.0.0:3376 consul://192.168.99.100:8500
+		swarm manage --tls --tlscacert=/certs/ca.pem --tlscert=/certs/server.pem \
+		--tlskey=/certs/server-key.pem -H tcp://0.0.0.0:3376 consul://192.168.99.100:8500
 	```
 
 6. Start a Swarm Agent container:
@@ -80,12 +76,14 @@ Here we will used docker-machine and virtualbox to create the host environment. 
 
 7. Start SwarmUI:
 	```
-	docker run -d -name=swarmui -v /certs:/certs -p 9000:9000 ptimagos/swarmui http://192.168.99.100:8500
+	docker run -d -name=swarmui -v /certs:/certs -p 9000:9000 ptimagos/swarmui -consul http://192.168.99.100:8500 \
+		-tls -CA /certs/ca.pem -cert /certs/server.pem -key /certs/server-key.pem
 	```
 
 	If you are behind a proxy, you can create the container like this: 
 	```
-	docker run -d -name=swarmui -v /certs:/certs -p 9000:9000 ptimagos/swarmui http://192.168.99.100:8500 http://<proxy ip>:<proxy port>
+	docker run -d -name=swarmui -v /certs:/certs -p 9000:9000 ptimagos/swarmui -consul http://192.168.99.100:8500 \
+		-tls -CA /certs/ca.pem -cert /certs/server.pem -key /certs/server-key.pem -proxy http://<proxy ip>:<proxy port>
 	```
 	
 	Now you can connect to the SwarmUI web interface: `http://192.168.99.100:9000`
@@ -139,9 +137,9 @@ You can create manually the cluster or by the lowest script...
 
 3. Copy the certificats in the directory "/certs"
 	```
-	docker-machine ssh master1 "sudo mkdir /certs; sudo cp /var/lib/boot2docker/ca.pem /certs; sudo cp /var/lib/boot2docker/server.pem /certs/cert.pem; sudo cp /var/lib/boot2docker/server-key.pem /certs/key.pem"
-	docker-machine ssh master2 "sudo mkdir /certs; sudo cp /var/lib/boot2docker/ca.pem /certs; sudo cp /var/lib/boot2docker/server.pem /certs/cert.pem; sudo cp /var/lib/boot2docker/server-key.pem /certs/key.pem"
-	docker-machine ssh master3 "sudo mkdir /certs; sudo cp /var/lib/boot2docker/ca.pem /certs; sudo cp /var/lib/boot2docker/server.pem /certs/cert.pem; sudo cp /var/lib/boot2docker/server-key.pem /certs/key.pem"
+	docker-machine ssh master1 "sudo mkdir /certs; sudo cp /var/lib/boot2docker/ca.pem /certs; sudo cp /var/lib/boot2docker/server.pem /certs; sudo cp /var/lib/boot2docker/server-key.pem /certs/"
+	docker-machine ssh master2 "sudo mkdir /certs; sudo cp /var/lib/boot2docker/ca.pem /certs; sudo cp /var/lib/boot2docker/server.pem /certs; sudo cp /var/lib/boot2docker/server-key.pem /certs/"
+	docker-machine ssh master3 "sudo mkdir /certs; sudo cp /var/lib/boot2docker/ca.pem /certs; sudo cp /var/lib/boot2docker/server.pem /certs; sudo cp /var/lib/boot2docker/server-key.pem /certs/"
 	```
 
 4. Start a Manager and Agent Swarm:
@@ -180,7 +178,8 @@ You can create manually the cluster or by the lowest script...
 	```
 	eval "$(docker-machine env master1)"
 	docker run -d -name=swarmui --dns 192.168.99.100 --dns 192.168.99.101 --dns 192.168.99.102 \
-		-v /certs:/certs -p 9000:9000 ptimagos/swarmui http://consul.service.consul:8500
+		-v /certs:/certs -p 9000:9000 ptimagos/swarmui -consul http://consul.service.consul:8500 \
+		-tls -CA /certs/ca.pem -cert /certs/server.pem -key /certs/server-key.pem
 	```
 
 	Now you can connect to the SwarmUI web interface: `http://192.168.99.100:9000`
