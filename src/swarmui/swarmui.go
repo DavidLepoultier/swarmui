@@ -1,4 +1,4 @@
-package main // import "github.com/Ptimagos/swarmui"
+package main 
 
 import (
 	"crypto/tls"
