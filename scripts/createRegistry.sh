@@ -7,7 +7,7 @@ machine_opt=""
 # exemple: docke
 master_server="master1 master2 master3"
 dns=""
-swarm_tags="1.1.2"
+registry="2.4.0"
 
 for master_serv in $master_server
 do
@@ -17,28 +17,24 @@ do
 done
 
 echo "###########################################"
-echo "Create VM to docker :"
-for serv in $servers
-do
-  echo "-------------------------------------------"
-  echo "Create Docker machine $serv..."
-  docker-machine create -d virtualbox $machine_opt $serv
-  echo "Copy certFile Docker $serv in /certs ..."
-  docker-machine ssh $serv "sudo mkdir /certs; sudo cp /var/lib/boot2docker/ca.pem /certs; sudo cp /var/lib/boot2docker/server.pem /certs/cert.pem; sudo cp /var/lib/boot2docker/server-key.pem /certs/key.pem"
-done
-
-echo "###########################################"
-echo "Install Swarm and start agent :"
+echo "Install Registry and start:"
 
 for serv in $servers
 do
   echo "-------------------------------------------"
-  echo "Get Swarm image on $serv..."
+  echo "Get Registry image on $serv..."
   eval "$(docker-machine env $serv)"
-  docker pull swarm:${swarm_tags}
+  docker pull registry:${registry}
   machine_ip=`docker-machine ls | grep $serv | awk '{print $5}' | awk -F"/" '{print $3}' | awk -F":" '{print $1}'`
   echo "Ip public for $serv : - $machine_ip -"
-  echo "Start Swarm agent on $serv..."
-  docker run -d --name=swarm-agent $dns --dns 8.8.8.8 --dns-search dc1.consul swarm:${swarm_tags} join --addr $machine_ip:2376 consul://consul.service.consul:8500
+  echo "Start Registry on $serv..."
+  docker run -d \
+    -p 5000:5000 \
+    --restart=always \
+    --name registry \
+    -e REGISTRY_HTTP_TLS_CERTIFICATE=/certs/server.crt \
+    -e REGISTRY_HTTP_TLS_KEY=/certs/server.key \
+    -v /Users/david/Documents/Docker/registry:/var/lib/registry \
+    -v /certs:/certs \
+    registry:${registry}
 done
-

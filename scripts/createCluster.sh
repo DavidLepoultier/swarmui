@@ -68,7 +68,7 @@ do
 done
 echo "###########################################"
 
-dns_consul="$dns_consul --dns 8.8.8.8 --dns-search service.consul"
+dns_consul="$dns_consul --dns 8.8.8.8 --dns-search dc1.consul"
 echo "DNS Used for the containers: - $dns_consul -"
 
 echo "###########################################"
@@ -84,8 +84,8 @@ do
   echo "Ip public for $serv : - $machine_ip -"
   echo "Start Swarm manager on $serv..."
   docker run -d --name swarm-manager -p 3376:3376 $dns_consul -v /certs:/certs \
-    swarm:${swarm_tags} manage --tls --tlscacert=/certs/ca.pem --tlscert=/certs/cert.pem \
-    --tlskey=/certs/key.pem -H tcp://0.0.0.0:3376 --replication --addr $machine_ip:3376 \
+    swarm:${swarm_tags} manage --tls --tlscacert=/certs/ca.pem --tlscert=/certs/server.pem \
+    --tlskey=/certs/server-key.pem -H tcp://0.0.0.0:3376 --replication --addr $machine_ip:3376 \
     consul://consul.service.consul:8500
   docker run -d --name swarm-agent $dns_consul swarm:${swarm_tags} join --addr $machine_ip:2376 consul://consul.service.consul:8500
 done
@@ -93,7 +93,7 @@ echo "###########################################"
 firstServer=`echo $servers | awk '{print $1}'`
 echo "Install SwarmUI on ${firstServer}:"
 eval "$(docker-machine env $firstServer)"
-docker run -d --name swarmui $dns_consul -p 9000:9000 ptimagos/swarmui:${swarmui_tags} -consul http://consul.service.consul:8500 \
+docker run -d --name swarmui $dns_consul -v /certs:/certs -p 9000:9000 ptimagos/swarmui:${swarmui_tags} -consul http://consul.service.consul:8500 \
     -tls -CA /certs/ca.pem -cert /certs/server.pem -key /certs/server-key.pem
 
 echo "Script ended"
