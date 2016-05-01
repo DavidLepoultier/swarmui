@@ -25,6 +25,7 @@ do
   docker-machine create -d virtualbox $machine_opt $serv
   echo "Copy certFile Docker $serv in /certs ..."
   docker-machine ssh $serv "sudo mkdir /certs; sudo cp /var/lib/boot2docker/ca.pem /certs; sudo cp /var/lib/boot2docker/server.pem /certs/cert.pem; sudo cp /var/lib/boot2docker/server-key.pem /certs/key.pem"
+  docker-machine ssh $serv "cd /etc/docker/; sudo mkdir -p certs.d/repository.node.consul:5000; cd certs.d/repository.node.consul:5000; sudo curl https://github.com/Ptimagos/swarmui/tree/0.3.0/certs/client.cert; sudo curl https://github.com/Ptimagos/swarmui/tree/0.3.0/certs/client.key; sudo curl https://github.com/Ptimagos/swarmui/tree/0.3.0/certs/repository.node.consul.crt; suod curl https://github.com/Ptimagos/swarmui/tree/0.3.0/certs/repository.node.consul.csr"
 done
 
 echo "###########################################"
