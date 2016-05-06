@@ -22,6 +22,9 @@ echo "Install Registry and start:"
 for serv in $servers
 do
   echo "-------------------------------------------"
+  echo "Copy certFile Registry in /certs..."
+  docker-machine scp ~/Docker/swarmui/certs/registry/server-key.pem $serv:/certs/server.key.pem
+  docker-machine scp ~/Docker/swarmui/certs/registry/server-cert.pem $serv:/certs/server-cert.pem
   echo "Get Registry image on $serv..."
   eval "$(docker-machine env $serv)"
   docker pull registry:${registry}
@@ -33,8 +36,8 @@ do
     -p 5000:5000 \
     --restart=always \
     --name registry \
-    -e REGISTRY_HTTP_TLS_CERTIFICATE=/certs/server.crt \
-    -e REGISTRY_HTTP_TLS_KEY=/certs/server.key \
+    -e REGISTRY_HTTP_TLS_CERTIFICATE=/certs/server.cert.pem \
+    -e REGISTRY_HTTP_TLS_KEY=/certs/server.key.pem \
     -v /Users/david/Documents/Docker/registry:/var/lib/registry \
     -v /certs:/certs \
     registry:${registry}

@@ -2,7 +2,7 @@
 servers=$1
 # machine_opt is used to set option for the docker-machine
 # exemple: machine_opt="--engine-env HTTP_PROXY=http://proxy:3128/ --engine-env HTTPS_PROXY=http://proxy:3128/"
-machine_opt=""
+machine_opt="--engine-env HTTP_PROXY=http://niceway.rd.francetelecom.fr:3128/ --engine-env HTTPS_PROXY=http://niceway.rd.francetelecom.fr:3128/ --engine-env NO_PROXY=.consul"
 # docker_opt is used to set option for the container
 # exemple: docke
 master_server="master1 master2 master3"
@@ -23,9 +23,14 @@ do
   echo "-------------------------------------------"
   echo "Create Docker machine $serv..."
   docker-machine create -d virtualbox $machine_opt $serv
-  echo "Copy certFile Docker $serv in /certs ..."
+  echo "Copy certFile Docker $serv in /certs..."
   docker-machine ssh $serv "sudo mkdir /certs; sudo cp /var/lib/boot2docker/ca.pem /certs; sudo cp /var/lib/boot2docker/server.pem /certs/cert.pem; sudo cp /var/lib/boot2docker/server-key.pem /certs/key.pem"
-  docker-machine ssh $serv "cd /etc/docker/; sudo mkdir -p certs.d/repository.node.consul:5000; cd certs.d/repository.node.consul:5000; sudo curl https://github.com/Ptimagos/swarmui/tree/0.3.0/certs/client.cert; sudo curl https://github.com/Ptimagos/swarmui/tree/0.3.0/certs/client.key; sudo curl https://github.com/Ptimagos/swarmui/tree/0.3.0/certs/repository.node.consul.crt; suod curl https://github.com/Ptimagos/swarmui/tree/0.3.0/certs/repository.node.consul.csr"
+  docker-machine ssh $serv "sudo mkdir -p /etc/docker/certs.d/repository.node.consul:5000/; sudo chmod 777 /etc/docker/certs.d/repository.node.consul:5000"
+  docker-machine ssh $serv "sudo echo \"nameserver 192.168.99.200\" >> /etc/resolv.conf"
+  echo "Copy certFile Registry $serv in /etc/docker/certs.d/repository.node.consul:5000..."
+  docker-machine scp ~/Docker/swarmui/certs/registry/client-key.pem $serv:/etc/docker/certs.d/repository.node.consul:5000/client.key
+  docker-machine scp ~/Docker/swarmui/certs/registry/client-cert.pem $serv:/etc/docker/certs.d/repository.node.consul:5000/client.cert
+  docker-machine scp ~/Docker/swarmui/certs/registry/repository.node.consul.cert.pem $serv:/etc/docker/certs.d/repository.node.consul:5000/repository.node.consul.crt
 done
 
 echo "###########################################"
