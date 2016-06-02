@@ -30,6 +30,7 @@ do
   docker pull registry:${registry}
   machine_ip=`docker-machine ls | grep $serv | awk '{print $5}' | awk -F"/" '{print $3}' | awk -F":" '{print $1}'`
   echo "Ip public for $serv : - $machine_ip -"
+  docker-machine ssh $serv "cd /certs; sudo curl https://github.com/Ptimagos/swarmui/tree/0.3.0/certs/server.key; sudo curl https://github.com/Ptimagos/swarmui/tree/0.3.0/certs/server.crt"
   echo "Start Registry on $serv..."
   docker run -d \
     -p 5000:5000 \
