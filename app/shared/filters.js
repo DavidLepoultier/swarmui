@@ -27,6 +27,11 @@ angular.module('swarmui.filters', [])
     return String(text).substring(length);
   };
 })
+.filter('splitmoocname', function() {
+  return function(input) {
+    return input.split('/')[2];
+  };
+})
 .filter('containername', function () {
   'use strict';
   return function (container) {
@@ -37,7 +42,7 @@ angular.module('swarmui.filters', [])
 .filter('nodename', function () {
   'use strict';
   return function (Node) {
-    var name = Node[0];
+    var name = Node;
     return name.substring(1, name.length);
   };
 })
@@ -64,6 +69,21 @@ angular.module('swarmui.filters', [])
     }
   };
 })
+.filter('statusRunning', function () {
+  'use strict';
+  return function (text) {
+    if (text === 'created' || text === 'Created') {
+      return '';
+    } 
+    if ( text.indexOf('Paused') !== -1 || text === 'paused' ) {
+      return '(Paused)';
+    }
+    if ( text.indexOf('Exit') !== -1 && text !== 'Exit 0' || text.indexOf('exited') !== -1 ) {
+      return '(Stopped)';
+    }
+    return '(Running)';
+  };
+})
 .filter('statusBadge', function () {
   'use strict';
   return function (text) {
@@ -73,7 +93,7 @@ angular.module('swarmui.filters', [])
     if (text === 'Ghost') {
       return 'important';
     } 
-    if ( text.indexOf('Paused') !== -1 ) {
+    if ( text.indexOf('Paused') !== -1 || text === 'paused' ) {
       return 'primary';
     }
     if ( text.indexOf('Exit') !== -1 && text !== 'Exit 0' || text.indexOf('exited') !== -1 ) {

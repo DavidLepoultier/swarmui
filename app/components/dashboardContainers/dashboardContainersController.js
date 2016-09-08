@@ -1,7 +1,7 @@
 angular.module('dashboardContainers', [])
 .controller('DashboardContainersController', ['$scope', '$rootScope', '$routeParams', 'Container', 'Swarm', 'Image',
-  'ConsulPrimarySwarm', 'SettingsConsul', 'Settings', 'Messages', 'ViewSpinner',
-  function ($scope, $rootScope, $routeParams, Container, Swarm, Image, ConsulPrimarySwarm, SettingsConsul, Settings, Messages, ViewSpinner) {
+  'ConsulPrimarySwarm', 'ConsulSolerni', 'SettingsConsul', 'Settings', 'Messages', 'ViewSpinner',
+  function ($scope, $rootScope, $routeParams, Container, Swarm, Image, ConsulPrimarySwarm, ConsulSolerni, SettingsConsul, Settings, Messages, ViewSpinner) {
     $scope.toggle = false;
     $scope.dashContainer = true;
     $scope.displayAll = Settings.displayAll;
@@ -49,53 +49,41 @@ angular.module('dashboardContainers', [])
     };
 
     $rootScope.$on("CallUpdateContainer", function(){
-      containerQuery();
+      update();
     });
 
-    var containerQuery = function (){
-      Container.query({all: 1, node: $scope.swarmUrl}, function (d) {
-        $scope.containers = d.map(function (item) {
-            return new ContainerViewModel(item);
-        });
-        for (var i = 0; i < $scope.containers.length; i++){
-          if ($scope.containers[i].Status === ''){
-            $scope.containers[i].Status = 'created';
-          }
-          var splitedNames = $scope.containers[i].Names[0].split("/");
-          $scope.containers[i].NodeName = splitedNames[1];
-          $scope.containers[i].ContainerName = splitedNames[2];
-        }
-      });
-    };
+    var getActiveMooc =  ConsulSolerni.getActiveMooc({}, function (d){});
 
     var update = function (data) {
       $scope.RepoTags = [];
       ViewSpinner.spin();
       ConsulPrimarySwarm.get({}, function (d){
         $scope.swarmUrl = atob(d[0].Value); 
-        Swarm.info({node: $scope.swarmUrl}, function (d) {
-          var n = 0;
-          for (var i = 4; i < d['SystemStatus'].length;i += 8) {
-            $scope.Nodes[n] = d['SystemStatus'][i];
-            n++;
-          }
-        });
         Image.query({node: $scope.swarmUrl}, function (d) {
           d.map(function (item) {
             $scope.RepoTags.push(item.RepoTags[0]);
           });
+        });
+        var activeMooc = atob(getActiveMooc[0].Value);
+        Container.get({node: $scope.swarmUrl, id: activeMooc}, function (d) {
+          $scope.activeContainer = d;
         });
         Container.query({all: 1, node: $scope.swarmUrl}, function (d) {
           $scope.containers = d.map(function (item) {
               return new ContainerViewModel(item);
           });
           for (var i = 0; i < $scope.containers.length; i++){
-            if ($scope.containers[i].Status === ''){
-              $scope.containers[i].Status = 'created';
+            var cname = $scope.containers[i].Names[0].split("/")[1];
+            var idContainer = $scope.containers[i].Id;
+            if ( idContainer !== $scope.activeContainer.Id ) {
+              $scope.containers.splice(i, 1);
+              i--;
+            } else {
+              if ($scope.containers[i].Status === ''){
+                $scope.containers[i].Status = 'created';
+              }
+              $scope.containers[i].ContainerName = cname;
             }
-            var splitedNames = $scope.containers[i].Names[0].split("/");
-            $scope.containers[i].NodeName = splitedNames[1];
-            $scope.containers[i].ContainerName = splitedNames[2];
           }
           ViewSpinner.stop();
         });

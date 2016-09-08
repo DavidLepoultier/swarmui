@@ -17,6 +17,7 @@ function ContainerViewModel(data) {
     this.Status = data.Status;
     this.Checked = false;
     this.Names = data.Names;
+    this.VolumesFrom = data.VolumesFrom;
 }
 
 function SwarmViewModel(data) {

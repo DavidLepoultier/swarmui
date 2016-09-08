@@ -14,6 +14,7 @@ angular.module('swarmui', [
     'startContainer',
     'containersActions',
     'pullImage',
+    'loader',
     'hosts',
     'hostsInforamtion',
     'wrapperHosts',
@@ -40,27 +41,27 @@ angular.module('swarmui', [
             templateUrl: 'app/components/dashboardContainers/dashboardContainers.html',
             controller: 'DashboardContainersController'
         });
-        $routeProvider.when('/:from/:node/containers/:id/', {
+        $routeProvider.when('/:from/containers/:id/', {
             templateUrl: 'app/components/container/container.html',
             controller: 'ContainerController'
         });
-        $routeProvider.when('/:from/:node/containers/:id/stats', {
+        $routeProvider.when('/:from/containers/:id/stats', {
             templateUrl: 'app/components/stats/stats.html',
             controller: 'StatsController'
         });
-        $routeProvider.when('/:from/:node/containers/:id/logs/', {
+        $routeProvider.when('/:from/containers/:id/logs/', {
             templateUrl: 'app/components/containerLogs/containerlogs.html',
             controller: 'ContainerLogsController'
         });
-        $routeProvider.when('/:from/:node/containers/:id/top', {
+        $routeProvider.when('/:from/containers/:id/top', {
             templateUrl: 'app/components/containerTop/containerTop.html',
             controller: 'ContainerTopController'
         });
-        $routeProvider.when('/:from/:node/containers/:id/stats', {
+        $routeProvider.when('/:from/containers/:id/stats', {
             templateUrl: 'app/components/stats/stats.html',
             controller: 'StatsController'
         });
-        $routeProvider.when('/:from/:node/containers/:containerId/image/:id/', {
+        $routeProvider.when('/:from/containers/:containerId/image/:id/', {
             templateUrl: 'app/components/image/image.html',
             controller: 'ImageController'
         });
@@ -80,3 +81,4 @@ angular.module('swarmui', [
     .constant('DOCKERREPO_ENDPOINT', 'swarmuiapirepo')
     .constant('DOCKER_PORT', '') // Docker port, leave as an empty string if no port is requred.  If you have a port, prefix it with a ':' i.e. :4243
     .constant('UI_VERSION', '0.2.0');
+    

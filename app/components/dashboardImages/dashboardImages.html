@@ -6,11 +6,11 @@
     <div class="row">
       <!-- Middle Container -->
       <div class="col-xs-12" id="body-middle-container">
-        <h1 class="page-header">Images Docker</h1>
+        <h1 class="page-header">Moocs</h1>
         <div class="panel panel-default">
           <div class="panel-heading">
             <h3 class="panel-title">
-              <span class="col-xs-11" style="margin-top: 5px; font-size: 18px;">Images's List</span>
+              <span class="col-xs-11" style="margin-top: 5px; font-size: 18px;">Mooc's List</span>
               <div class="btn-group">
                 <button type="button" class="btn btn-default dropdown-toggle" style="margin: 0;" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                   Action <span class="caret"></span>
@@ -18,13 +18,19 @@
                 <ul class="dropdown-menu">
                   <li>
                     <button type="button" class="btn-link btn-block btn-dropdown"
-                      data-toggle="modal" data-target="#pull-modal">Pull image
+                      data-toggle="modal" data-target="#pull-modal">Download mooc
                     </button>
                   </li>
                   <li>
                     <button type="button" class="btn-link btn-block btn-dropdown"
                       ng-controller="ImagesActionsController"
-                      ng-click="removeImage()">Remove images
+                      ng-click="removeImage()">Backup mooc
+                    </button>
+                  </li>
+                  <li>
+                    <button type="button" class="btn-link btn-block btn-dropdown"
+                      ng-controller="ImagesActionsController"
+                      ng-click="removeImage()">Remove mooc
                     </button>
                   </li>
                 </ul>
@@ -32,6 +38,7 @@
             </h3>
           </div>
           <div ng-include="template" ng-controller="PullImageController"></div>
+          <div ng-include="template" ng-controller="LoaderController"></div>
           <!-- Table -->
           <table class="table table-striped">
             <tr>
@@ -41,7 +48,7 @@
                   Tags
                   <span class="sortorder" ng-show="predicate === 'RepoTag'" ng-class="{reverse:reverse}"></span>
                 </button>
-                <input class="form-control input-filter" ng-model="search.RepoTag" placeholder="Filter...">
+                <input class="form-control input-filter" ng-model="search.RepoTag" placeholder="Filter..." value="mooc">
               </th>
               <th>
                 <button type="button" class="btn-link btn-block btn-dropdown" ng-click="order('Id')">
@@ -65,12 +72,12 @@
                 <input class="form-control input-filter" ng-model="search.VirtualSize" placeholder="Filter...">
               </th>
               <th>
-                Containers
+                Status
               </th>
             </tr>
             <tr ng-repeat="image in images | filter:search:strict | orderBy:predicate:reverse">
               <td>
-                <div ng-if="!image.ContainerCreate">
+                <div ng-if="!image.Select">
                   <input type="checkbox" ng-model="image.Checked" />
                 </div>
               </td>
@@ -90,8 +97,9 @@
                 {{ image.VirtualSize | humansize }}
               </td>
               <td>
-                <a href="" style="text-decoration: none;" data-toggle="tooltip" data-placement="top" title="Container(s) created">
-                  <span class="label label-success" style="font-size: 95%;">{{ image.ContainerCreate }}</span>
+                <a href="#/dashboard/images/" type="button" id="button_agent_action" ng-click="actionImage(image)" 
+                class="btn" style="padding: 4px; display: inline;" autocomplete="off">
+                  <span class="label label-{{ image.Status|statusBadge }}" style="font-size: 95%;">{{ image.ContainerCreate }} {{ image.Status|statusRunning }}</span>
                 </a>
               </td>
             </tr>

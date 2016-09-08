@@ -26,7 +26,6 @@ module.exports = function (grunt) {
     ]);
     grunt.registerTask('release', [
         'clean:all',
-        'if:binaryNotExist',
         'html2js',
         'uglify',
         'clean:tmpl',

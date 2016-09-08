@@ -1,7 +1,7 @@
 angular.module('dashboardImages', [])
-.controller('DashboardImagesController', ['$scope', '$rootScope', '$routeParams', 'Image', 'Container', 'Swarm', 
-  'ConsulPrimarySwarm', 'SettingsConsul', 'Settings', 'Messages', 'ViewSpinner',
-  function ($scope, $rootScope, $routeParams, Image, Container, Swarm, ConsulPrimarySwarm, SettingsConsul, Settings, Messages, ViewSpinner) {
+.controller('DashboardImagesController', ['$scope', '$rootScope', '$routeParams', '$timeout', 'Image', 'Container', 'Swarm', 
+  'ConsulPrimarySwarm', 'ConsulSolerni', 'SettingsConsul', 'Settings', 'Messages', 
+  function ($scope, $rootScope, $routeParams, $timeout, Image, Container, Swarm, ConsulPrimarySwarm, ConsulSolerni, SettingsConsul, Settings, Messages) {
     $scope.images = [];
     $scope.toggle = false;
     $scope.swarmUrl = '';
@@ -17,77 +17,86 @@ angular.module('dashboardImages', [])
     };
 
     $rootScope.$on("CallUpdateImage", function(){
-      imageQuery();
+      update();
     });
 
-    var imageQuery = function (){
-      Image.query({node: $scope.swarmUrl}, function (d) {
-        $scope.images = d.map(function (item) {
-            return new ImageViewModel(item);
+    $scope.containerBatch = function () {
+      var actionTask = $scope.actionCont[0].toUpperCase() + $scope.actionCont.slice(1) + " container";
+      Container.actionCont({id: $scope.containerId, node: $scope.swarmUrl, action: $scope.actionCont}, function (d) {
+        Messages.send(actionTask + ' : ', $scope.containerId);
+        ConsulSolerni.getMoocId({info: $scope.container.Name, key: 'containerId'}, function (d){
+          $scope.containerId = atob(d[0].Value);
+          $scope.actionCont = 'start';
+          actionTask = $scope.actionCont[0].toUpperCase() + $scope.actionCont.slice(1) + " container";
+          Container.actionCont({id: $scope.containerId, node: $scope.swarmUrl, action: $scope.actionCont}, function (d) {
+            Messages.send(actionTask + ' : ', $scope.containerId);
+            ConsulSolerni.updateActiveMooc({}, $scope.containerId, function (d){ 
+              update();
+              $('#loader-modal').modal('hide');
+            });
+          }, function (e) {
+            Messages.error("Failure", "Container failed to " + $scope.actionCont + ".");
+            update();
+            $('#loader-modal').modal('hide');
+          });
         });
-        for (var i = 0; i < $scope.images.length; i++){
-          $scope.images[i].From = $routeParams.from;
-          $scope.images[i].RepoTag = $scope.images[i].RepoTags[0];
-          var options = { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit' };
-          var language = navigator.browserLanguage;
-          var date = new Date($scope.images[i].Created*1000);
-          $scope.images[i].Create = date.toLocaleDateString(language, options);
-          var countContainer = 0;
-          for (var c = 0; c < $scope.containers.length; c++) {
-            if ( $scope.images[i].RepoTag === $scope.containers[c].Image ) {
-              countContainer++;
-            }
-          }
-          if (countContainer !== 0) {
-            $scope.images[i].ContainerCreate = countContainer;
-          } else {
-            $scope.images[i].ContainerCreate = '';
-          }
-        }
-      });
+      }, function (e) {
+        Messages.error("Failure", "Container failed to " + $scope.actionCont + ".");
+        update();
+        $('#loader-modal').modal('hide');
+      });  
+    };
+
+    $scope.actionImage = function (image) {
+      if (image.Status !== 'running'){
+        $('#loader-modal').modal({backdrop: 'static', keyboard: true, show: true});
+        $scope.actionCont = 'stop';
+        $scope.container = image;
+        $scope.containerId = $scope.activeMooc;
+        $scope.containerBatch();
+      }
     };
 
     var update = function (data) {
-      ViewSpinner.spin();
       ConsulPrimarySwarm.get({}, function (d){
         $scope.swarmUrl = atob(d[0].Value);
-        Swarm.info({node: $scope.swarmUrl}, function (d) {
-          var n = 0;
-          for (var i = 4; i < d['SystemStatus'].length;i += 8) {
-            $scope.Nodes[n] = d['SystemStatus'][i];
-            n++;
-          }
-        });
-        Container.query({all: 1, node: $scope.swarmUrl, notruc: 1}, function (d) {
-          $scope.containers = d.map(function (item) {
-            return new ContainerViewModel(item);
+        ConsulSolerni.getActiveMooc({}, function (d){
+          $scope.activeMooc = atob(d[0].Value);
+          Container.get({node: $scope.swarmUrl, id: $scope.activeMooc}, function (d) {
+            $scope.containers = d;
           });
-        });
-        Image.query({node: $scope.swarmUrl}, function (d) {
-          $scope.images = d.map(function (item) {
-              return new ImageViewModel(item);
-          });
-          for (var i = 0; i < $scope.images.length; i++){
-            $scope.images[i].From = $routeParams.from;
-            $scope.images[i].RepoTag = $scope.images[i].RepoTags[0];
-            var options = { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit' };
-            var language = navigator.browserLanguage;
-            var date = new Date($scope.images[i].Created*1000);
-            $scope.images[i].Create = date.toLocaleDateString(language, options);
-            var countContainer = 0;
-            for (var c = 0; c < $scope.containers.length; c++) {
-              if ( $scope.images[i].RepoTag === $scope.containers[c].Image ) {
-                countContainer++;
+          Image.query({node: $scope.swarmUrl}, function (d) {
+            $scope.images = d.map(function (item) {
+                return new ImageViewModel(item);
+            });
+            for (var i = 0; i < $scope.images.length; i++){
+              var tmp = $scope.images[i].RepoTags[0].split('/')[2];
+              if (tmp.indexOf('mooc') === -1) {
+                $scope.images.splice(i, 1);
+                i--;
+              } else {
+                $scope.images[i].From = $routeParams.from;
+                $scope.images[i].RepoTag = tmp;
+                $scope.images[i].Name = tmp.split(':')[0];
+                var options = { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit' };
+                var language = navigator.browserLanguage;
+                var date = new Date($scope.images[i].Created*1000);
+                $scope.images[i].Create = date.toLocaleDateString(language, options);
+                var countContainer = 0;
+                if ( $scope.images[i].Id === $scope.containers.Image) {
+                  countContainer++;
+                }
+                if (countContainer !== 0) {
+                  $scope.images[i].ContainerCreate = 'Set';
+                  $scope.images[i].Status = $scope.containers.State.Status;
+                  $scope.images[i].Select = 'off';
+                } else {
+                  $scope.images[i].ContainerCreate = 'Unset';
+                  $scope.images[i].Status = 'created';
+                }
               }
             }
-            if (countContainer !== 0) {
-              $scope.images[i].ContainerCreate = countContainer;
-            } else {
-              $scope.images[i].ContainerCreate = '';
-            }
-          }
-
-          ViewSpinner.stop();
+          });
         });
       });
     };

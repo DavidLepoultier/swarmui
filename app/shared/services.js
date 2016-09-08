@@ -9,6 +9,19 @@ angular.module('swarmui.services', ['ngResource'])
         get: {method: 'GET', isArray: true}
     });
   }])
+  .factory('ConsulSolerni', ['$resource', 'SettingsConsul', function ContainerFactory($resource, Settings) {
+    'use strict';
+    // Resource for interacting with the docker containers
+    // http://docs.docker.com/reference/api/docker_remote_api_<%= remoteApiVersion %>/#2-1-containers
+    return $resource(Settings.url + '/v1/kv/docker/swarm/solerni/:dir/:info/:key', {
+        node: '@name'
+    }, {
+        getActiveMooc: {method: 'GET', params: {dir: 'active', info: 'mooc'}, isArray: true},
+        updateActiveMooc: {method: 'PUT', params: {dir: 'active', info: 'mooc'}},
+        getMoocId: {method: 'GET', params: {dir: 'moocs'}, isArray: true},
+        addImage: {method: 'PUT', params: {dir: 'moocs'}}
+    });
+  }])
   .factory('Swarm', ['$resource', 'Settings', function ContainerFactory($resource, Settings) {
     'use strict';
     // Resource for interacting with the docker containers
@@ -30,7 +43,7 @@ angular.module('swarmui.services', ['ngResource'])
       get: {method: 'GET', params: {node: '@node', action: 'json'}},
       actionCont: {method: 'POST', params: {id: '@id', node: '@node', t: 5, action: '@action'}},
       changes: {method: 'GET', params: {node: '@node', action: 'changes'}, isArray: true},
-      create: {method: 'POST', params: {node: '@SwarmHost', action: 'create'}},
+      create: {method: 'POST', params: {node: '@swarmHost', action: 'create'}},
       remove: {method: 'DELETE', params: {id: '@id', node: '@node', v: 0}},
       rename: {method: 'POST', params: {id: '@id', node: '@node', action: 'rename'}, isArray: false},
       top: {method: 'GET', params: {id: '@id', node: '@node', ps_args: '@ps_args', action: 'top'}},
@@ -98,8 +111,9 @@ angular.module('swarmui.services', ['ngResource'])
   }])
   .factory('Repositories', ['$resource', 'SettingsRepo', function ImageFactory($resource, SettingsRepo) {
       'use strict';
-      return $resource(SettingsRepo.url + '/hub.docker.com/v2/repositories/:image/tags', {}, {
-        get: {method: 'GET', params: {image: '@image'}}
+      return $resource(SettingsRepo.url + '/repository.inrelosv2.com/v2/:action', {}, {
+        get: {method: 'GET', params: {image: '@image'}},
+        query: {method: 'GET', params: {action: '@action'}}
       });
   }])
   .factory('Version', ['$resource', 'Settings', function VersionFactory($resource, Settings) {
@@ -204,7 +218,7 @@ angular.module('swarmui.services', ['ngResource'])
               $.gritter.add({
                   title: title,
                   text: text,
-                  time: 2000,
+                  time: 5000,
                   before_open: function () {
                       if ($('.gritter-item-wrapper').length === 3) {
                           return false;

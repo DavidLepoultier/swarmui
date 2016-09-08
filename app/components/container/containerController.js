@@ -44,6 +44,7 @@ angular.module('container', [])
           var url = atob(d[0].Value);
           $scope.primarySwarm = url;
           Container.get({id: $routeParams.id, node: $scope.primarySwarm}, function (d) {
+            console.log(d);
             $scope.container = d;
             $scope.container.edit = false;
             $scope.container.Node = $routeParams.node;
@@ -117,27 +118,6 @@ angular.module('container', [])
         // clearing interval when view changes
         clearInterval($scope.logIntervalId);
       });
-
-      $scope.getChanges = function () {
-        ViewSpinner.spin();
-        ConsulPrimarySwarm.get({}, function (d){
-        var url = atob(d[0].Value); 
-          Swarm.info({node: url}, function (d) {
-            var nodeUrl = "";
-            for (var i = 4; i < d['SystemStatus'].length;i += 8){
-              var nodename = d['SystemStatus'][i][0].split(" ");
-              if ( nodename[1] === $routeParams.node ) {
-                nodeUrl = d['SystemStatus'][i][1];
-                break;
-              }
-            }
-            Container.changes({id: $routeParams.id, node: nodeUrl}, function (d) {
-              $scope.changes = d;
-              ViewSpinner.stop();
-            });
-          });
-        });
-      };
 
       $scope.start = function () {
         ViewSpinner.spin();
@@ -471,6 +451,4 @@ angular.module('container', [])
 
     // Call function update Container
     update();
-    $scope.getChanges();
-
 }]);
