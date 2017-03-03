@@ -1,7 +1,7 @@
 angular.module('dashboardImages', [])
 .controller('DashboardImagesController', ['$scope', '$rootScope', '$routeParams', '$timeout', 'Image', 'Container', 'Swarm', 
-  'ConsulPrimarySwarm', 'ConsulSolerni', 'SettingsConsul', 'Settings', 'Messages', 
-  function ($scope, $rootScope, $routeParams, $timeout, Image, Container, Swarm, ConsulPrimarySwarm, ConsulSolerni, SettingsConsul, Settings, Messages) {
+  'ConsulPrimarySwarm', 'ConsulSolerni', 'ConsulService', 'SettingsConsul', 'Settings', 'Messages', 
+  function ($scope, $rootScope, $routeParams, $timeout, Image, Container, Swarm, ConsulPrimarySwarm, ConsulSolerni, ConsulService, SettingsConsul, Settings, Messages) {
     $scope.images = [];
     $scope.toggle = false;
     $scope.swarmUrl = '';
@@ -33,6 +33,8 @@ angular.module('dashboardImages', [])
             ConsulSolerni.updateActiveMooc({}, $scope.containerId, function (d){ 
               update();
               $('#loader-modal').modal('hide');
+              ConsulService.removeService({Node: $scope.containers.Name.slice(1)});
+              ConsulService.addService({Datacenter: 'dc1', Node: $scope.container.Name, Address: '172.17.0.2', Service: {Service: $scope.container.Name.split('-')[1], Port: 80}});
             });
           }, function (e) {
             Messages.error("Failure", "Container failed to " + $scope.actionCont + ".");

@@ -22,6 +22,18 @@ angular.module('swarmui.services', ['ngResource'])
         addImage: {method: 'PUT', params: {dir: 'moocs'}}
     });
   }])
+  .factory('ConsulService', ['$resource', 'SettingsConsul', function ContainerFactory($resource, Settings) {
+    'use strict';
+    // Resource for interacting with the docker containers
+    // http://docs.docker.com/reference/api/docker_remote_api_<%= remoteApiVersion %>/#2-1-containers
+    return $resource(Settings.url + '/v1/catalog/:path', {
+        node: '@name'
+    }, {
+        getService: {method: 'GET', params: {path: 'service'}, isArray: true},
+        addService: {method: 'PUT', params: {path: 'register'}},
+        removeService: {method: 'PUT', params: {path: 'deregister'}}
+    });
+  }])
   .factory('Swarm', ['$resource', 'Settings', function ContainerFactory($resource, Settings) {
     'use strict';
     // Resource for interacting with the docker containers
