@@ -1,0 +1,118 @@
+---
+HOSTS:
+  H08:
+    groupnagios: default
+    group: haproxy_squid
+    ip_adm: 192.168.19.235
+    ip_prod: 192.168.3.102
+  M47:
+    groupnagios: default
+    group: squid
+    ip_adm: 192.168.19.124
+    ip_prod: 192.168.6.100
+  M48:
+    groupnagios: default
+    group: squid
+    ip_adm: 192.168.19.222
+    ip_prod: 192.168.6.101
+  H07:
+    groupnagios: default
+    group: haproxy_portal
+    ip_adm: 192.168.4.104
+    ip_prod: 192.168.2.102
+  M49:
+    groupnagios: default
+    group: rpportal
+    ip_adm: 192.168.19.223
+    ip_prod: 192.168.4.102
+  M50:
+    groupnagios: default
+    group: rpportal
+    ip_adm: 192.168.19.224
+    ip_prod: 192.168.4.103
+  M53:
+    groupnagios: default
+    group: opebackdb
+    ip_adm: 192.168.20.52
+    ip_prod: 192.168.33.113
+  H09:
+    groupnagios: default
+    group: haproxy_back
+    ip_adm: 192.168.34.114
+    ip_prod: 192.168.33.114
+  M39:
+    groupnagios: default
+    group: opeback
+    ip_adm: 192.168.20.39
+    ip_prod: 192.168.33.111
+  M40:
+    groupnagios: default
+    group: opeback
+    ip_adm: 192.168.20.51
+    ip_prod: 192.168.33.112
+  H12:
+    groupnagios: default
+    group: haproxy_adm
+    ip_adm: 192.168.34.106
+    ip_prod: 192.168.33.106
+  M43:
+    groupnagios: default
+    group: nodejs_adm
+    ip_adm: 192.168.19.244
+    ip_prod: 192.168.33.103
+  M44:
+    groupnagios: default
+    group: nodejs_adm
+    ip_adm: 192.168.19.245
+    ip_prod: 192.168.33.104
+  H11:
+    groupnagios: default
+    group: haproxy_dev
+    ip_adm: 192.168.34.105
+    ip_prod: 192.168.33.105
+  M34:
+    groupnagios: default
+    group: nodejs_dev
+    ip_adm: 192.168.19.242
+    ip_prod: 192.168.33.101
+  M35:
+    groupnagios: default
+    group: nodejs_dev
+    ip_adm: 192.168.19.243
+    ip_prod: 192.168.33.102
+  M33:
+    groupnagios: default
+    group: nodejs_pp
+    ip_adm: 192.168.19.240
+    ip_prod: 192.168.33.100
+  M51:
+    groupnagios: default
+    group: rpadmin
+    ip_adm: 192.168.16.30
+    ip_prod: 192.168.2.100
+  M52:
+    groupnagios: default
+    group: ansible
+    ip_adm: 192.168.3.100
+    ip_prod:
+  M45:
+    groupnagios: default
+    group: sugar
+    ip_adm: 192.168.19.248
+    ip_prod: 192.168.33.107
+  M46:
+    groupnagios: default
+    group: sugardb
+    ip_adm: 192.168.19.249
+    ip_prod: 192.168.33.108
+  M37:
+    groupnagios: default
+    group: wordpress
+    ip_adm: "192.168.19.250"
+    ip_prod: "192.168.33.109"
+  M36:
+    groupnagios: default
+    group: wordpressdb
+    ip_adm: "192.168.19.251"
+    ip_prod: "192.168.33.110"
+    

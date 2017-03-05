@@ -1,0 +1,112 @@
+---
+# Download application deliverables
+- hosts: ansible
+  vars:
+    artiuser: opeuser
+    artipass: opeapi%1
+    GOROCO_DIR: "{{ OPERelease }}"
+  roles:
+    - { role: download_app_deliverables, tags: download_app_deliverables, DeployQual }
+    - { role: download_maintenancepage_deliverable, tags: download_maintenancepage_deliverable }
+
+########################## ACTIVATE MAINTENANCE PAGE ##########################    
+# OPE_G3 RPportal Developer and Partner Maintenance Page Activation
+#   use no tags in your ansible-playbook command to impact "developer" and "partner" 
+#   use <--tags developer> to impact "developer" portal only
+#   use <--tags partner> to impact "partner" portal only
+- hosts: rpportal
+  serial: 1
+  roles:
+    - { role: deploy_rpportal_maintenancepage, tags: deploy_rpportal_maintenancepage maintenance, APA_VERSION: "{{ APACHE_VERSION_RHEL7 }}"}
+    - { role: activate_rpportal_maintenancepage, tags: activate_rpportal_maintenancepage maintenance, APA_VERSION: "{{ APACHE_VERSION_RHEL7 }}" }
+
+########################## DEACTIVATE SUGER SYNC  ##########################    
+- hosts: opeback
+  roles:
+    - { role: deactivate_sugar_sync, tags: deactivate_sugar_sync afiback front_admin fron_developer }
+
+######## BACKUP PART ##############################################################
+# backup OPEBACK DB
+- hosts: opebackdb
+  become: yes
+  vars:
+    - database_server: "{{ DATABASE_SERVER_NAME }}"
+    - database_name: "{{ DATABASE_NAME }}"
+  roles:
+    - { role: backup_mysql_db, tags: backup_mysql_db_opeback afiback DeployQual }
+
+# backup OPEBACK CONTENT
+- hosts: opeback1
+  vars:
+    - component2bck: OPEBACK
+    - app2bck: "{{ OPEBACK_CONTENTS_LOCAL_MOUNT_POINT }}"
+  roles:
+    - { role: backup_content, tags: backup_content_opeback afiback }
+
+# backup FRONT ADMIN PUBLISH CONTENT
+- hosts: nodejs-admin1
+  vars:
+    - component2bck: FRONT-ADM-PUBLISH
+    - app2bck: "{{ NODE_FRONT_PUBLISH_LOCAL_MOUNT_POINT }}"
+  roles:
+    - { role: backup_content, tags: backup_content_front_adm_publish front_admin }
+
+######## UPDATE PART ##############################################################
+#OPE BACK update DB
+- hosts: opebackdb
+  gather_facts: no
+  become: yes
+  vars:
+    - GOROCO_DIR: "{{ OPERelease }}"
+  vars_files:
+    - "{{ OPEBACK_DBUPDATE_PATH }}{{ OPEBACK_DBUPDATE_FILE }}"
+  roles:
+    -  { role: update_DB_opeback, tags: update_DB_opeback DeployQual }
+
+# OPE back deployment
+- hosts: opeback
+  serial: 1
+  roles:
+    - { role: deploy_opeback_afi, tags: ["deploy_opeback", "afiback", "DeployQual"] }
+    - { role: hosts_add_FQDN_BB, tags: hosts_add_FQDN_BB hosts_add_FQDN_BB_opeback afiback}
+#    - { role: hosts_set_prod_ip_in_first_position, tags: hosts_set_prod_ip_in_first_position }    
+
+- hosts: opeback2
+  roles:
+    - { role: backup_OPEBACK_contents_daily, tags: backup_OPEBACK_contents_daily afiback }
+    - { role: configure_crm_synchronize, tags: configure_crm_synchronize afiback }
+
+# Front Dev deployment
+- hosts: nodejs-dev
+  serial: 1
+  vars:
+    NODE_APP: "{{ NODE_FRONT_DEV_APPLICATION_DIR }}/{{ NODE_FRONT_DEV_APPLICATION_FILE }}"  
+  roles:
+    - { role: deploy_node_front_dev, tags: ["deploy_node_front_dev", "fron_developer", "DeployQual"] }
+    - { role: hosts_add_FQDN_BB, tags: hosts_add_FQDN_BB hosts_add_FQDN_BB_ope_dev fron_developer }
+
+# Front Admin deployment
+- hosts: nodejs-admin
+  serial: 1
+  vars:
+    NODE_APP: "{{ NODE_FRONT_ADMIN_APPLICATION_DIR }}/{{ NODE_FRONT_ADMIN_APPLICATION_FILE }}"
+  roles:
+    - { role: deploy_node_front_admin, tags: ["deploy_node_front_admin", "front_admin", "DeployQual"] }
+    - { role: hosts_add_FQDN_BB, tags: hosts_add_FQDN_BB hosts_add_FQDN_BB_ope_adm front_admin }
+
+########################## DEACTIVATE MAINTENANCE PAGE ##########################    
+# OPE_G3 RPportal Developer and Partner Maintenance Page deactivation
+#   use no tags in your ansible-playbook command to impact "developer" and "partner" 
+#   use <--tags developer> to impact "developer" portal only
+#   use <--tags partner> to impact "partner" portal only
+- hosts: rpportal
+  serial: 1
+  roles:
+    - { role: deactivate_rpportal_maintenancepage, tags: deactivate_rpportal_maintenancepage deactive_maintenance, APA_VERSION: "{{ APACHE_VERSION_RHEL7 }}" }
+
+########################## POST-TASKS ##########################
+# Clean /images/OPE/
+- hosts: ansible
+  gather_facts: no
+  roles:
+    - { role: clean_images_OPE, tags: clean_images_OPE DeployQual }

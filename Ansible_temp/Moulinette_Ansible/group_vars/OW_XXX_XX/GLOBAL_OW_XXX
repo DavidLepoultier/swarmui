@@ -1,0 +1,96 @@
+# GLOBAL vars for G3 Portal Integration platform on Openwatt %ENV%_%PTF% platform
+---
+ENVIRONMENT: "%ENV%"
+PLATFORM: "%PTF%"
+
+#### Yum Repo ################################################
+YUM_REPO_G02R02C00_STATE: 1
+YUM_REPO_G03R01C00_STATE: 1
+YUM_REPO_STANDARD_LB_STATE: 0
+YUM_REPO_STANDARD_STATE: 0
+YUM_REPO_PULP_OPTIONAL_STATE: 1
+YUM_REPO_EPEL_STATE: 0
+YUM_REPO_PULP_EPEL_STATE: 1
+YUM_REPO_PULP_RDO_STATE: 1
+YUM_REPO_PULP_STATE: 1
+YUM_REPO_PULPMASTER_STATE: 1
+
+YUM_PULP_FQDN: repoyum-central.itn.ftgroup
+YUM_PULP_IP: 10.236.240.170
+
+APTPLATON_SERVER_IP: 10.114.138.51
+REPOYUMCENTRAL_SERVER_IP: 10.236.240.170
+PULPMASTER_SERVER_IP: 10.170.226.87
+ARTIFACTORY_SERVER_IP: 10.170.230.21
+REPOYUMPROTO_SERVER_IP: 10.171.50.130
+
+#### Packages ##############################################
+PACKAGES_DIRECTORY: /var/opt/data/flat/ansible/packages
+ANSIBLE_PACKAGES_DIRECTORY: packages
+
+#### DNS ###################################################
+DNS_SERVER_1: 10.236.240.37
+#DNS_SERVER2 is for VM which can't connect GIN network
+DNS_SERVER_2: "{{ HOSTS.%TYPE%%ENV%OW0%PTF%RP02.ip_adm }}"
+
+#### NFS ###################################################
+NFS_SERVER_IP: 172.16.4.251 
+NFS_PATH_ROOT: /OW_{{ ENVIRONMENT | lower }}_portal_{{ PLATFORM }}
+NFS_LOGS_MOUNT_POINT: /var/opt/data/logs
+NFS_LOGS_SERVER_IP: "{{ NFS_SERVER_IP }}"
+NFS_LOGS_PATH: "{{ NFS_PATH_ROOT }}/IN{{ ENVIRONMENT }}ALL_LOGS"
+
+#### localogs ##############################################
+LOGS_VG_NAME: infravg
+LOGS_LV_NAME: logs_lv
+LOGS_LV_SIZE: 2g
+LOGS_MOUNT_POINT: /var/opt/data/locallogs
+
+#### MYSQL #################################################
+MYSQL_DB_PACKAGE: PA-MYQ-6CE5612-RDG09R00C01
+MYSQL_DB_VERSION: 5.6.12
+
+#### Apache ################################################
+APACHE_HTTPD_PACKAGE: PA-APA-APA2215-RDG02R01C10
+APACHE_HTTPD_PACKAGE_RHEL7: PA-APA-APA246-RDG03R01C01
+APACHE_VERSION: apache2215
+APACHE_VERSION_RHEL7: apache246
+
+CRM_SERVER_NAME: "crm-{{ ENVIRONMENT | lower }}-ow{{ ENVIRONMENT | lower }}{{ PLATFORM }}.itn.ftgroup"
+RPPORTAL_DEVELOPER_SERVER_NAME: "developer-ow{{ ENVIRONMENT | lower }}{{ PLATFORM }}.itn.ftgroup"
+RPPORTAL_PARTNER_SERVER_NAME: "partner-ow{{ ENVIRONMENT | lower }}{{ PLATFORM }}.itn.ftgroup"
+RPADMIN_ADMIN_PORTAL_SERVER_NAME: "admin-{{ ENVIRONMENT | lower }}-ow{{ ENVIRONMENT }}{{ PLATFORM }}.itn.ftgroup"
+DASHBOARD_LOGS_SERVER_NAME: "dashboard-{{ ENVIRONMENT | lower }}-ow{{ ENVIRONMENT | lower }}{{ PLATFORM }}.itn.ftgroup"
+PREVIEW_SERVER_NAME: "prepublish-{{ ENVIRONMENT | lower }}-ow{{ ENVIRONMENT | lower }}{{ PLATFORM }}.itn.ftgroug"
+ADMIN_SERVER_NAME: "techadmin-{{ ENVIRONMENT | lower }}-ow{{ ENVIRONMENT | lower }}{{ PLATFORM }}.itn.ftgroup"
+OPE_BACK_SERVER_NAME: "{{ ENVIRONMENT | lower }}-back-ow{{ ENVIRONMENT | lower }}{{ PLATFORM }}.itn.ftgroup"
+
+#### IPs ################################################
+WORDPRESS_VM_PROD_NAT_IP: "{{ HOSTS.%TYPE%%ENV%OW0%PTF%CM01.ip_prod }}"
+SUGAR_VM_PROD_NAT_IP: "{{ HOSTS.%TYPE%%ENV%OW0%PTF%SL03.ip_prod }}"
+SUGAR_VM_ADMIN_NAT_IP: "{{ HOSTS.%TYPE%%ENV%OW0%PTF%SL03.ip_adm }}"
+H07_STATS_NAT_IP: "{{ HOSTS.%TYPE%%ENV%OW0%PTF%HP07.ip_adm }}"
+H08_STATS_NAT_IP: "{{ HOSTS.%TYPE%%ENV%OW0%PTF%HP08.ip_adm }}"
+H09_STATS_NAT_IP: "{{ HOSTS.%TYPE%%ENV%OW0%PTF%HP09.ip_adm }}"
+H11_STATS_NAT_IP: "{{ HOSTS.%TYPE%%ENV%OW0%PTF%HP11.ip_adm }}"
+H12_STATS_NAT_IP: "{{ HOSTS.%TYPE%%ENV%OW0%PTF%HP12.ip_adm }}"
+H07_PROD_NAT_IP: "{{ HOSTS.%TYPE%%ENV%OW0%PTF%HP07.ip_prod }}"
+H08_PROD_NAT_IP: "{{ HOSTS.%TYPE%%ENV%OW0%PTF%HP08.ip_prod }}"
+H09_PROD_NAT_IP: "{{ HOSTS.%TYPE%%ENV%OW0%PTF%HP09.ip_prod }}"
+H11_PROD_NAT_IP: "{{ HOSTS.%TYPE%%ENV%OW0%PTF%HP11.ip_prod }}"
+H12_PROD_NAT_IP: "{{ HOSTS.%TYPE%%ENV%OW0%PTF%HP12.ip_prod }}"
+H08_OUTGOING_PROD_IP: "{{ HOSTS.%TYPE%%ENV%OW0%PTF%HP08.ip_pub }}"
+RPADMIN_VM_ADMIN_IP: "{{ HOSTS.%TYPE%%ENV%OW0%PTF%RP02.ip_adm }}"
+RPADMIN_VM_PROD_IP: "{{ HOSTS.%TYPE%%ENV%OW0%PTF%RP02.ip_prod }}"
+ELK_VM_ADMIN_NAT_IP: "{{ HOSTS.%TYPE%%ENV%OW0%PTF%EL01.ip_adm }}"
+PPUBLISH_VM_ADMIN_NAT_IP: "{{ HOSTS.%TYPE%%ENV%OW0%PTF%PP01.ip_adm }}"
+RPPORTAL01_VM_PROD_IP: "{{ HOSTS.%TYPE%%ENV%OW0%PTF%AS07.ip_prod }}"
+RPPORTAL02_VM_PROD_IP: "{{ HOSTS.%TYPE%%ENV%OW0%PTF%AS08.ip_prod }}"
+SQUID01_VM_PROD_IP: "{{ HOSTS.%TYPE%%ENV%OW0%PTF%AS05.ip_prod }}"
+SQUID02_VM_PROD_IP: "{{ HOSTS.%TYPE%%ENV%OW0%PTF%AS06.ip_prod }}"
+OPEBACK01_VM_PROD_IP: "{{ HOSTS.%TYPE%%ENV%OW0%PTF%BK01.ip_prod }}"
+OPEBACK02_VM_PROD_IP: "{{ HOSTS.%TYPE%%ENV%OW0%PTF%BK02.ip_prod }}"
+DEVELOPER01_VM_PROD_IP: "{{ HOSTS.%TYPE%%ENV%OW0%PTF%DP01.ip_prod }}"
+DEVELOPER02_VM_PROD_IP: "{{ HOSTS.%TYPE%%ENV%OW0%PTF%DP02.ip_prod }}"
+OPEADMIN01_VM_PROD_IP: "{{ HOSTS.%TYPE%%ENV%OW0%PTF%AD01.ip_prod }}"
+OPEADMIN02_VM_PROD_IP: "{{ HOSTS.%TYPE%%ENV%OW0%PTF%AD02.ip_prod }}"

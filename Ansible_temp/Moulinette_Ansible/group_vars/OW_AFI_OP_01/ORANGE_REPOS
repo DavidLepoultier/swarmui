@@ -1,0 +1,459 @@
+# Define where the hosts are based: rsc / lodz / cloudwatt
+orepSite: "rsc"
+# Delete unmanaged repos on the hosts
+orepCleanRepos: 1
+# Define if the repos are exposed by a proxy
+orepUseProxy: 0
+# Manage user repos
+orepReposExtra:
+#- repo:
+#    value:
+#    - "[alaexta]"
+#    - "name=aptplaton-standard-x86_64-rhas60-RPMS.server"
+#    - "baseurl=http://{{ orepSiteUrl }}/yum/repos/aptplaton/standard/x86_64/rhas60/RPMS.server"
+#    - "enabled=0"
+#    - "gpgcheck=0"
+#    distribution: ["RedHat", "CentOS"]
+#    version: ["6","7"]
+#    site: ["rsc", "lodz"]
+
+# This part should not be change
+# FQDN / IP of the repos server, depending of the site
+orepUrl:
+  rsc: "repoyum-proto.si.francetelecom.fr"
+  lodz: "repoyum-central.itn.ftgroup"
+  cloudwatt: "84.39.38.87"
+
+# Used to managed the OS distribution control
+orepDistribution:
+  CentOS: [ "6", "7" ]
+  RedHat: [ "6", "7" ]
+
+# Repos file name managed by the role
+orepReposFileName: orange.repos.repo
+
+# Internal usage: depending on the site, define the orepSiteUrl with the FQDN / IP
+orepSiteUrl: "{{ orepUrl[orepSite] }}"
+
+# Default repos list
+orepRepos:
+- repo:
+    value:
+    - "[standard]"
+    - "name=aptplaton-standard-x86_64-rhas60-RPMS.server"
+    - "baseurl=http://{{ orepSiteUrl }}/yum/repos/aptplaton/standard/x86_64/rhas60/RPMS.server"
+    - "enabled=0"
+    - "gpgcheck=0"
+    distribution: ["RedHat"]
+    version: ["6"]
+    site: ["rsc", "lodz"]
+- repo:
+    value:
+    - "[standard]"
+    - "name=rhel7-os"
+    - "baseurl=http://{{ orepSiteUrl }}/yum/repos/provider/rhel/7/os"
+    - "enabled=0"
+    - "gpgcheck=0"
+    distribution: ["RedHat"]
+    version: ["7"]
+    site: ["rsc", "lodz"]
+- repo:
+    value:
+    - "[optional]"
+    - "name=rhel7-optional"
+    - "baseurl=http://{{ orepSiteUrl }}/yum/repos/provider/rhel/7/optional"
+    - "enabled=0"
+    - "gpgcheck=0"
+    distribution: ["RedHat"]
+    version: ["7"]
+    site: ["rsc", "lodz"]
+- repo:
+    value:
+    - "[extras]"
+    - "name=rhel7-extras"
+    - "baseurl=http://{{ orepSiteUrl }}/yum/repos/provider/rhel/7/extras"
+    - "enabled=0"
+    - "gpgcheck=0"
+    distribution: ["RedHat"]
+    version: ["7"]
+    site: ["rsc", "lodz"]
+- repo:
+    value:
+    - "[optional]"
+    - "name=aptplaton-standard-x86_64-rhas60-RPMS.optional"
+    - "baseurl=http://{{ orepSiteUrl }}/yum/repos/aptplaton/standard/x86_64/rhas60/RPMS.optional"
+    - "enabled=0"
+    - "gpgcheck=0"
+    distribution: ["RedHat"]
+    version: ["6"]
+    site: ["rsc", "lodz"]
+- repo:
+    value:
+    - "[base]"
+    - "name=asis-centos-os-$releasever"
+    - "baseurl=http://{{ orepSiteUrl }}/yum/repos/asis/centos/$releasever/os{{ '/x86_64' if ansible_distribution_major_version=='7' else '' }}"
+    - "enabled=0"
+    - "gpgcheck=0"
+    distribution: ["CentOS"]
+    version: ["6", "7"]
+    site: ["rsc", "lodz"]
+- repo:
+    value:
+    - "[updates]"
+    - "name=asis-centos-updates-$releasever"
+    - "baseurl=http://{{ orepSiteUrl }}/yum/repos/asis/centos/$releasever/updates{{ '/x86_64' if ansible_distribution_major_version=='7' else '' }}"
+    - "enabled=0"
+    - "gpgcheck=0"
+    distribution: ["CentOS"]
+    version: ["6", "7"]
+    site: ["rsc", "lodz"]
+- repo:
+    value:
+    - "[extras]"
+    - "name=asis-centos-extras-$releasever"
+    - "baseurl=http://{{ orepSiteUrl }}/yum/repos/asis/centos/$releasever/extras{{ '/x86_64' if ansible_distribution_major_version=='7' else '' }}"
+    - "enabled=0"
+    - "gpgcheck=0"
+    distribution: ["CentOS"]
+    version: ["6", "7"]
+    site: ["rsc", "lodz"]
+- repo:
+    value:
+    - "[epel]"
+    - "name=asis-epel-6"
+    - "baseurl=http://{{ orepSiteUrl }}/yum/repos/asis/epel/6/x86_64"
+    - "enabled=0"
+    - "gpgcheck=0"
+    distribution: ["CentOS", "RedHat"]
+    version: ["6"]
+    site: ["rsc", "lodz"]
+- repo:
+    value:
+    - "[epel]"
+    - "name=asis-epel-7"
+    - "baseurl=http://{{ orepSiteUrl }}/yum/repos/asis/epel/7/x86_64"
+    - "enabled=0"
+    - "gpgcheck=0"
+    distribution: ["CentOS", "RedHat"]
+    version: ["7"]
+    site: ["rsc", "lodz"]
+- repo:
+    value:
+    - "[nginx]"
+    - "name=asis-nginx-rhel6"
+    - "baseurl=http://{{ orepSiteUrl }}/yum/repos/asis/nginx/rhel/6"
+    - "enabled=0"
+    - "gpgcheck=0"
+    distribution: ["RedHat"]
+    version: ["6"]
+    site: ["rsc", "lodz"]
+- repo:
+    value:
+    - "[nginx]"
+    - "name=asis-nginx-rhel7"
+    - "baseurl=http://{{ orepSiteUrl }}/yum/repos/asis/nginx/rhel/7"
+    - "enabled=0"
+    - "gpgcheck=0"
+    distribution: ["RedHat"]
+    version: ["7"]
+    site: ["rsc", "lodz"]
+- repo:
+    value:
+    - "[nginx]"
+    - "name=asis-nginx-centos-$releasever"
+    - "baseurl=http://{{ orepSiteUrl }}/yum/repos/asis/nginx/centos/$releasever"
+    - "enabled=0"
+    - "gpgcheck=0"
+    distribution: ["CentOS"]
+    version: ["6", "7"]
+    site: ["rsc", "lodz"]
+- repo:
+    value:
+    - "[zabbix2.4]"
+    - "name=asis-zabbix-2.4-rhel6"
+    - "baseurl=http://{{ orepSiteUrl }}/yum/repos/asis/zabbix/rhel6"
+    - "enabled=0"
+    - "gpgcheck=0"
+    distribution: ["CentOS", "RedHat"]
+    version: ["6"]
+    site: ["rsc", "lodz"]
+- repo:
+    value:
+    - "[zabbix2.4]"
+    - "name=asis-zabbix-2.4-rhel7"
+    - "baseurl=http://{{ orepSiteUrl }}/yum/repos/asis/zabbix/2.4/rhel7/x86_64"
+    - "enabled=0"
+    - "gpgcheck=0"
+    distribution: ["CentOS", "RedHat"]
+    version: ["7"]
+    site: ["rsc", "lodz"]
+- repo:
+    value:
+    - "[zabbix3.0]"
+    - "name=asis-zabbix-3.0-rhel7"
+    - "baseurl=http://{{ orepSiteUrl }}/yum/repos/asis/zabbix/3.0/rhel7/x86_64"
+    - "enabled=0"
+    - "gpgcheck=0"
+    distribution: ["CentOS", "RedHat"]
+    version: ["7"]
+    site: ["rsc", "lodz"]
+- repo:
+    value:
+    - "[nosql]"
+    - "name=orange-product-nosql-el6"
+    - "baseurl=http://{{ orepSiteUrl }}/yum/repos/orange/product/nosql/el6"
+    - "enabled=0"
+    - "gpgcheck=0"
+    distribution: ["CentOS", "RedHat"]
+    version: ["6"]
+    site: ["rsc", "lodz", "cloudwatt"]
+- repo:
+    value:
+    - "[nosql]"
+    - "name=orange-product-nosql-el7"
+    - "baseurl=http://{{ orepSiteUrl }}/yum/repos/orange/product/nosql/el7"
+    - "enabled=0"
+    - "gpgcheck=0"
+    distribution: ["CentOS", "RedHat"]
+    version: ["7"]
+    site: ["rsc", "lodz", "cloudwatt"]
+- repo:
+    value:
+    - "[mariadb]"
+    - "name=orange-product-mariadb-el6"
+    - "baseurl=http://{{ orepSiteUrl }}/yum/repos/orange/product/rdbms/el6"
+    - "enabled=0"
+    - "gpgcheck=0"
+    distribution: ["CentOS", "RedHat"]
+    version: ["6"]
+    site: ["rsc", "lodz", "cloudwatt"]
+- repo:
+    value:
+    - "[mariadb]"
+    - "name=orange-product-mariadb-el7"
+    - "baseurl=http://{{ orepSiteUrl }}/yum/repos/orange/product/rdbms/el7"
+    - "enabled=0"
+    - "gpgcheck=0"
+    distribution: ["CentOS", "RedHat"]
+    version: ["7"]
+    site: ["rsc", "lodz", "cloudwatt"]
+- repo:
+    value:
+    - "[jenkins]"
+    - "name=asis-jenkins-redhat-stable"
+    - "baseurl=http://{{ orepSiteUrl }}/yum/repos/asis/jenkins/redhat-stable"
+    - "enabled=0"
+    - "gpgcheck=0"
+    distribution: ["CentOS", "RedHat"]
+    version: ["6", "7"]
+    site: ["rsc", "lodz"]
+- repo:
+    value:
+    - "[juno]"
+    - "name=repos-asis-rdo-juno-epel7"
+    - "baseurl=http://{{ orepSiteUrl }}/yum/repos/asis/rdo/juno/epel7"
+    - "enabled=0"
+    - "gpgcheck=0"
+    distribution: ["CentOS", "RedHat"]
+    version: ["7"]
+    site: ["rsc", "lodz"]
+- repo:
+    value:
+    - "[kilo]"
+    - "name=repos-asis-rdo-kilo-el7"
+    - "baseurl=http://{{ orepSiteUrl }}/yum/repos/asis/rdo/kilo/el7"
+    - "enabled=0"
+    - "gpgcheck=0"
+    distribution: ["CentOS", "RedHat"]
+    version: ["7"]
+    site: ["rsc", "lodz"]
+- repo:
+    value:
+    - "[liberty]"
+    - "name=repos-asis-rdo-kilo-epel7"
+    - "baseurl=http://{{ orepSiteUrl }}/yum/repos/asis/rdo/liberty/el7"
+    - "enabled=0"
+    - "gpgcheck=0"
+    distribution: ["CentOS", "RedHat"]
+    version: ["7"]
+    site: ["rsc", "lodz"]
+- repo:
+    value:
+    - "[influxdb]"
+    - "name=asis-influxdb-rhel6"
+    - "baseurl=http://{{ orepSiteUrl }}/yum/repos/asis/influxdb/rhel/6"
+    - "enabled=0"
+    - "gpgcheck=0"
+    distribution: ["CentOS", "RedHat"]
+    version: ["6"]
+    site: ["rsc", "lodz"]
+- repo:
+    value:
+    - "[influxdb]"
+    - "name=asis-influxdb-rhel7"
+    - "baseurl=http://{{ orepSiteUrl }}/yum/repos/asis/influxdb/rhel/7"
+    - "enabled=0"
+    - "gpgcheck=0"
+    distribution: ["CentOS", "RedHat"]
+    version: ["7"]
+    site: ["rsc", "lodz"]
+- repo:
+    value:
+    - "[devops]"
+    - "name=orange-project-devops-el6"
+    - "baseurl=http://{{ orepSiteUrl }}/yum/repos/orange/project/devops/el6"
+    - "enabled=0"
+    - "gpgcheck=0"
+    distribution: ["CentOS", "RedHat"]
+    version: ["6"]
+    site: ["rsc", "lodz", "cloudwatt"]
+- repo:
+    value:
+    - "[devops]"
+    - "name=orange-project-devops-el7"
+    - "baseurl=http://{{ orepSiteUrl }}/yum/repos/orange/project/devops/el7"
+    - "enabled=0"
+    - "gpgcheck=0"
+    distribution: ["CentOS", "RedHat"]
+    version: ["7"]
+    site: ["rsc", "lodz", "cloudwatt"]
+- repo:
+    value:
+    - "[percona]"
+    - "name=asis-percona-el6"
+    - "baseurl=http://{{ orepSiteUrl }}/yum/repos/asis/percona/6/x86_64"
+    - "enabled=0"
+    - "gpgcheck=0"
+    distribution: ["CentOS", "RedHat"]
+    version: ["6"]
+    site: ["rsc", "lodz"]
+- repo:
+    value:
+    - "[percona]"
+    - "name=asis-percona-el7"
+    - "baseurl=http://{{ orepSiteUrl }}/yum/repos/asis/percona/7/x86_64"
+    - "enabled=0"
+    - "gpgcheck=0"
+    distribution: ["CentOS", "RedHat"]
+    version: ["7"]
+    site: ["rsc", "lodz"]
+- repo:
+    value:
+    - "[elasticsearch2]"
+    - "name=asis-elastic-elasticsearch"
+    - "baseurl=http://{{ orepSiteUrl }}/yum/repos/asis/elastic/elasticsearch/2/centos"
+    - "enabled=0"
+    - "gpgcheck=0"
+    distribution: ["CentOS", "RedHat"]
+    version: ["6", "7"]
+    site: ["rsc", "lodz"]
+- repo:
+    value:
+    - "[logstash2.3]"
+    - "name=asis-elastic-logstash"
+    - "baseurl=http://{{ orepSiteUrl }}/yum/repos/asis/elastic/logstash/2.3/centos"
+    - "enabled=0"
+    - "gpgcheck=0"
+    distribution: ["CentOS", "RedHat"]
+    version: ["6", "7"]
+    site: ["rsc", "lodz"]
+- repo:
+    value:
+    - "[kibana4.5]"
+    - "name=asis-elastic-kibana"
+    - "baseurl=http://{{ orepSiteUrl }}/yum/repos/asis/elastic/kibana/4.5/centos"
+    - "enabled=0"
+    - "gpgcheck=0"
+    distribution: ["CentOS", "RedHat"]
+    version: ["6", "7"]
+    site: ["rsc", "lodz"]
+- repo:
+    value:
+    - "[beats]"
+    - "name=asis-elastic-beats"
+    - "baseurl=http://{{ orepSiteUrl }}/yum/repos/asis/elastic/beats/el"
+    - "enabled=0"
+    - "gpgcheck=0"
+    distribution: ["CentOS", "RedHat"]
+    version: ["6", "7"]
+    site: ["rsc", "lodz"]
+- repo:
+    value:
+    - "[curator3]"
+    - "name=asis-elastic-curator-el6"
+    - "baseurl=http://{{ orepSiteUrl }}/yum/repos/asis/elastic/curator/3/centos/6"
+    - "enabled=0"
+    - "gpgcheck=0"
+    distribution: ["CentOS", "RedHat"]
+    version: ["6"]
+    site: ["rsc", "lodz"]
+- repo:
+    value:
+    - "[curator3]"
+    - "name=asis-elastic-curator-el7"
+    - "baseurl=http://{{ orepSiteUrl }}/yum/repos/asis/elastic/curator/3/centos/7"
+    - "enabled=0"
+    - "gpgcheck=0"
+    distribution: ["CentOS", "RedHat"]
+    version: ["7"]
+    site: ["rsc", "lodz"]
+- repo:
+    value:
+    - "[nodejs4]"
+    - "name=asis-nodejs-4-el6-x86_64"
+    - "baseurl=http://{{ orepSiteUrl }}/yum/repos/asis/nodejs/4/el6/x86_64/"
+    - "enabled=0"
+    - "gpgcheck=0"
+    distribution: ["CentOS", "RedHat"]
+    version: ["6"]
+    site: ["rsc", "lodz"]
+- repo:
+    value:
+    - "[nodejs4]"
+    - "name=asis-nodejs-4-el7-x86_64"
+    - "baseurl=http://{{ orepSiteUrl }}/yum/repos/asis/nodejs/4/el7/x86_64/"
+    - "enabled=0"
+    - "gpgcheck=0"
+    distribution: ["CentOS", "RedHat"]
+    version: ["7"]
+    site: ["rsc", "lodz"]
+- repo:
+    value:
+    - "[nodejs6]"
+    - "name=asis-nodejs-6-el6-x86_64"
+    - "baseurl=http://{{ orepSiteUrl }}/yum/repos/asis/nodejs/6/el6/x86_64/"
+    - "enabled=0"
+    - "gpgcheck=0"
+    distribution: ["CentOS", "RedHat"]
+    version: ["6"]
+    site: ["rsc", "lodz"]
+- repo:
+    value:
+    - "[nodejs6]"
+    - "name=asis-nodejs-6-el7-x86_64"
+    - "baseurl=http://{{ orepSiteUrl }}/yum/repos/asis/nodejs/6/el7/x86_64/"
+    - "enabled=0"
+    - "gpgcheck=0"
+    distribution: ["CentOS", "RedHat"]
+    version: ["7"]
+    site: ["rsc", "lodz"]
+- repo:
+    value:
+    - "[pulp]"
+    - "name=pulp Packages for Enterprise Linux 6"
+    - "baseurl=http://{{ orepSiteUrl }}/yum/repos/asis/redhat/pulp/2.5/rhel6/"
+    - "enabled=0"
+    - "gpgcheck=0"
+    distribution: ["CentOS", "RedHat"]
+    version: ["6"]
+    site: ["rsc", "lodz"]
+- repo:
+    value:
+    - "[pulp]"
+    - "name=pulp Packages for Enterprise Linux 6"
+    - "baseurl=http://{{ orepSiteUrl }}/yum/repos/asis/redhat/pulp/2.5/rhel7/"
+    - "enabled=0"
+    - "gpgcheck=0"
+    distribution: ["CentOS", "RedHat"]
+    version: ["7"]
+    site: ["rsc", "lodz"]

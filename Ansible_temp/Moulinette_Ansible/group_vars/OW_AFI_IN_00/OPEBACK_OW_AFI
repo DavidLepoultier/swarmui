@@ -1,0 +1,135 @@
+# OPEBACK vars
+---
+OPEBACK_PORT: 8080
+
+OPEBACK_SPRING_PROFILES: "{{ ENVIRONMENT }}"
+OPEBACK_PLATFORM_NAME: "OW_{{ ENVIRONMENT }}_{{ PLATFORM }}"
+OPEBACK_ADMIN_USERS_DEFAULT: tlwx8588,oslu6214,ceel6353,jjtp4884,isgu6416,dvgm7036,opym7392,efig7491,wdhn3644
+OPEBACK_WAR_FILE: "/images/{{ ENVIRONMENT }}/{{ OPERelease }}/{{ ENVIRONMENT | lower }}-back.war"
+OPEBACK_DBINIT_FILE: "/images/{{ ENVIRONMENT }}/{{ OPERelease }}/Common/db/{{ OPERelease }}/init/create_{{ OPERelease }}.sql"
+OPEBACK_DBUPDATE_PATH: "/images/{{ ENVIRONMENT }}/{{ OPERelease }}/Common/db/{{ GOROCO_DIR }}/update/"
+OPEBACK_DBUPDATE_FILE: "sql_list_{{ ENVIRONMENT }}.yml"
+OPEBACK_HA_PEM_FILE: "{{ TYPE | lower }}{{ ENVIRONMENT | lower }}{{ PLATFORM }}_back.pem"
+
+INTERNAL_APIS_LOGIN: 2sfyUcAxP5me39jSkOcNtZoGzqG07G1l 
+INTERNAL_APIS_PASSWORD: uMUrRcQhHKMS1bCg
+STATUS_EXTERNAL_LOGIN: VtVHqfPBowy2mkJS3narkBMZw2WJAwmL
+STATUS_EXTERNAL_PASSWORD: gnrfYNPRHBG4saI2
+STATUS_EXTERNAL_PROXY: "{{ SQUID_PROXY_VIP_ADDR }}:{{ SQUID_PROXY_VIP_PORT }}"
+PROVISIONING_PROXY: ""
+
+OPE_REQUEST_READ_TIMEOUT: 23000
+OPE_REQUEST_TIMEOUT: 3000
+
+M39_VM_PROD_IP: "{{ OPEBACK01_VM_PROD_IP }}"
+
+#### APIGEE #####################################################################
+APC_INTERNAL_SERVER_URL: https://{{ ORANGE_INTERNAL_SERVER_NAME }}
+### for Nagios
+APC_INTERNAL_SERVER_NAME: "{{ ENVIRONMENT | lower }}{{ PLATFORM }}{{ TYPE | lower }}-owapg2p.api.intraorange"
+APC_EXTERNAL_SERVER_NAME: "{{ ENVIRONMENT | lower }}{{ PLATFORM }}{{ TYPE | lower }}-wwww-owapg2p.api.intraorange"
+APIGEE_OPEBACK_ENDPOINT: "{{ APC_INTERNAL_SERVER_URL }}/{{ ENVIRONMENT | lower }}-back/{{ CLOUD }}_{{ ENVIRONMENT }}_{{ PLATFORM }}/v1"
+APIGEE_OPEBACK_OAUTH: "{{ APC_INTERNAL_SERVER_URL }}/oauth/v2"
+APIGEE_API_PROXY: ""
+APIGEE_API_ENDPOINT: "{{ APC_INTERNAL_SERVER_URL }}/apigee/v1"
+APIGEE_API_ORGANIZATION: "{{ ENVIRONMENT | lower }}{{ CLOUD | lower }}{{ PLATFORM }}{{ CLOUD | lower }}{{ TYPE | lower }}"
+APIGEE_API_ENVIRONMENT: intranet
+APIGEE_API_LOGIN: "{{ INTERNAL_APIS_LOGIN }}"
+APIGEE_API_PWD: "{{ INTERNAL_APIS_PASSWORD }}"
+
+#### FRONT BACKEND URL ##########################################################
+FRONT_BACKEND_URL: "{{ APIGEE_OPEBACK_ENDPOINT }}"
+FRONT_BACKEND_TOKEN_URL: "{{ APIGEE_OPEBACK_OAUTH }}/token?user_id="
+FRONT_BACKEND_KEY: "{{ INTERNAL_APIS_LOGIN }}"
+FRONT_BACKEND_SECRET: "{{ INTERNAL_APIS_PASSWORD }}"
+
+#### SUGAR ######################################################################
+SUGAR_API_ENDPOINT: "http://{{ CRM_SERVER_NAME }}"
+SUGAR_API_PROXY: ""
+SUGAR_API_DEVELOPER_LOGIN: "AFI dev portal"
+SUGAR_API_DEVELOPER_MD5PWD: 4AE97EB4A03103AF7ACB3C4FDC0872F9
+SUGAR_API_PARTNER_LOGIN: wordpress
+SUGAR_API_PARTNER_MD5PWD: 56DB7235B655565456CDD480BCD8FF00
+
+#### OIDC #######################################################################
+OIDC_ENDPOINT: "{{ APC_INTERNAL_SERVER_URL }}/oidc/admin/v3"
+OIDC_PROXY: ""
+OIDC_LOGIN: "{{ INTERNAL_APIS_LOGIN }}"
+OIDC_PASSWORD: "{{ INTERNAL_APIS_PASSWORD }}"
+
+#### OPEBCKDB ###################################################################
+# vars file for orange.mariadb-galera-cluster
+omariadbDistribution:
+  CentOS: [ "7" ]
+  RedHat: [ "7" ]
+# defaults file for orange.mariadb-galera
+omariadbVersion: 10.1.13
+omariadbBase: /myqdata
+omariadbServer: "{{ DATABASE_SERVER_NAME }}"
+omariadbPort: 3306
+omariadbIface: eth1
+# omadbmode: cluster / standalone
+omariadbMode: cluster
+omariadbGaleraUri: "gcomm://{{ hostvars[inventory_hostname]['ansible_' + omariadbIface].ipv4.address }}"
+#omariadbGaleraWsrepSstMethod: rsync / xtrabackup / xtrabackup-v2"
+omariadbGaleraWsrepSstMethod: "rsync"
+omariadbGaleraWsrepSstUser: "sstuser"
+omariadbGaleraWsrepSstPassword: "M4d6b!s1tt"
+omariadbClusterCheckUser: "clustercheckuser"
+omariadbClusterCheckPassword: "clustercheckpassword!"
+
+DATABASE_SERVER_IP: "127.0.0.1"
+DATABASE_NAME: afi
+DATABASE_USERNAME: "{{ DATABASE_NAME }}update"
+DATABASE_PASSWORD: "{{ DATABASE_NAME }}update"
+DATABASE_SERVER_NAME: mydbsrvm53
+DATABASE_MAX_CONNECTIONS: 151
+#
+OPEBACK_DATABASE_HOST: "localhost"
+OPEBACK_DATABASE_PORT: 3306
+OPEBACK_DATABASE_BASENAME: "{{ DATABASE_NAME }}"
+OPEBACK_DATABASE_USER: "{{ DATABASE_NAME }}update"
+OPEBACK_DATABASE_PWD: "{{ DATABASE_NAME }}update"
+OPEBACK_DATABASE_MAX_ACTIVE: 50
+OPEBACK_DATABASE_MAX_IDLE: 30
+OPEBACK_DATABASE_AUTO: validate
+
+#### NFS ########################################################################
+NFS_BACK_MYSQL_SERVER_IP: "{{ NFS_SERVER_IP }}"
+NFS_BACK_MYSQL_DATA_DIR: "/myqdata/{{ DATABASE_SERVER_NAME }}/data"
+NFS_BACK_MYSQL_LOG_DIR: "/myqdata/{{ DATABASE_SERVER_NAME }}/log"
+NFS_BACK_MYSQL_TMP_DIR: "/myqdata/{{ DATABASE_SERVER_NAME }}/tmp"
+NFS_BACK_MYSQL_BACKUP_DIR: /myqdata/backup
+NFS_BACK_MYSQL_DATA_PATH: "{{ NFS_PATH_ROOT }}/{{ TYPE }}{{ ENVIRONMENT }}ALL_BACKDB_DATA"
+NFS_BACK_MYSQL_LOG_PATH: "{{ NFS_PATH_ROOT }}/{{ TYPE }}{{ ENVIRONMENT }}ALL_BACKDB_LOG"
+NFS_BACK_MYSQL_TMP_PATH: "{{ NFS_PATH_ROOT }}/{{ TYPE }}{{ ENVIRONMENT }}ALL_BACKDB_TMP"
+NFS_BACK_MYSQL_BACKUP_PATH: "{{ NFS_PATH_ROOT }}/{{ TYPE }}{{ ENVIRONMENT }}ALL_BACKDB_BACKUP"
+OPEBACK_CONTENTS_LOCAL_MOUNT_POINT: /var/opt/data/flat/{{ ENVIRONMENT | lower }}backcontents
+NFS_OPEBACK_CONTENTS_SERVER_IP: "{{ NFS_SERVER_IP }}"
+NFS_OPEBACK_CONTENTS_PATH: "{{ NFS_PATH_ROOT }}/{{ TYPE }}{{ ENVIRONMENT }}ALL_BACK"
+LOCAL_FS_OPEBACKDB: /dev/vdb
+MOUNT_POINT_LOCAL_FS_OPEBACKDB: /myqdata/{{ DATABASE_SERVER_NAME }}/data 
+
+#### TOMCAT #####################################################################
+TOMCAT_BASEDIR: /opt/tomcat
+TOMCAT_RELEASE_RHEL7: 8.0.27
+TOMCAT_PACKAGE: apache-tomcat-{{ TOMCAT_RELEASE }}
+TOMCAT_PLATON_PACKAGE_RHEL7: "PA-TOM-R7T80-RDG03R01C01"
+TOMCAT_DEFAULT_LV_SIZE: 300
+TOMCAT_DEFAULT_DUMP_LV_SIZE: 500
+TOMCAT_DEFAULT_GREENWICH_PORT_MIN: 8080
+TOMCAT_INSTANCE_DIR: "/opt/application/{{ tomcat_HTTP_INSTANCE_NAME }}/{{ tomcat_instance_version }}/tomcat/{{ tomcat_HTTP_INSTANCE_ID }}"
+TOMCAT_TODEPLOY_DIR: "{{ TOMCAT_INSTANCE_DIR }}/todeploy"
+TOMCAT_WEBAPPS_DIR: "{{ TOMCAT_INSTANCE_DIR }}/webapps"
+TOMCAT_CONF_DIR: "{{ TOMCAT_INSTANCE_DIR }}/conf"
+TOMCAT_BIN_DIR: "{{ TOMCAT_INSTANCE_DIR }}/bin"
+TOMCAT_WORK_DIR: "/opt/application/{{ tomcat_HTTP_INSTANCE_NAME }}/{{ tomcat_instance_version }}/tomcat/{{ tomcat_HTTP_INSTANCE_ID }}/work/{{ ENVIRONMENT | lower }}-back"
+tomcat_HTTP_INSTANCE_NAME: "{{ ENVIRONMENT | lower }}back"
+tomcat_instance_version: "{{ GOROCO_OPE }}"
+tomcat_HTTP_INSTANCE_ID: "00"
+
+PROD_NETWORK_IF: eth1
+
+#### NAGIOS #####################################################################
+NAGIOS_SERVICE_OPEBCKDB: opebckdb
+SERVICE: "{{ NAGIOS_SERVICE_OPEBCKDB }}"

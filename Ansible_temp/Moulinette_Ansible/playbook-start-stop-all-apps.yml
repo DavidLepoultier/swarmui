@@ -1,0 +1,10 @@
+---
+- hosts: afi_hosts
+  roles:
+    - { role: stop_all_apps, tags: stop_all_apps stop }
+    - { role: start_all_apps, tags: start_all_apps start }
+
+- hosts: ope_hosts
+  roles:
+    - { role: stop_all_apps, tags: stop_all_apps stop }
+    - { role: start_all_apps, tags: start_all_apps start }

@@ -1,0 +1,38 @@
+---
+HOSTS:
+  M33:
+    group: nodejs
+    hostname: "m33"
+    ip_adm: "192.168.4.8"
+    ip_prod: "10.100.0.28"
+  M34:
+    group: nodejs
+    hostname: "m34"
+    ip_adm: "192.168.4.7"
+    ip_prod: "10.100.0.27"
+  M35:
+    group: nodejs
+    hostname: "m35"
+    ip_adm: "192.168.4.27"
+    ip_prod: "10.100.0.48"
+  M43:
+    group: nodejs
+    hostname: "m43"
+    ip_adm: "192.168.4.9"
+    ip_prod: "10.100.0.29"
+  M44:
+    group: nodejs
+    hostname: "m44"
+    ip_adm: "192.168.4.28"
+    ip_prod: "10.100.0.49"
+  M37:
+    group: wordpress
+    hostname: "m37"
+    ip_adm: "192.168.4.13"
+    ip_prod: "10.100.0.33"
+  M36:
+    group: wordpressdb
+    hostname: "m36"
+    ip_adm: "192.168.4.12"
+    ip_prod: "10.100.0.32"
+    

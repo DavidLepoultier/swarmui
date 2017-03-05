@@ -1,0 +1,120 @@
+# GLOBAL vars for G3 Portal Integration platform on Openwatt OPE_04 platform
+---
+ENVIRONMENT: OPE
+PLATFORM: "04"
+
+GOROCO_OPE: G03R03C01
+
+#### Yum Repo ################################################
+YUM_REPO_G02R02C00_STATE: 1
+YUM_REPO_STANDARD_LB_STATE: 0
+YUM_REPO_STANDARD_STATE: 0
+YUM_REPO_PULP_OPTIONAL_STATE: 1
+YUM_REPO_PULP_EPEL_STATE: 1
+YUM_REPO_PULP_RDO_STATE: 0
+YUM_REPO_PULP_STATE: 1
+
+YUM_PULP_FQDN: repoyum-central.itn.ftgroup
+YUM_PULP_IP: 10.236.240.170
+
+#### Packages ##############################################
+PACKAGES_DIRECTORY: /var/opt/data/flat/ansible/packages
+ANSIBLE_PACKAGES_DIRECTORY: /var/opt/data/flat/ansible/git-integration/Ansible/packages
+STUFF_PILE: /var/opt/data/flat/ansible/project/files/stuff_pile
+
+#### DNS ###################################################
+DNS_SERVER_1: 10.236.240.37
+#DNS_SERVER2 is for VM which can't connect GIN network
+DNS_SERVER_2: "{{ HOSTS.INOPEOW004RP02.ip_adm }}"
+
+#### NFS ###################################################
+NFS_SERVER_IP: 172.16.4.251 
+NFS_PATH_ROOT: /OW_ope_portal_04
+NFS_LOGS_MOUNT_POINT: /var/opt/data/logs
+NFS_LOGS_SERVER_IP: "{{ NFS_SERVER_IP }}"
+NFS_LOGS_PATH: "{{ NFS_PATH_ROOT }}/INOP3ALL_LOGS"
+
+#### localogs ##############################################
+LOGS_VG_NAME: infravg
+LOGS_LV_NAME: logs_lv
+LOGS_LV_SIZE: 2g
+LOGS_MOUNT_POINT: /var/opt/data/locallogs
+
+#### MYSQL #################################################
+MYSQL_DB_PACKAGE: PA-MYQ-6CE5612-RDG09R00C01
+MYSQL_DB_VERSION: 5.6.12
+
+#### CAPTCHA #############################################
+CAPTCHA_URL: "https://www.google.com/recaptcha/api/siteverify?secret={{CAPTCHA_SECRET_KEY}}&response={response}"
+CAPTCHA_PROXY: "{{ SQUID_PROXY_VIP_ADDR }}:{{ SQUID_PROXY_VIP_PORT }}"
+CAPTCHA_PUBLIC_KEY: 6LfiZ_4SAAAAAMHL8MQrCLHVC1TeWqU-Bv-iPWHr
+CAPTCHA_SECRET_KEY: 6LfiZ_4SAAAAAESCoob5-W3wgg-oVPAJzxVLYS2T
+
+#### Apache ################################################
+APACHE_HTTPD_PACKAGE: PA-APA-APA2215-RDG02R01C03
+
+CRM_SERVER_NAME: crm-ope-owope04.itn.ftgroup
+RPPORTAL_DEVELOPER_SERVER_NAME: developer-owope{{ PLATFORM }}.itn.ftgroup
+RPPORTAL_PARTNER_SERVER_NAME: partner-owope{{ PLATFORM }}.itn.ftgroup
+#### If value set below, do not forget ":" just before the port value
+RPPORTAL_PARTNER_OPTIONAL_PORT: ""
+RPADMIN_ADMIN_PORTAL_SERVER_NAME: admin-ope-owope{{ PLATFORM }}.itn.ftgroup
+DASHBOARD_LOGS_SERVER_NAME: dashboard-ope-owope{{ PLATFORM }}.itn.ftgroup
+PREVIEW_SERVER_NAME: prepublish-ope-owope{{ PLATFORM }}.itn.ftgroug
+ADMIN_SERVER_NAME: techadmin-ope-owope{{ PLATFORM }}.itn.ftgroup
+OPE_BACK_SERVER_NAME: ope-back-owope{{ PLATFORM }}.itn.ftgroup
+OPE_INTERNAL_SERVER_NAME: ope-internal-owope{{ PLATFORM }}.itn.ftgroup
+OPE_EXTERNAL_SERVER_NAME: ope-external-owope{{ PLATFORM }}.itn.ftgroup
+
+#### IPs ################################################
+WORDPRESS_VM_PROD_NAT_IP: "{{ HOSTS.INOPEOW004CM01.ip_prod }}"
+SUGAR_VM_PROD_NAT_IP: "{{ HOSTS.INOPEOW004SL03.ip_prod }}"
+SUGAR_VM_ADMIN_NAT_IP: "{{ HOSTS.INOPEOW004SL03.ip_adm }}"
+H07_STATS_NAT_IP: "{{ HOSTS.INOPEOW004HP07.ip_adm }}"
+H08_STATS_NAT_IP: "{{ HOSTS.INOPEOW004HP08.ip_adm }}"
+H09_STATS_NAT_IP: "{{ HOSTS.INOPEOW004HP09.ip_adm }}"
+H11_STATS_NAT_IP: "{{ HOSTS.INOPEOW004HP11.ip_adm }}"
+H12_STATS_NAT_IP: "{{ HOSTS.INOPEOW004HP12.ip_adm }}"
+H07_PROD_NAT_IP: "{{ HOSTS.INOPEOW004HP07.ip_prod }}"
+H08_PROD_NAT_IP: "{{ HOSTS.INOPEOW004HP08.ip_prod }}"
+H09_PROD_NAT_IP: "{{ HOSTS.INOPEOW004HP09.ip_prod }}"
+H11_PROD_NAT_IP: "{{ HOSTS.INOPEOW004HP11.ip_prod }}"
+H12_PROD_NAT_IP: "{{ HOSTS.INOPEOW004HP12.ip_prod }}"
+H08_OUTGOING_PROD_IP: "{{ HOSTS.INOPEOW004HP08.ip_pub }}"
+RPADMIN_VM_ADMIN_IP: "{{ HOSTS.INOPEOW004RP02.ip_adm }}"
+RPADMIN_VM_PROD_IP: "{{ HOSTS.INOPEOW004RP02.ip_prod }}"
+ELK_VM_ADMIN_NAT_IP: "{{ HOSTS.INOPEOW004EL01.ip_adm }}"
+PPUBLISH_VM_ADMIN_NAT_IP: "{{ HOSTS.INOPEOW004PP01.ip_adm }}"
+RPPORTAL01_VM_PROD_IP: "{{ HOSTS.INOPEOW004AS07.ip_prod }}"
+RPPORTAL02_VM_PROD_IP: "{{ HOSTS.INOPEOW004AS08.ip_prod }}"
+RPPORTAL01_VM_PUB_IP: "{{ HOSTS.INOPEOW004AS07.ip_pub }}"
+RPPORTAL02_VM_PUB_IP: "{{ HOSTS.INOPEOW004AS08.ip_pub }}"
+SQUID01_VM_PROD_IP: "{{ HOSTS.INOPEOW004AS05.ip_prod }}"
+SQUID02_VM_PROD_IP: "{{ HOSTS.INOPEOW004AS06.ip_prod }}"
+OPEBACK01_VM_PROD_IP: "{{ HOSTS.INOPEOW004BK01.ip_prod }}"
+OPEBACK02_VM_PROD_IP: "{{ HOSTS.INOPEOW004BK02.ip_prod }}"
+DEVELOPER01_VM_PROD_IP: "{{ HOSTS.INOPEOW004DP01.ip_prod }}"
+DEVELOPER02_VM_PROD_IP: "{{ HOSTS.INOPEOW004DP02.ip_prod }}"
+OPEADMIN01_VM_PROD_IP: "{{ HOSTS.INOPEOW004AD01.ip_prod }}"
+OPEADMIN02_VM_PROD_IP: "{{ HOSTS.INOPEOW004AD02.ip_prod }}"
+
+# Pour palier problème de DNS
+ORANGE_INTERNAL_SERVER_NAME: api-owope4.itn.ftgroup
+H13_VM_PROD_NAT_IP: 10.236.246.225
+
+#### Mail service #####################################
+SMTP_HOST: 10.98.84.179
+SMTP_PORT: 25
+MAIL_STATUS_FROM: staging.opeow{{ PLATFORM }}@orange.com
+MAIL_STATUS_TO: staging.opeow04@orange.com
+MAIL_WORDPRESS_FROM: staging.opeow04@orange.com
+MAIL_WORDPRESS_TO: staging.opeow04@orange.com
+MAIL_SUPPORT_REQUEST_TO: staging.opeow04@orange.com
+MAIL_SUPPORT_NAME: Orange Partner team
+SMTP_AUTH: False
+SMTP_USER: ""
+SMTP_PASSWORD: ""
+SMTP_SECURE: ""
+
+#### Backup #####################################
+DEFAULT_BACKUP_DIRECTORY: /var/opt/data/logs/backup

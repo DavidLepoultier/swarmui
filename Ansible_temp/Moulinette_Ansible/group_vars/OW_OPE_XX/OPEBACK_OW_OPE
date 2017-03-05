@@ -1,0 +1,24 @@
+# OPEBACK vars
+---
+OPEBACK_PORT: 8080
+
+# OPEBCKDB ######################################################################
+DATABASE_NAME: ope
+DATABASE_USERNAME: "{{ DATABASE_NAME }}update"
+DATABASE_PASSWORD: "{{ DATABASE_NAME }}update"
+DATABASE_SERVER_NAME: mydbsrvm53
+DATABASE_MAX_CONNECTIONS: 151
+#### NFS ########################################################################
+NFS_MYSQL_SERVER_IP: "{{ NFS_SERVER_IP }}"
+NFS_MYSQL_DATA_DIR: "/myqdata/{{ DATABASE_SERVER_NAME }}/data"
+NFS_MYSQL_LOG_DIR: "/myqdata/{{ DATABASE_SERVER_NAME }}/log"
+NFS_MYSQL_TMP_DIR: "/myqdata/{{ DATABASE_SERVER_NAME }}/tmp"
+NFS_MYSQL_BACKUP_DIR: /myqdata/backup
+NFS_MYSQL_DATA_PATH: /OW_ope_portal_04/INOP3ALL_BACKDB_DATA
+NFS_MYSQL_LOG_PATH: /OW_ope_portal_04/INOP3ALL_BACKDB_LOG
+NFS_MYSQL_TMP_PATH: /OW_ope_portal_04/INOP3ALL_BACKDB_TMP
+NFS_MYSQL_BACKUP_PATH: /OW_ope_portal_04/INOP3ALL_BACKDB_BACKUP
+
+#### NAGIOS #####################################################################
+NAGIOS_SERVICE_OPEBCKDB: opebckdb
+SERVICE: "{{ NAGIOS_SERVICE_OPEBCKDB }}"

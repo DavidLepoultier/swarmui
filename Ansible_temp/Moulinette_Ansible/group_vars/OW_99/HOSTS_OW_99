@@ -1,0 +1,6 @@
+---
+HOSTS:
+  jenkins:
+    group: default
+    ip_adm: 
+    ip_prod: 10.100.0.12

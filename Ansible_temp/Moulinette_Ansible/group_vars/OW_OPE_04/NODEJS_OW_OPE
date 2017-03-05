@@ -1,0 +1,60 @@
+# NODEJS vars
+---
+NODEJS_GOROCO: G06R03R00
+NODEJS_PORT: 8080
+
+NODE_FRONT_DEV_APPLICATION_DIR: /var/opt/data/flat/node_dev
+NODE_FRONT_DEV_APPLICATION_FILE: dist/proxy/main.js
+NODE_FRONT_ADMIN_APPLICATION_DIR: /var/opt/data/flat/node_admin
+NODE_FRONT_ADMIN_APPLICATION_FILE: dist/proxy/main.js
+NODE_FRONT_ADM_BASE_PATH: '{{ ENVIRONMENT | lower }}'
+NODE_FRONT_DEV_BASE_PATH: ''
+
+FRONT_DEV_ARCHIVE_PATH: "/images/OPE/{{ OPERelease }}/ope-dev.zip"
+FRONT_ADMIN_ARCHIVE_PATH: "/images/OPE/{{ OPERelease }}/ope-admin.zip"
+
+#### NFS ##########################################################################
+NODE_FRONT_PUBLISH_LOCAL_MOUNT_POINT: /var/opt/data/flat/publish
+NODE_FRONT_PREPUBLISH_LOCAL_MOUNT_POINT: /var/opt/data/flat/prepublish
+NFS_PUBLISH_SERVER_IP: "{{ NFS_SERVER_IP }}"
+NFS_PUBLISH_PATH: "{{ NFS_PATH_ROOT }}/INOP3ALL_PUBLISH"
+NFS_PREPUBLISH_SERVER_IP: "{{ NFS_SERVER_IP }}"
+NFS_PREPUBLISH_PATH: "{{ NFS_PATH_ROOT }}/INOP3ALL_PREPUBLISH"
+
+#### LVM #################################################################
+NODE_FRONT_DEV_VG_NAME: infravg
+NODE_FRONT_DEV_LV_NAME: webapps_lv
+NODE_FRONT_DEV_LV_SIZE: 1g
+
+NODE_FRONT_ADMIN_VG_NAME: infravg
+NODE_FRONT_ADMIN_LV_NAME: webapps_lv
+NODE_FRONT_ADMIN_LV_SIZE: 1g
+
+VM_PROD_IP: "{{ HOSTS[inventory_hostname].ip_prod }}"
+
+FRONT_DEV_ANALYTICS_KEY: UA-3797585-5
+FRONT_PARTNER_URL: "http://{{ WORDPRESS_VM_PROD_NAT_IP }}/v1/"
+FRONT_PROXY_SWAGGER: "http://{{ SQUID_PROXY_VIP_ADDR}}:{{SQUID_PROXY_VIP_PORT}}"
+FRONT_PROXY_PARTNER: ""
+FRONT_PROXY_BACKEND: ""
+
+COOKIE_FRONT_NAME: AT_{{ PLATFORM }}
+COOKIE_FRONT_DOMAIN: itn.ftgroup
+COOKIE_FRONT_ADMIN_NAME: OPE_{{ PLATFORM }}
+COOKIE_FRONT_ADMIN_ID_NAME: OPEID_{{ PLATFORM }} 
+
+TWITTER_URL: https://twitter.com/OrangePartner
+GITHUB_URL: https://github.com/Orange-OpenSource
+PROGRAMMABLE_WEB_URL: https://www.programmableweb.com/profile/orangepartner
+GITHUB_ATK_URL: https://github.com/Orange-OpenSource/ATK
+STACKOVERFLOW_URL: http://stackoverflow.com/tags/orange-api
+
+#### PORTAL ######################################################################
+PORTAL_DEVELOPER_URL: "https://{{ RPPORTAL_DEVELOPER_SERVER_NAME }}"
+PORTAL_DEVELOPER_NAME: Orange Developer
+PORTAL_PARTNER_URL:  "https://{{ RPPORTAL_PARTNER_SERVER_NAME }}"
+PORTAL_PARTNER_NAME: Orange Partner
+PORTAL_ADMIN_URL: https://fr.wikipedia.org/wiki/Vous_etes_ici
+PORTAL_ADMIN_NAME: OPE Admin
+PORTAL_ADMIN_PLATFORM: "OpenWatt Integration"
+PORTAL_ADMIN_URL_SIGNIN: "/admin/auth/signin"

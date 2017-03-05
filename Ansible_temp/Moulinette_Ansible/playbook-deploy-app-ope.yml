@@ -1,0 +1,88 @@
+---
+# Download application deliverables
+- hosts: ansible
+  gather_facts: no
+
+  vars:
+    artiuser: opeuser
+    artipass: opeapi%1
+    
+  roles:
+    - { role: download_app_deliverables, tags: download_app_deliverables }
+    
+# Front Dev deployment
+- hosts: nodejs-dev
+  gather_facts: no 
+  vars:
+    NODE_APP: "{{ NODE_FRONT_DEV_APPLICATION_DIR }}/{{ NODE_FRONT_DEV_APPLICATION_FILE }}"  
+  roles:
+    - { role: deploy_node_front_dev, tags: deploy_node_front_dev }
+    - { role: hosts_add_FQDN_BB, tags: hosts_add_FQDN_BB hosts_add_FQDN_BB_ope_dev }
+  
+# Front Admin deployment
+- hosts: nodejs-admin
+  gather_facts: no
+  vars:
+    NODE_APP: "{{ NODE_FRONT_ADMIN_APPLICATION_DIR }}/{{ NODE_FRONT_ADMIN_APPLICATION_FILE }}"
+  roles:
+    - { role: deploy_node_front_admin, tags: deploy_node_front_admin }
+    - { role: hosts_add_FQDN_BB, tags: hosts_add_FQDN_BB hosts_add_FQDN_BB_ope_adm }
+
+# OPE back deployment
+- hosts: opeback
+  gather_facts: no
+  roles:
+    - { role: deploy_opeback, tags: deploy_opeback }
+    - { role: hosts_add_FQDN_BB, tags: hosts_add_FQDN_BB hosts_add_FQDN_BB_opeback }
+#    - { role: hosts_set_prod_ip_in_first_position, tags: hosts_set_prod_ip_in_first_position }    
+ 
+- hosts: opeback2
+  gather_facts: no 
+  roles:
+    - { role: backup_OPEBACK_contents_daily, tags: backup_OPEBACK_contents_daily }
+    - { role: configure_crm_synchronize, tags: configure_crm_synchronize }
+
+# OPE BACK init DB
+- hosts: opebackdb
+  gather_facts: no
+  become: yes
+  roles:
+    -  { role: init_DB_opeback, tags: init_DB_opeback }  
+
+# Wordpress deployment   
+- hosts: wordpress
+  gather_facts: no
+  vars:
+    - forceUpload: false
+    - forceLanguages: false
+  roles:
+    - { role: deploy_wordpress_php, tags: deploy_wordpress_php }
+    - { role: hosts_add_FQDN_BB, tags: hosts_add_FQDN_BB hosts_add_FQDN_BB_wordpress }
+    
+# Wordpress db init  
+- hosts: wordpressdb
+  gather_facts: no
+  become: yes
+  roles:
+    - { role: init_DB_wordpress, tags: init_DB_wordpress }
+
+# SugarCRMdb patch deployment
+- hosts: sugardb
+  gather_facts: no
+  become: yes
+  roles:
+    - { role: update_sugarcrmdb_rights, tags: update_sugarcrmdb_rights }
+    - { role: update_sugarcrm_schema_fromaddr_size, tags: update_sugarcrm_schema_fromaddr_size }
+
+# SugarCRM patch deployment 
+- hosts: sugar
+  gather_facts: no
+  become: yes
+  roles:
+    - { role: update_sugarcrm_schema_fromaddr_size, tags: update_sugarcrm_schema_fromaddr_size }
+    
+# Clean /images/OPE/
+- hosts: ansible
+  gather_facts: no
+  roles:
+    - { role: clean_images_OPE, tags: clean_images_OPE }

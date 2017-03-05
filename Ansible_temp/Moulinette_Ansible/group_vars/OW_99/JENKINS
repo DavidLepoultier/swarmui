@@ -1,0 +1,33 @@
+ojenkinsVersion: latest
+ojenkinsPort: 8080
+ojenkinsListenAdress: "0.0.0.0"
+ojenkinsHome: "/opt/jenkins"        # Si CommunBundle, alors mettre variable à : "/opt/jenkins"
+
+ojenkinsJavaOptions: " -Djava.awt.headless=true -Djenkins.install.runSetupWizard=false " # option de lancement
+
+ojenkinsAdminUsername: admin    # username par defaut
+ojenkinsAdminPassword: admin    # password par defaut
+
+ojenkinsInstallPlugins: 1               # Set to 1 if you want to install additionnal plugins (require an Internet Proxy!, see readme) 
+ojenkinsPlugins:                        # List of plugins to install
+  - git
+  - job-dsl
+  - uno-choice 
+  - artifactdeployer
+  - build-with-parameters
+  - checkstyle
+  - chucknorris
+  - cobertura
+  - dynamicparameter
+  - extra-columns
+  - git-changelog 
+  - global-variable-string-parameter
+  - heavy-job
+  - hp-application-automation-tools-plugin
+  - jobdelete-builder
+  - maven-plugin
+  - nodejs
+  - publish-over-ssh
+  - robot
+  - role-strategy
+  - ws-cleanup

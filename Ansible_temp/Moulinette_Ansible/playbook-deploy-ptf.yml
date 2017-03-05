@@ -1,0 +1,9 @@
+---
+- hosts: opeback
+  roles: 
+    - { role: deploy_opeback, tags: deploy_opeback opeback}
+
+- hosts: wordpress
+  roles: 
+    - { role: deploy_wordpress_php, tags: deploy_wordpress_php wordpress_php wordpress }
+

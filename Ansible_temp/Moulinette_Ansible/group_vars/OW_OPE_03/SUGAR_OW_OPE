@@ -1,0 +1,17 @@
+# SUGAR vars
+---
+# SUGARCRM #####################################################################
+SUGAR_PORT: 80
+HTTP_START_SERVERS: 10
+
+# MEMCACHED ########################################################################
+MEMCACHED_PORT: 11211
+
+# SUGARDB ######################################################################
+NAGIOS_SERVICE_SUGARDB: sugardb
+SERVICE: "{{ NAGIOS_SERVICE_SUGARDB }}"
+DATABASE_NAME: sugarcrmdb
+DATABASE_USERNAME: "{{ DATABASE_NAME }}update"
+DATABASE_PASSWORD: "{{ DATABASE_NAME }}update"
+DATABASE_SERVER_NAME: mysqlsrv
+DATABASE_MAX_CONNECTIONS: 151

@@ -1,0 +1,137 @@
+---
+HOSTS:
+  OPAFIOW001FP01:
+    groupnagios: default
+    group: squid
+    ip_adm: 10.103.0.117
+    ip_prod: 10.101.0.126
+# OPAFIOW001LB91:
+#   groupnagios: default
+#   group: haproxy_graylog
+#   ip_adm: 
+#   ip_prod: 
+# OPAFIOW001LB90:
+#   groupnagios: default
+#   group: haproxy_graylog
+#   ip_adm: 
+#   ip_prod: 
+# OPAFIOW001LB11:
+#   groupnagios: default
+#   group: haproxy_back
+#   ip_adm: 
+#   ip_prod: 
+  OPAFIOW001LB10:
+    groupnagios: default
+    group: haproxy_back
+    ip_adm: 10.103.0.127
+    ip_prod: 10.101.0.123
+#  OPAFIOW001LB02:
+#    groupnagios: default
+#    group: haproxy_portal
+#    ip_adm: 
+#    ip_prod: 
+  OPAFIOW001LB01:
+    groupnagios: default
+    group: haproxy_portal
+    ip_adm: 10.103.0.134
+    ip_prod: 10.101.0.133
+  OPAFIOW001RP02:
+    groupnagios: default
+    group: rpportal
+    ip_adm: 10.103.0.132
+    ip_prod: 10.101.0.144
+  OPAFIOW001RP01:
+    groupnagios: default
+    group: rpportal
+    ip_adm: 10.103.0.125
+    ip_prod: 10.101.0.138
+  OPAFIOW001DB03:
+    groupnagios: default
+    group: opebackdb
+    ip_adm: 10.103.0.122
+    ip_prod: 10.101.0.137
+  OPAFIOW001DB02:
+    groupnagios: default
+    group: opebackdb
+    ip_adm: 10.103.0.133
+    ip_prod: 10.101.0.136
+  OPAFIOW001DB01:
+    groupnagios: default
+    group: opebackdb
+    ip_adm: 10.103.0.121
+    ip_prod: 10.101.0.140
+  OPAFIOW001AS02:
+    groupnagios: default
+    group: opeback
+    ip_adm: 10.103.0.126
+    ip_prod: 10.101.0.128
+  OPAFIOW001AS01:
+    groupnagios: default
+    group: opeback
+    ip_adm: 10.103.0.119
+    ip_prod: 10.101.0.129
+  OPAFIOW001AD02:
+    groupnagios: default
+    group: nodejs_adm
+    ip_adm: 10.103.0.131
+    ip_prod: 10.101.0.132
+  OPAFIOW001AD01:
+    groupnagios: default
+    group: nodejs_adm
+    ip_adm: 10.103.0.124
+    ip_prod: 10.101.0.121
+  OPAFIOW001DP02:
+    groupnagios: default
+    group: nodejs_dev
+    ip_adm: 10.103.0.137
+    ip_prod: 10.101.0.131
+  OPAFIOW001DP01:
+    groupnagios: default
+    group: nodejs_dev
+    ip_adm: 10.103.0.130
+    ip_prod: 10.101.0.122
+  OPAFIOW001PP01:
+    groupnagios: default
+    group: nodejs_pp
+    ip_adm: 10.103.0.123
+    ip_prod: 10.101.0.127
+  OPAFIOW001RP99:
+    groupnagios: default
+    group: rpadmin
+    ip_adm: 10.103.0.136
+    ip_prod: 10.101.0.125
+  OPAFIOW001AN01:
+    groupnagios: default
+    group: ansible
+    ip_adm: 10.103.0.135
+    ip_prod: 10.101.0.124
+#  OPAFIOW001HP11:
+#    groupnagios: default
+#    group: haproxy
+#    ip_adm: 127.0.0.1
+#    ip_prod: 127.0.0.1
+#  OPAFIOW001HP09:
+#    groupnagios: default
+#    group: haproxy
+#    ip_adm: 127.0.0.1
+#    ip_prod: 127.0.0.1
+#  OPAFIOW001HP08:
+#    groupnagios: default
+#    group: haproxy
+#    ip_adm: 127.0.0.1
+#    ip_prod: 127.0.0.1
+#  OPAFIOW001HP07:
+#    groupnagios: default
+#    group: haproxy
+#    ip_adm: 127.0.0.1
+#    ip_prod: 127.0.0.1
+#  OPAFIOW001HP11:
+#    groupnagios: default
+#    group: haproxy
+#    ip_adm: 127.0.0.1
+#    ip_prod: 127.0.0.1
+#  OPAFIOW001HP12:
+#    groupnagios: default
+#    group: haproxy
+#    ip_adm: 127.0.0.1
+#    ip_prod: 127.0.0.1

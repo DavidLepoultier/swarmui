@@ -1,0 +1,151 @@
+# GLOBAL vars for G3 Portal Integration platform on Openwatt %ENV%_%PTF% platform
+---
+ENVIRONMENT: "%ENV%"
+PLATFORM: "%PTF%"
+TYPE: "%TYPE%"
+CLOUD: "%CLOUD%"
+
+GOROCO_OPE: G03R04C00
+OPERelease: "{{ GOROCO_OPE }}"
+
+#### Yum Repo ################################################
+YUM_REPO_G02R02C00_STATE: 1
+YUM_REPO_G03R01C00_STATE: 1
+YUM_REPO_STANDARD_LB_STATE: 0
+YUM_REPO_STANDARD_STATE: 0
+YUM_REPO_PULP_OPTIONAL_STATE: 1
+YUM_REPO_EPEL_STATE: 0
+YUM_REPO_PULP_EPEL_STATE: 1
+YUM_REPO_PULP_RDO_STATE: 1
+YUM_REPO_PULP_STATE: 1
+YUM_REPO_PULPMASTER_STATE: 1
+
+YUM_PULP_FQDN: repoyum-central.itn.ftgroup
+YUM_PULP_IP: 10.236.240.170
+
+APTPLATON_SERVER_IP: 10.114.138.51
+REPOYUMCENTRAL_SERVER_IP: 10.236.240.170
+PULPMASTER_SERVER_IP: 10.170.226.87
+ARTIFACTORY_SERVER_IP: 10.170.230.21
+REPOYUMPROTO_SERVER_IP: 10.171.50.130
+
+# proxy settting for ansible get_url module only and for Openwatt ONLY
+ansible_proxy_env:
+  http_proxy: "http://10.236.240.71:3128"
+  https_proxy: "http://10.236.240.71:3128"
+internet_proxyaccess: True
+
+#### Packages ##############################################
+PACKAGES_DIRECTORY: /var/opt/data/flat/ansible/packages
+ANSIBLE_PACKAGES_DIRECTORY: packages
+
+#### DNS HorsPROD ##########################################
+DNS_SERVER_1: 10.236.240.37
+DNS_SERVER_2: 10.236.240.38
+#### DNS PROD ##############################################
+# DNS_SERVER_1: 10.236.56.8
+# DNS_SERVER_2: 10.236.56.9
+
+#### NTP HorsProd ###################################################
+NTP_SERVERS: [ "10.114.0.1" ]
+#### NTP Prod ###################################################
+#NTP_SERVERS: [ "10.114.0.1", "10.236.40.68", "10.113.56.188" ]
+
+#### NFS ###################################################
+NFS_SERVER_IP: 172.16.4.251 
+NFS_PATH_ROOT: /OW_{{ ENVIRONMENT | lower }}_portal_{{ PLATFORM }}
+NFS_LOGS_MOUNT_POINT: /var/opt/data/logs
+NFS_LOGS_SERVER_IP: "{{ NFS_SERVER_IP }}"
+NFS_LOGS_PATH: "{{ NFS_PATH_ROOT }}/{{ TYPE }}{{ ENVIRONMENT }}ALL_LOGS"
+
+#### localogs ##############################################
+LOGS_VG_NAME: infravg
+LOGS_LV_NAME: logs_lv
+LOGS_LV_SIZE: 2g
+LOGS_MOUNT_POINT: /var/opt/data/locallogs
+
+#### MYSQL #################################################
+MYSQL_DB_VERSION: 10.1.13
+
+#### CAPTCHA #############################################
+CAPTCHA_URL: "https://www.google.com/recaptcha/api/siteverify?secret={{CAPTCHA_SECRET_KEY}}&response={response}"
+CAPTCHA_PROXY: "{{ SQUID_PROXY_VIP_ADDR }}:{{ SQUID_PROXY_VIP_PORT }}"
+CAPTCHA_PUBLIC_KEY: 6LfiZ_4SAAAAAMHL8MQrCLHVC1TeWqU-Bv-iPWHr
+CAPTCHA_SECRET_KEY: 6LfiZ_4SAAAAAESCoob5-W3wgg-oVPAJzxVLYS2T
+
+#### Apache ################################################
+APACHE_HTTPD_PACKAGE: PA-APA-APA2215-RDG02R01C10
+APACHE_HTTPD_PACKAGE_RHEL7: PA-APA-APA246-RDG03R01C01
+APACHE_VERSION: apache2215
+APACHE_VERSION_RHEL7: apache246
+
+CRM_SERVER_NAME: "api-crm-{{ TYPE | lower }}{{ CLOUD | lower }}ope{{ PLATFORM }}.itn.intraorange"
+RPPORTAL_DEVELOPER_SERVER_NAME: "developer-{{ TYPE | lower }}{{ CLOUD | lower }}{{ ENVIRONMENT | lower }}{{ PLATFORM }}.itn.intraorange"
+RPPORTAL_PARTNER_SERVER_NAME: "partner-{{ TYPE | lower }}{{ CLOUD | lower }}{{ ENVIRONMENT | lower }}{{ PLATFORM }}.itn.intraorange"
+RPADMIN_ADMIN_PORTAL_SERVER_NAME: "admin-{{ TYPE | lower }}{{ CLOUD | lower }}{{ ENVIRONMENT | lower }}{{ PLATFORM }}.itn.intraorange"
+DASHBOARD_LOGS_SERVER_NAME: "dashboard-{{ TYPE | lower }}{{ CLOUD | lower }}{{ ENVIRONMENT | lower }}{{ PLATFORM }}.itn.intraorange"
+PREVIEW_SERVER_NAME: "prepublish-{{ TYPE | lower }}{{ CLOUD | lower }}{{ ENVIRONMENT | lower }}{{ PLATFORM }}.itn.intraorange"
+ADMIN_SERVER_NAME: "techadmin-{{ TYPE | lower }}{{ CLOUD | lower }}{{ ENVIRONMENT | lower }}{{ PLATFORM }}.itn.intraorange"
+OPE_BACK_SERVER_NAME: "{{ ENVIRONMENT | lower }}-back-{{ TYPE | lower }}{{ CLOUD | lower }}{{ ENVIRONMENT | lower }}{{ PLATFORM }}.itn.intraorange"
+OPE_INTERNAL_SERVER_NAME: "{{ ENVIRONMENT | lower }}{{ PLATFORM }}{{ TYPE | lower }}-owapg2p.api.intraorange"
+OPE_EXTERNAL_SERVER_NAME: "{{ ENVIRONMENT | lower }}{{ PLATFORM }}{{ TYPE | lower }}-www-owapg2p.api.intraorange"
+
+#### IPs ################################################
+CIDR_PROD: "10.100.0.0/24"
+ROUTER_DEFAULT: "10.100.0.1"
+WORDPRESS_VM_PROD_NAT_IP: "{{ HOSTS.%TYPE%%ENV%%CLOUD%0%PTF%DP01.ip_prod }}"
+SUGAR_VM_PROD_NAT_IP: "{{ HOSTS.%TYPE%%ENV%%CLOUD%0%PTF%SL03.ip_prod }}"
+SUGAR_VM_ADMIN_NAT_IP: "{{ HOSTS.%TYPE%%ENV%%CLOUD%0%PTF%SL03.ip_adm }}"
+H07_STATS_NAT_IP: "{{ HOSTS.%TYPE%%ENV%%CLOUD%0%PTF%LB01.ip_adm }}"
+H08_STATS_NAT_IP: "{{ HOSTS.%TYPE%%ENV%%CLOUD%0%PTF%HP08.ip_adm }}"
+H09_STATS_NAT_IP: "{{ HOSTS.%TYPE%%ENV%%CLOUD%0%PTF%LB10.ip_adm }}"
+H11_STATS_NAT_IP: "{{ HOSTS.%TYPE%%ENV%%CLOUD%0%PTF%HP11.ip_adm }}"
+H12_STATS_NAT_IP: "{{ HOSTS.%TYPE%%ENV%%CLOUD%0%PTF%HP12.ip_adm }}"
+H07_PROD_NAT_IP: "{{ HOSTS.%TYPE%%ENV%%CLOUD%0%PTF%LB01.ip_prod }}"
+H08_PROD_NAT_IP: "{{ HOSTS.%TYPE%%ENV%%CLOUD%0%PTF%FP01.ip_prod }}"
+H09_PROD_NAT_IP: "{{ HOSTS.%TYPE%%ENV%%CLOUD%0%PTF%LB10.ip_prod }}"
+H11_PROD_NAT_IP: "{{ HOSTS.%TYPE%%ENV%%CLOUD%0%PTF%HP11.ip_prod }}"
+H12_PROD_NAT_IP: "{{ HOSTS.%TYPE%%ENV%%CLOUD%0%PTF%HP12.ip_prod }}"
+H08_OUTGOING_PROD_IP: "{{ HOSTS.%TYPE%%ENV%%CLOUD%0%PTF%FP01.ip_prod }}"
+RPADMIN_VM_ADMIN_IP: "{{ HOSTS.%TYPE%%ENV%%CLOUD%0%PTF%RP99.ip_adm }}"
+RPADMIN_VM_PROD_IP: "{{ HOSTS.%TYPE%%ENV%%CLOUD%0%PTF%RP99.ip_prod }}"
+ELK_VM_ADMIN_NAT_IP: "{{ HOSTS.%TYPE%%ENV%%CLOUD%0%PTF%EL01.ip_adm }}"
+PPUBLISH_VM_ADMIN_NAT_IP: "{{ HOSTS.%TYPE%%ENV%%CLOUD%0%PTF%PP01.ip_adm }}"
+RPPORTAL01_VM_PROD_IP: "{{ HOSTS.%TYPE%%ENV%%CLOUD%0%PTF%RP01.ip_prod }}"
+RPPORTAL02_VM_PROD_IP: "{{ HOSTS.%TYPE%%ENV%%CLOUD%0%PTF%RP02.ip_prod }}"
+RPPORTAL01_VM_PUB_IP: "{{ HOSTS.%TYPE%%ENV%%CLOUD%0%PTF%RP01.ip_prod }}"
+RPPORTAL02_VM_PUB_IP: "{{ HOSTS.%TYPE%%ENV%%CLOUD%0%PTF%RP02.ip_prod }}"
+SQUID01_VM_PROD_IP: "{{ HOSTS.%TYPE%%ENV%%CLOUD%0%PTF%FP01.ip_prod }}"
+SQUID02_VM_PROD_IP: "{{ HOSTS.%TYPE%%ENV%%CLOUD%0%PTF%FP01.ip_prod }}"
+OPEBACK01_VM_PROD_IP: "{{ HOSTS.%TYPE%%ENV%%CLOUD%0%PTF%AS01.ip_prod }}"
+OPEBACK02_VM_PROD_IP: "{{ HOSTS.%TYPE%%ENV%%CLOUD%0%PTF%AS02.ip_prod }}"
+DEVELOPER01_VM_PROD_IP: "{{ HOSTS.%TYPE%%ENV%%CLOUD%0%PTF%DP01.ip_prod }}"
+DEVELOPER02_VM_PROD_IP: "{{ HOSTS.%TYPE%%ENV%%CLOUD%0%PTF%DP02.ip_prod }}"
+OPEADMIN01_VM_PROD_IP: "{{ HOSTS.%TYPE%%ENV%%CLOUD%0%PTF%AD01.ip_prod }}"
+OPEADMIN02_VM_PROD_IP: "{{ HOSTS.%TYPE%%ENV%%CLOUD%0%PTF%AD02.ip_prod }}"
+
+# Pour palier problème de DNS
+ORANGE_INTERNAL_SERVER_NAME: "{{  ENVIRONMENT  | lower }}internal00in-owapg2p.api.intraorange" #    DNS 
+H13_VM_PROD_NAT_IP: 10.117.161.142
+
+#### Mail service #####################################
+# SMTP_HOST for HorsPROD ########
+SMTP_HOST: fed-appsq.itn.ftgroup
+# SMTP_HOST for PROD ############
+# SMTP_HOST: fed-apps.itn.ftgroup
+SMTP_PORT: 25
+#  WARN about MAIL_FROM value : SMTP "FROM" value must be a known email address in ORANGE AD for FED gateway (created and propagated)
+MAIL_STATUS_FROM: "staging.{{ ENVIRONMENT | lower}}{{ CLOUD | lower }}{{ PLATFORM }}@orange.com"
+#bounce
+MAIL_STATUS_TO: "staging.{{ ENVIRONMENT | lower}}{{ CLOUD | lower }}{{ PLATFORM }}@orange.com"
+#support
+MAIL_SUPPORT_REQUEST_TO: "staging.{{ ENVIRONMENT | lower}}{{ CLOUD | lower }}{{ PLATFORM }}@orange.com"
+MAIL_SUPPORT_EMAIL: "staging.{{ ENVIRONMENT | lower}}{{ CLOUD | lower }}{{ PLATFORM }}@orange.com"
+MAIL_SUPPORT_NAME: Orange Partner team
+SMTP_AUTH: False
+SMTP_USER: ""
+SMTP_PASSWORD: ""
+SMTP_SECURE: ""
+
+#### Backup #####################################
+DEFAULT_BACKUP_DIRECTORY: /var/opt/data/logs/backup

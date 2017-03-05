@@ -1,0 +1,108 @@
+---
+HOSTS:
+  INOPEOW004BK01:
+    group: opeback
+    ip_adm: 192.168.6.23
+    ip_prod: 10.100.0.50
+  INOPEOW004BK02:
+    group: opeback
+    ip_adm: 192.168.6.21
+    ip_prod: 10.100.0.65
+  INOPEOW004RP02:
+    group: rpadmin
+    ip_adm: 192.168.6.15
+    ip_prod: 10.100.0.48
+  INOPEOW004SL03:
+    group: sugar
+    ip_adm: 192.168.6.36
+    ip_prod: 10.100.0.54
+  INOPEOW004CM01:
+    group: wordpress
+    ip_adm: 192.168.6.14
+    ip_prod: 10.100.0.60
+  INOPEOW004AN01:
+    group: ansible
+    ip_adm: 192.168.6.29
+    ip_prod: 10.100.0.55
+  INOPEOW004AS07:
+    group: rpportal
+    ip_adm: 192.168.6.34
+    ip_prod: 10.100.0.67
+    ip_pub: 192.168.7.15
+  INOPEOW004AD02:
+    group: nodejs_adm
+    ip_adm: 192.168.6.16
+    ip_prod: 10.100.0.59
+  INOPEOW004AD01:
+    group: nodejs_adm
+    ip_adm: 192.168.6.32
+    ip_prod: 10.100.0.62
+  INOPEOW004HP09:
+    group: haproxy_opeback
+    ip_adm: 192.168.6.33
+    ip_prod: 10.100.0.69
+  INOPEOW004HP07:
+    group: haproxy_portal
+    ip_adm: 192.168.6.27
+    ip_prod: 10.100.0.53
+    ip_pub: 192.168.7.14
+  INOPEOW004EL01:
+    group: elk
+    ip_adm: 192.168.6.13
+    ip_prod: 10.100.0.63
+  INOPEOW004NA01:
+    group: nagios
+    ip_adm: 192.168.6.25
+    ip_prod: 10.100.0.49
+  INOPEOW004SL04:
+    group: sugardb
+    ip_adm: 192.168.6.28
+    ip_prod: 10.100.0.64
+  INOPEOW004HP12:
+    group: haproxy_opeadm
+    ip_adm: 192.168.6.10
+    ip_prod: 10.100.0.51
+  INOPEOW004BK03:
+    group: opebackdb
+    ip_adm: 192.168.6.18
+    ip_prod: 10.100.0.58
+  INOPEOW004HP08:
+    group: haproxy_squid
+    ip_adm: 192.168.6.17
+    ip_prod: 10.100.0.61
+    ip_pub: 192.168.7.16
+  INOPEOW004AS05:
+    group: squid
+    ip_adm: 192.168.6.20
+    ip_prod: 192.168.7.13
+    ip_pub: 192.168.7.13
+  INOPEOW004AS06:
+    group: squid
+    ip_adm: 192.168.6.35
+    ip_prod: 192.168.7.10
+    ip_pub: 192.168.7.10
+  INOPEOW004PP01:
+    group: nodejs_pp
+    ip_adm: 192.168.6.30
+    ip_prod: 10.100.0.57
+  INOPEOW004AS08:
+    group: rpportal
+    ip_adm: 192.168.6.22
+    ip_prod: 10.100.0.52
+    ip_pub: 192.168.7.17
+  INOPEOW004DP02:
+    group: nodejs_dev
+    ip_adm: 192.168.6.19
+    ip_prod: 10.100.0.68
+  INOPEOW004HP11:
+    group: haproxy_opedev
+    ip_adm: 192.168.6.26
+    ip_prod: 10.100.0.66
+  INOPEOW004CM02:
+    group: wordpressdb
+    ip_adm: 192.168.6.24
+    ip_prod: 10.100.0.71
+  INOPEOW004DP01:
+    group: nodejs_dev
+    ip_adm: 192.168.6.31
+    ip_prod: 10.100.0.70

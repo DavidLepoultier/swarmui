@@ -1,0 +1,87 @@
+---
+########################## RESTORE DB ##########################     
+# OPEBACK
+- hosts: opeback
+  become: yes
+  roles:
+    - { role: stop_all_apps, tags: restore_mysql_db_opeback }
+
+# restore OPEBACK DB
+- hosts: opebackdb
+  become: yes
+  vars:
+    - database_server: "{{ DATABASE_SERVER_NAME }}"
+    - database_name: "{{ DATABASE_NAME }}"
+    - dump_to_restore: "{{ opebackdb_dump_to_restore }}"
+  roles:
+    - { role: restore_mysql_db, tags: restore_mysql_db_opeback } 
+
+# OPEBACK
+- hosts: opeback
+  become: yes
+  roles:
+    - { role: start_all_apps, tags: restore_mysql_db_opeback }
+
+# restore WORDPRESS DB
+- hosts: wordpressdb
+  become: yes
+  vars:
+    - database_server: "{{ DATABASE_SERVER_NAME }}"
+    - database_name: "{{ DATABASE_NAME }}"
+    - dump_to_restore: "{{ wordpressdb_dump_to_restore }}"
+  roles:
+    - { role: restore_mysql_db, tags: restore_mysql_db_wordpress }
+    
+# restore SUGAR DB
+- hosts: sugardb
+  become: yes
+  vars:
+    - database_server: "{{ DATABASE_SERVER_NAME }}"
+    - database_name: "{{ DATABASE_NAME }}"
+    - dump_to_restore: "{{ sugardb_dump_to_restore }}"
+  roles:
+    - { role: restore_mysql_db, tags: restore_mysql_db_sugar }
+    
+
+########################## RESTORE CONTENT ##########################
+
+#restore OPEBACK CONTENT
+- hosts: opeback1
+  vars:
+    - component2rst: OPEBACK_CONTENTS
+    - app2rst: "{{ OPEBACK_CONTENTS_LOCAL_MOUNT_POINT }}"
+    - rights: tomcat:tomcat
+    - tar_to_restore: "{{ back_tar_to_restore }}"
+  roles:
+    - { role: restore_content, tags: restore_content_opeback } 
+    
+#restore FRONT ADMIN PUBLISH CONTENT
+- hosts: nodejs-admin1
+  vars:
+    - component2rst: FRONT-ADM-PUBLISH
+    - app2rst: "{{ NODE_FRONT_PUBLISH_LOCAL_MOUNT_POINT }}"
+    - rights: nodejs:nodejs
+    - tar_to_restore: "{{ front_tar_to_restore }}"
+  roles:
+    - { role: restore_content, tags: restore_content_front_adm_publish }
+    
+#restore FRONT ADMIN PREPUBLISH CONTENT
+- hosts: nodejs-admin1
+  vars:
+    - component2rst: FRONT-ADM-PREPUBLISH
+    - app2rst: "{{ NODE_FRONT_PREPUBLISH_LOCAL_MOUNT_POINT }}"
+    - rights: nodejs:nodejs
+    - tar_to_restore: "{{ frontpp_front_tar_to_restore }}"
+  roles:
+    - { role: restore_content, tags: restore_content_front_adm_prepublish }
+    
+#restore PARTNER CONTENT
+- hosts: wordpress
+  vars:
+    - component2rst: WORDPRESS_UPLOADS
+    - app2rst: "{{ WORDPRESS_UPLOADS_DIR }}"
+    - rights: apache:apache
+    - tar_to_restore: "{{ partner_tar_to_restore }}"
+  roles:
+    - { role: restore_content, tags: restore_content_partner }
+    

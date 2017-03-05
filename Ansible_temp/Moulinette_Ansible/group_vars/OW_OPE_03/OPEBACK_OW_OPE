@@ -1,0 +1,89 @@
+# OPEBACK vars
+---
+OPEBACK_PORT: 8080
+
+# Nagios ######################################################################
+NAGIOS_SERVICE_OPEBCKDB: opebckdb
+SERVICE: "{{ NAGIOS_SERVICE_OPEBCKDB }}"
+
+OPEBACK_PLATFORM_NAME: OW_OPE3
+OPEBACK_ADMIN_USERS_DEFAULT: tlwx8588,myqr8732,rqpw0618,oslu6214,nmtv3386,wdhn3644
+OPEBACK_WAR_FILE: "/images/OPE/{{ OPERelease }}/ope-back.war"
+OPERelease: "{{ GOROCO_OPE }}"
+OPEBACK_DBINIT_FILE: "/images/{{ ENVIRONMENT }}/{{ OPERelease }}/Common/db/{{ OPERelease }}/init/create_{{ OPERelease }}.sql"
+OPEBACK_DBUPDATE_PATH: "/images/{{ ENVIRONMENT }}/{{ OPERelease }}/Common/db/{{ GOROCO_DIR }}/update/"
+OPEBACK_DBUPDATE_FILE: "sql_list_{{ ENVIRONMENT }}.yml"
+
+INTERNAL_APIS_LOGIN: 2sfyUcAxP5me39jSkOcNtZoGzqG07G1l
+INTERNAL_APIS_PASSWORD: uMUrRcQhHKMS1bCg
+STATUS_EXTERNAL_LOGIN: VtVHqfPBowy2mkJS3narkBMZw2WJAwmL
+STATUS_EXTERNAL_PASSWORD: gnrfYNPRHBG4saI2
+STATUS_EXTERNAL_PROXY: "{{ SQUID_PROXY_VIP_ADDR }}:{{ SQUID_PROXY_VIP_PORT }}"
+PROVISIONING_PROXY: ""
+
+OPE_REQUEST_READ_TIMEOUT: 23000
+OPE_REQUEST_TIMEOUT: 3000
+
+M39_VM_PROD_IP: "{{ OPEBACK01_VM_PROD_IP }}"
+
+#### APIGEE #####################################################################
+APIGEE_OPEBACK_ENDPOINT: "https://{{ OPE_INTERNAL_SERVER_NAME }}:444/ope-back/OW_OPE_03/v1"
+APIGEE_OPEBACK_OAUTH: "https://{{ OPE_INTERNAL_SERVER_NAME }}:444/oauth/v2"
+APIGEE_API_PROXY: ""
+APIGEE_API_ENDPOINT: "https://{{ OPE_INTERNAL_SERVER_NAME }}:444/apigee/v1"
+APIGEE_API_ORGANIZATION: ope_ow3
+APIGEE_API_ENVIRONMENT: prod
+APIGEE_API_LOGIN: "{{ INTERNAL_APIS_LOGIN }}"
+APIGEE_API_PWD: "{{ INTERNAL_APIS_PASSWORD }}"
+
+#### FRONT BACKEND URL ##########################################################
+FRONT_BACKEND_URL: "{{ APIGEE_OPEBACK_ENDPOINT }}"
+FRONT_BACKEND_TOKEN_URL: "{{ APIGEE_OPEBACK_OAUTH }}/token?user_id="
+FRONT_BACKEND_KEY: "{{ INTERNAL_APIS_LOGIN }}"
+FRONT_BACKEND_SECRET: "{{ INTERNAL_APIS_PASSWORD }}"
+
+#### SUGAR ######################################################################
+SUGAR_API_ENDPOINT: "http://{{ SUGAR_VM_PROD_NAT_IP }}"
+SUGAR_API_PROXY: ""
+SUGAR_API_DEVELOPER_LOGIN: dev portal
+SUGAR_API_DEVELOPER_MD5PWD: 4AE97EB4A03103AF7ACB3C4FDC0872F9
+SUGAR_API_PARTNER_LOGIN: wordpress
+SUGAR_API_PARTNER_MD5PWD: 56DB7235B655565456CDD480BCD8FF00
+
+#### OIDC #######################################################################
+OIDC_ENDPOINT: "https://{{ OPE_INTERNAL_SERVER_NAME }}:444/oidc/admin/v4"
+OIDC_PROXY: ""
+OIDC_LOGIN: "{{ INTERNAL_APIS_LOGIN }}"
+OIDC_PASSWORD: "{{ INTERNAL_APIS_PASSWORD }}"
+
+#### OPEBCKDB ###################################################################
+DATABASE_SERVER_IP: 10.100.0.101
+DATABASE_NAME: ope
+DATABASE_USERNAME: "{{ DATABASE_NAME }}update"
+DATABASE_PASSWORD: "{{ DATABASE_NAME }}update"
+DATABASE_SERVER_NAME: mydbsrvm53
+DATABASE_MAX_CONNECTIONS: 151
+#
+OPEBACK_DATABASE_HOST: "{{ DATABASE_SERVER_IP }}"
+OPEBACK_DATABASE_PORT: 3306
+OPEBACK_DATABASE_BASENAME: "{{ DATABASE_NAME }}"
+OPEBACK_DATABASE_USER: "{{ DATABASE_NAME }}update"
+OPEBACK_DATABASE_PWD: "{{ DATABASE_NAME }}update"
+OPEBACK_DATABASE_MAX_ACTIVE: 50
+OPEBACK_DATABASE_MAX_IDLE: 30
+OPEBACK_DATABASE_AUTO: validate
+
+#### NFS ########################################################################
+OPEBACK_CONTENTS_LOCAL_MOUNT_POINT: /var/opt/data/flat/opebackcontents
+NFS_OPEBACK_CONTENTS_SERVER_IP: "{{ NFS_SERVER_IP }}"
+NFS_OPEBACK_CONTENTS_PATH: "{{ NFS_PATH_ROOT }}/INOP3ALL_BACK"
+
+#### TOMCAT #####################################################################
+TOMCAT_BASEDIR: /opt/tomcat
+TOMCAT_PACKAGE: apache-tomcat-8.0.28
+TOMCAT_WEBAPPS_DIR: /var/opt/data/flat/tomcat_webapps
+TOMCAT_WORK_DIR: /var/opt/data/flat/tomcat_work
+
+
+
+

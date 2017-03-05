@@ -1,0 +1,82 @@
+---
+HOSTS:
+  asec-test:
+    group: 
+    ip_adm: 
+    ip_prod: 10.100.0.109
+  INAFIOW000AS02:
+    group: opeback
+    ip_adm: 192.168.6.114
+    ip_prod: 10.100.0.90
+  INAFIOW000AS01:
+    group: opeback
+    ip_adm: 192.168.6.112
+    ip_prod: 10.100.0.92
+  INAFIOW000FP01:
+    group: squid
+    ip_adm: 192.168.6.123
+    ip_prod: 10.100.0.85
+  INAFIOW000RP02:
+    group: rpportal
+    ip_adm: 192.168.6.128
+    ip_prod: 10.100.0.107
+  INAFIOW000RP01:
+    group: rpportal
+    ip_adm: 192.168.6.127
+    ip_prod: 10.100.0.103
+  INAFIOW000DB03:
+    group: opebackdb
+    ip_adm: 192.168.6.129
+    ip_prod: 10.100.0.104
+  INAFIOW000DB02:
+    group: opebackdb
+    ip_adm: 192.168.6.121
+    ip_prod: 10.100.0.108
+  INAFIOW000DB01:
+    group: opebackdb
+    ip_adm: 192.168.6.124
+    ip_prod: 10.100.0.98
+  INAFIOW000AD02:
+    group: nodejs_adm
+    ip_adm: 192.168.6.115
+    ip_prod: 10.100.0.95
+  INAFIOW000AD01:
+    group: nodejs_adm
+    ip_adm: 192.168.6.130
+    ip_prod: 10.100.0.91
+  INAFIOW000DP02:
+    group: nodejs_dev
+    ip_adm: 192.168.6.116
+    ip_prod: 10.100.0.93
+  INAFIOW000DP01:
+    group: nodejs_dev
+    ip_adm: 192.168.6.122
+    ip_prod: 10.100.0.94
+  INAFIOW000PP01:
+    group: nodejs_pp
+    ip_adm: 192.168.6.118
+    ip_prod: 10.100.0.97
+  INAFIOW000RP99:
+    group: rpadmin
+    ip_adm: 192.168.6.113
+    ip_prod: 10.100.0.88
+  INAFIOW000AN01:
+    group: ansible
+    ip_adm: 192.168.6.117
+    ip_prod: 10.100.0.96
+  INAFIOW000HP11:
+    group: none
+    ip_adm: 127.0.0.1
+    ip_prod: 127.0.0.1
+  INAFIOW000HP12:
+    group: none
+    ip_adm: 127.0.0.1
+    ip_prod: 127.0.0.1
+  INAFIOW000HP08:
+    group: none
+    ip_adm: 127.0.0.1
+    ip_prod: 127.0.0.1
+  INAFIOW000HP09:
+    group: none
+    ip_adm: 127.0.0.1
+    ip_prod: 127.0.0.1

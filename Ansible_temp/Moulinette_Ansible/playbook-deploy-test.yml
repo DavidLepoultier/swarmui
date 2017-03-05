@@ -1,0 +1,9 @@
+---
+- hosts: nodejs_dev
+  roles:
+    - { role: deploy_test_front, front_type: dev }
+
+- hosts: nodejs_admin
+  roles:
+    - { role: deploy_test_front, front_type: admin }
+

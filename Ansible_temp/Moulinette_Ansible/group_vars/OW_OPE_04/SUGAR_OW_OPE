@@ -1,0 +1,58 @@
+# SUGAR vars
+---
+# SUGARCRM #####################################################################
+SUGAR_PORT: 80
+HTTP_START_SERVERS: 10
+
+PHP_ZEND_PACKAGE: PA-PPH-ZND55R6-RDG02R02C03
+
+SUGAR_WWW_LOCAL_MOUNT_POINT: /var/opt/data/flat/sugardoc
+SUGAR_WEBAPPS_DIR: "{{ WORDPRESS_WWW_LOCAL_MOUNT_POINT }}"
+SUGAR_WEBAPPS_VG_NAME: infravg
+SUGAR_WEBAPPS_LV_NAME: webapps_lv
+SUGAR_WEBAPPS_LV_SIZE: 1g
+NFS_SUGAR_SERVER_IP: "{{ NFS_SERVER_IP }}"
+NFS_SUGAR_DATA_PATH: "{{ NFS_PATH_ROOT }}/INOP3ALL_CRMIMG"
+
+
+# MEMCACHED ########################################################################
+MEMCACHED_PORT: 11211
+
+#### Apache #####################################################
+APACHE_HTTPD_INSTANCE_NAME: sugarhttp
+APACHE_APPLI_TYPE: PHP
+APACHE_INSTANCE_VERSION: G01R00C00
+APACHE_WORKER: Y
+APACHE_USE_HTTP: Y
+APACHE_HTTP_PORT: 80
+APACHE_USE_HTTPS: N
+APACHE_HTTPS_PORT: NA
+APACHE_AJP_PORT: 9000
+APACHE_SIZE: 100
+APACHE_HTTPD_IF: eth1
+my_apache_hostname: "{{ inventory_hostname }}"
+APACHE_USER: apache
+APACHE_GROUP: apache
+
+
+# SUGARDB ######################################################################
+DATABASE_SERVER_IP: "{{ HOSTS.INOPEOW004SL04.ip_prod }}"
+DATABASE_NAME: sugarcrmdb
+DATABASE_USERNAME: "{{ DATABASE_NAME }}update"
+DATABASE_PASSWORD: "{{ DATABASE_NAME }}update"
+DATABASE_SERVER_NAME: mysqlsrv
+DATABASE_MAX_CONNECTIONS: 151
+#### NFS ##########################################################################
+NFS_SUGAR_MYSQL_SERVER_IP: "{{ NFS_SERVER_IP }}"
+NFS_SUGAR_MYSQL_DATA_DIR: "/myqdata/{{ DATABASE_SERVER_NAME }}/data"
+NFS_SUGAR_MYSQL_LOG_DIR: "/myqdata/{{ DATABASE_SERVER_NAME }}/log"
+NFS_SUGAR_MYSQL_TMP_DIR: "/myqdata/{{ DATABASE_SERVER_NAME }}/tmp"
+NFS_SUGAR_MYSQL_BACKUP_DIR: /myqdata/backup
+NFS_SUGAR_MYSQL_DATA_PATH: "{{ NFS_PATH_ROOT }}/INOP3ALL_CRMDB_DATA"
+NFS_SUGAR_MYSQL_LOG_PATH: "{{ NFS_PATH_ROOT }}/INOP3ALL_CRMDB_LOG"
+NFS_SUGAR_MYSQL_TMP_PATH: "{{ NFS_PATH_ROOT }}/INOP3ALL_CRMDB_TMP"
+NFS_SUGAR_MYSQL_BACKUP_PATH: "{{ NFS_PATH_ROOT }}/INOP3ALL_CRMDB_BACKUP"
+
+# NAGIOS #######################################################################
+NAGIOS_SERVICE_SUGARDB: sugardb
+SERVICE: "{{ NAGIOS_SERVICE_SUGARDB }}"

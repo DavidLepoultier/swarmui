@@ -1,0 +1,7 @@
+# WORDPRESS vars
+---
+# WORDPRESS ########################################################################
+
+### JIRA APIOPE-334
+WORDPRESS_UPLOADS_LV_SIZE: 2.7g
+

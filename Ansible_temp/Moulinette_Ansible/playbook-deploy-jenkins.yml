@@ -1,0 +1,17 @@
+---
+- hosts: ansible
+  become: yes
+
+  vars:
+    proxy_host: 10.236.240.71
+    proxy_port: 3128
+    proxy_login: ""
+    proxy_password: ""
+    proxy_env:
+      http_proxy: http://{{ proxy_host }}:{{ proxy_port }}
+      https_proxy: http://{{ proxy_host }}:{{ proxy_port }}
+
+  roles: 
+  - { role: orange_repos, tags: orange.repos } 
+  - { role: orange.openjdk, tags: orange.openjdk } 
+  - { role: orange.jenkins, tags: orange.jenkins }

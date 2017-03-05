@@ -1,0 +1,147 @@
+# GLOBAL vars for G3 Portal Integration platform on Openwatt OPE_03 platform
+---
+ENVIRONMENT: OPE
+PLATFORM: "03"
+TYPE: "IN"
+CLOUD: "OW"
+
+
+#### Yum Repo ################################################
+YUM_REPO_G02R02C00_STATE: 1
+YUM_REPO_STANDARD_LB_STATE: 0
+YUM_REPO_STANDARD_STATE: 0
+YUM_REPO_PULP_OPTIONAL_STATE: 1
+YUM_REPO_PULP_EPEL_STATE: 1
+YUM_REPO_PULP_RDO_STATE: 0
+YUM_REPO_PULP_STATE: 1
+
+YUM_PULP_FQDN: repoyum-central.itn.ftgroup
+YUM_PULP_IP: 10.236.240.170
+
+#### FILER NFS ###############################################
+FILER_HOST_IP: 172.16.4.251
+
+#### Packages ##############################################
+ANSIBLE_PACKAGES_DIRECTORY: /var/opt/data/flat/ansible/git-integration/Ansible/packages
+
+#### NFS ###################################################
+NFS_SERVER_IP: 172.16.4.251
+NFS_PATH_ROOT: /OW_ope_portal_isop
+NFS_LOGS_MOUNT_POINT: /var/opt/data/logs
+NFS_LOGS_SERVER_IP: "{{ NFS_SERVER_IP }}"
+NFS_LOGS_PATH: "{{ NFS_PATH_ROOT }}/INOP3ALL_LOGS"
+
+#### MYSQL #################################################
+MYSQL_DB_PACKAGE: PA-MYQ-6CE5612-RDG09R00C01
+MYSQL_DB_VERSION: 5.6.12
+
+#### Apache ################################################
+APACHE_HTTPD_PACKAGE: PA-APA-APA2215-RDG02R01C10
+APACHE_HTTPD_PACKAGE_RHEL7: PA-APA-APA246-RDG03R01C01
+APACHE_VERSION: apache2215
+APACHE_VERSION_RHEL7: apache246
+
+#### CAPTCHA #############################################
+CAPTCHA_URL: "https://www.google.com/recaptcha/api/siteverify?secret={{CAPTCHA_SECRET_KEY}}&response={response}"
+CAPTCHA_PROXY: "{{ SQUID_PROXY_VIP_ADDR }}:{{ SQUID_PROXY_VIP_PORT }}"
+CAPTCHA_PUBLIC_KEY: 6LfiZ_4SAAAAAMHL8MQrCLHVC1TeWqU-Bv-iPWHr
+CAPTCHA_SECRET_KEY: 6LfiZ_4SAAAAAESCoob5-W3wgg-oVPAJzxVLYS2T
+
+#### IPs ################################################
+SUGAR_VM_PROD_NAT_IP: 10.100.0.93
+WORDPRESS_VM_PROD_NAT_IP: 10.100.0.95
+OPEBACK01_VM_PROD_IP: 10.100.0.83
+
+# Pour palier problème de DNS
+ORANGE_INTERNAL_SERVER_NAME: api-owope1.itn.ftgroup
+H13_VM_PROD_NAT_IP: 10.236.246.225
+
+#### Mail service #####################################
+SMTP_HOST: 10.117.24.20
+SMTP_PORT: 25
+MAIL_STATUS_FROM: staging.opeow03@orange.com
+MAIL_STATUS_TO: staging.opeow03@orange.com
+MAIL_WORDPRESS_FROM: staging.opeow03@orange.com
+MAIL_WORDPRESS_TO: staging.opeow03@orange.com
+MAIL_SUPPORT_REQUEST_TO: staging.opeow03@orange.com
+MAIL_SUPPORT_EMAIL: staging.opeow03@orange.com
+MAIL_SUPPORT_NAME: Orange Partner team
+SMTP_AUTH: False
+SMTP_USER: ""
+SMTP_PASSWORD: ""
+SMTP_SECURE: ""
+
+#### Backup #####################################
+DEFAULT_BACKUP_DIRECTORY: /var/opt/data/logs/backup
+
+RPPORTAL_PARTNER_SERVER_NAME: partner-owope03.itn.ftgroup
+RPPORTAL_DEVELOPER_SERVER_NAME: developer-owope03.itn.ftgroup
+RPADMIN_ADMIN_PORTAL_SERVER_NAME: admin-ope-owope03.itn.ftgroup
+OPE_INTERNAL_SERVER_NAME: ope-internal-owope1.itn.ftgroup
+DEVELOPER_PORTAL_SERVER_NAME: "{{ RPPORTAL_DEVELOPER_SERVER_NAME }}"
+PARTNER_PORTAL_SERVER_NAME: "{{ RPPORTAL_PARTNER_SERVER_NAME }}"
+HTACCESS_FILTER: false
+
+#### Apache ################################################
+APACHE_VERSION: apache2215
+APACHE_VERSION_RHEL7: apache246
+
+#### Nagios ##################################################
+NAGIOS_ADMIN_PASSWD: $apr1$I5hzl2kB$8rSsfjj5dl15ud5QA/eko1
+NAGIOS_ADM_PORT: 8080
+NAGIOS_HOST_GROUPS:
+  nodejs:
+    group: nodejs
+    hosts: inopeow003ad01,inopeow003ad02,inopeow003pp01,inopeow003dp01,inopeow003dp02
+  nagios: 
+    group: nagios
+    hosts: inopeow003na01
+  ansible: 
+    group: ansible
+    hosts: inopeow003an01
+  opeback: 
+    group: opeback
+    hosts: inopeow003bk01,inopeow003bk02
+  opebckdb: 
+    group: opebckdb
+    hosts: inopeow003bk03
+  rpportal: 
+    group: rpportal
+    hosts: inopeow003as07,inopeow003as08
+  rpadmin:
+    group: rpadmin
+    hosts: inopeow003rp02
+  sugarcrm: 
+    group: sugarcrm
+    hosts: inopeow003sl03
+  sugardb:
+    group: sugardb
+    hosts: inopeow003sl04
+  squid: 
+    group: squid
+    hosts: inopeow003as05,inopeow003as06
+  wordpress: 
+    group: wordpress
+    hosts: inopeow003cm01
+  wordpressdb: 
+    group: wordpressdb
+    hosts: inopeow003cm02
+  haproxy_rpportal: 
+    group: haproxy_rpportal
+    hosts: inopeow003hp07
+  haproxy_squid: 
+    group: haproxy_squid
+    hosts: inopeow003hp08
+  haproxy_opeback: 
+    group: haproxy_opeback
+    hosts: inopeow003hp09
+  haproxy_opedev: 
+    group: haproxy_opedev
+    hosts: inopeow003hp11
+  haproxy_opeadm: 
+    group: haproxy_opeadm
+    hosts: inopeow003hp12
+  elk: 
+    group: elk
+    hosts: inopeow003el01
+

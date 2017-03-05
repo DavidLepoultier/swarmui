@@ -1,0 +1,36 @@
+# OPEBACK vars
+---
+OPEBACK_PORT: 8080
+
+# OPEBCKDB ######################################################################
+DATABASE_SERVER_IP: "{{ HOSTS.%TYPE%%ENV%OW0%PTF%BK03.ip_prod }}"
+DATABASE_NAME: ope
+DATABASE_USERNAME: "{{ DATABASE_NAME }}update"
+DATABASE_PASSWORD: "{{ DATABASE_NAME }}update"
+DATABASE_SERVER_NAME: mydbsrvm53
+DATABASE_MAX_CONNECTIONS: 151
+#### NFS ########################################################################
+NFS_BACK_MYSQL_SERVER_IP: "{{ NFS_SERVER_IP }}"
+NFS_BACK_MYSQL_DATA_DIR: "/myqdata/{{ DATABASE_SERVER_NAME }}/data"
+NFS_BACK_MYSQL_LOG_DIR: "/myqdata/{{ DATABASE_SERVER_NAME }}/log"
+NFS_BACK_MYSQL_TMP_DIR: "/myqdata/{{ DATABASE_SERVER_NAME }}/tmp"
+NFS_BACK_MYSQL_BACKUP_DIR: /myqdata/backup
+NFS_BACK_MYSQL_DATA_PATH: "{{ NFS_PATH_ROOT }}/INOP3ALL_BACKDB_DATA"
+NFS_BACK_MYSQL_LOG_PATH: "{{ NFS_PATH_ROOT }}/INOP3ALL_BACKDB_LOG"
+NFS_BACK_MYSQL_TMP_PATH: "{{ NFS_PATH_ROOT }}/INOP3ALL_BACKDB_TMP"
+NFS_BACK_MYSQL_BACKUP_PATH: "{{ NFS_PATH_ROOT }}/INOP3ALL_BACKDB_BACKUP"
+#### TOMCAT #####################################################################
+TOMCAT_BASEDIR: /opt/tomcat
+TOMCAT_PACKAGE: apache-tomcat-8.0.28
+TOMCAT_WEBAPPS_DIR: /var/opt/data/flat/tomcat_webapps
+TOMCAT_WORK_DIR: /var/opt/data/flat/tomcat_work
+TOMCAT_WEBAPPS_VG_NAME: infravg
+TOMCAT_WEBAPPS_LV_NAME: webapps_lv
+TOMCAT_WEBAPPS_LV_SIZE: 1g
+TOMCAT_WORK_VG_NAME: infravg
+TOMCAT_WORK_LV_NAME: work_lv
+TOMCAT_WORK_LV_SIZE: 1g
+
+#### NAGIOS #####################################################################
+NAGIOS_SERVICE_OPEBCKDB: opebckdb
+SERVICE: "{{ NAGIOS_SERVICE_OPEBCKDB }}"

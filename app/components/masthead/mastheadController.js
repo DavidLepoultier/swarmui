@@ -1,6 +1,6 @@
 angular.module('masthead', [])
-.controller('MastheadController', ['$scope', 'Settings', 'Version', 'ConsulPrimarySwarm', '$uibModal',
-  function ($scope, Settings, Version, ConsulPrimarySwarm, $uibModal) {
+.controller('MastheadController', ['$scope', '$rootScope', 'Settings', 'Version', '$uibModal', 'Roles', 'Playbooks',
+  function ($scope, $rootScope, Settings, Version, $uibModal, Roles, Playbooks) {
     $scope.template = 'app/components/masthead/masthead.html';
     $scope.showNetworksVolumes = false;
     $scope.dashOn = false;
@@ -16,6 +16,28 @@ angular.module('masthead', [])
       $scope.dashOn = true;
     }
     
+    $rootScope.$on("CallRoles", function(){
+      $scope.roles();
+    });
+
+    $rootScope.$on("CallPlaybooks", function(){
+      $scope.playbooks();
+    });
+
+    $scope.roles = function() {
+      Roles.get({}, function (d){
+        $rootScope.numRoles = d.length;
+        $rootScope.dataRoles = d;
+      });    
+    };
+
+    $scope.playbooks = function () {
+      Playbooks.get({}, function (d){
+        $rootScope.numPlaybooks = d.length;
+        $rootScope.dataPlaybooks = d;
+      });
+    };
+
     $scope.updateMasthead = function(page) {
       var containerWrapperName="#navbar_000";
       var totalDashElem=5+1;
@@ -27,13 +49,6 @@ angular.module('masthead', [])
       }
       $(containerWrapperName+currentContainer).addClass('active');
     };
-
-    ConsulPrimarySwarm.get({}, function (d){
-      var url = atob(d[0].Value); 
-      Version.get({node: url}, function (d) {
-        $scope.docker = d;
-      });
-    });
 
     $scope.open = function () {
       var modalInstance = $uibModal.open({

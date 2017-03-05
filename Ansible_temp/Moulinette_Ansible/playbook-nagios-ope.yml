@@ -1,0 +1,59 @@
+---
+- hosts: ope_hosts
+  roles:
+    - { role: configure-yum-repository, tags: configure-yum-repository yum-repo }
+    - { role: install-nagios-nrpe-all, tags: install-nagios-nrpe-all nagios-nrpe nagios }
+    - { role: configure-nagios-nrpe-all, tags: configure-nagios-nrpe-all nagios-nrpe nagios }
+
+- hosts: nodejs
+  roles:
+    - { role: configure-nagios-nrpe-nodejs, tags: configure-nagios-nrpe-nodejs nagios-nodejs nagios }
+
+- hosts: opeback
+  roles:
+    - { role: configure-nagios-nrpe-opeback, tags: configure-nagios-nrpe-opeback nagios-opeback nagios-nrpe nagios }
+
+- hosts: opebckdb
+  roles:
+    - { role: configure-nagios-nrpe-db, tags: configure-nagios-nrpe-db nagios-opeback nagios-nrpe nagios }
+
+- hosts: rpportal
+  roles:
+    - { role: configure-nagios-nrpe-rpportal, tags: configure-nagios-nrpe-rpportal nagios-rpportal nagios-nrpe nagios }
+
+- hosts: rpadmin
+  roles:
+    - { role: configure-nagios-nrpe-rpadmin, tags: configure-nagios-nrpe-rpadmin nagios-rpadmin nagios-nrpe nagios }
+
+- hosts: sugarcrm
+  roles:
+    - { role: configure-nagios-nrpe-sugar, tags: configure-nagios-nrpe-sugar nagios-sugar nagios-nrpe nagios }
+
+- hosts: sugardb
+  roles:
+    - { role: configure-nagios-nrpe-db, tags: configure-nagios-nrpe-db nagios-sugar nagios-nrpe nagios }
+
+- hosts: wordprs
+  roles:
+    - { role: configure-nagios-nrpe-wordpress, tags: configure-nagios-nrpe-wordpress nagios-wordpress nagios-nrpe nagios }
+
+- hosts: wordpressdb
+  roles:
+    - { role: configure-nagios-nrpe-db, tags: configure-nagios-nrpe-db nagios-wordpress nagios-nrpe nagios }
+
+- hosts: haproxy
+  roles:
+    - { role: configure-nagios-nrpe-haproxy, tags: configure-nagios-nrpe-haproxy nagios-haproxy nagios-nrpe nagios }
+
+- hosts: squid
+  roles:
+    - { role: configure-nagios-nrpe-squid, tags: configure-nagios-nrpe-squid nagios-squid nagios-nrpe nagios }
+
+- hosts: elk
+  roles:
+    - { role: configure-nagios-nrpe-elk, tags: configure-nagios-nrpe-elk nagios-elk nagios-nrpe nagios }
+
+- hosts: nagios
+  roles: 
+    - { role: install-nagios-server, tags: install-nagios-server nagios-server nagios }
+    - { role: configure-nagios-common-server, tags: configure-nagios-common-server nagios-server nagios }

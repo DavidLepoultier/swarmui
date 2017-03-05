@@ -8,6 +8,10 @@ function ImageViewModel(data) {
     this.VirtualSize = data.VirtualSize;
 }
 
+function RolesViewModel(data) {
+    this.Roles = data;
+}
+
 function ContainerViewModel(data) {
     this.Id = data.Id;
     this.Image = data.Image;

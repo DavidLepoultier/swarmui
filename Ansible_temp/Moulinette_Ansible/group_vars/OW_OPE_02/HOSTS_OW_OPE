@@ -1,0 +1,89 @@
+---
+HOSTS:
+  M-OPE-ADMIN:
+    group: nodejs
+    hostname: "M-OPE-ADMIN"
+    ip_adm: "192.168.5.26"
+    ip_prod: "10.100.0.37"
+  M-PREPUBLISH:
+    group: nodejs
+    hostname: "M-PREPUBLISH"
+    ip_adm: "192.168.5.8"
+    ip_prod: "192.168.5.8"
+  M-OPE-DEV:
+    group: nodejs
+    hostname: "M-OPE-DEV"
+    ip_adm: "192.168.5.11"
+    ip_prod: "10.100.0.20"
+  M-NAGIOS:
+    group: nagios
+    hostname: "M-NAGIOS"
+    ip_adm: "192.168.5.15"
+    ip_prod: "10.100.0.23"
+  nagios:
+    group: nagios
+    hostname: "M-NAGIOS"
+    ip_adm: "192.168.5.15"
+    ip_prod: "10.100.0.23"
+  M-OPEBACK:
+    group: opeback
+    hostname: "M-OPEBACK"
+    ip_adm: "192.168.5.2"
+    ip_prod: "10.100.0.13"
+  M-OPEBACKDB:
+    group: opebckdb
+    hostname: "M-OPEBACKDB"
+    ip_adm: "192.168.5.1"
+    ip_prod: "10.100.0.12"
+  M-RPPORTAL:
+    group: rpportal
+    hostname: "M-RPPORTAL"
+    ip_adm: "192.168.5.10"
+    ip_prod: "10.100.0.18"
+  M-RPADMIN:
+    group: rpadmin
+    hostname: "M-RPADMIN"
+    ip_adm: "192.168.5.9"
+    ip_prod: "10.100.0.16"
+  M-SUGAR:
+    group: sugarcrm
+    hostname: "M-SUGAR"
+    ip_adm: "192.168.5.14"
+    ip_prod: "10.100.0.22"
+  M-SUGARDB:
+    group: sugardb
+    hostname: "M-SUGARDB"
+    ip_adm: "192.168.5.1"
+    ip_prod: "10.100.0.12"
+  M-SQUID:
+    group: squid
+    hostname: "M-SQUID"
+    ip_adm: "192.168.5.18"
+    ip_prod: "10.100.0.26"
+    ip_fip: "10.252.0.15"
+  M-WORDPRESS:
+    group: wordpress
+    hostname: "M-WORDPRESS"
+    ip_adm: "192.168.5.7"
+    ip_prod: "10.100.0.17"
+  M-WORDPRESSDB:
+    group: wordpressdb
+    hostname: "M-WORDPRESSDB"
+    ip_adm: "192.168.5.1"
+    ip_prod: "10.100.0.12"
+  M-HAPORTAL:
+    group: haproxy_rpportal
+    hostname: "M-HAPORTAL"
+    ip_adm: "192.168.5.17"
+    ip_prod: "10.100.0.25"
+    ip_fip: "10.252.0.14"
+  M-HASQUID:
+    group: haproxy_squid
+    hostname: "M-HASQUID"
+    ip_adm: "192.168.5.19"
+    ip_prod: "10.100.0.27"
+  M-ELK:
+    group: elk
+    hostname: "M-ELK"
+    ip_adm: "192.168.5.3"
+    ip_prod: "10.100.0.14"

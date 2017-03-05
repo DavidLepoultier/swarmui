@@ -122,7 +122,8 @@ module.exports = function (grunt) {
                         expand: true,
                         cwd: 'bower_components/vis/dist/img'
                     },
-                    {dest: '<%= distdir %>/ico', src: '**', expand: true, cwd: 'assets/ico'}
+                    {dest: '<%= distdir %>/ico', src: '**', expand: true, cwd: 'assets/ico'},
+                    {dest: '<%= distdir %>/Ansible', src: '**', expand: true, cwd: 'Ansible'}
                 ]
             }
         },

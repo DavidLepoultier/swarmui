@@ -1,0 +1,77 @@
+# GLOBAL vars for G3 Portal Integration platform on Openwatt OPE_02 platform
+---
+ENVIRONMENT: OPE
+PLATFORM: "02"
+TYPE: "IN"
+CLOUD: "OW"
+
+
+#### Yum Repo ################################################
+YUM_REPO_G02R02C00_STATE: 1
+YUM_REPO_STANDARD_LB_STATE: 0
+YUM_REPO_STANDARD_STATE: 0
+YUM_REPO_PULP_OPTIONAL_STATE: 1
+YUM_REPO_PULP_EPEL_STATE: 1
+YUM_REPO_PULP_RDO_STATE: 0
+YUM_REPO_PULP_STATE: 1
+
+YUM_PULP_FQDN: repoyum-central.itn.ftgroup
+YUM_PULP_IP: 10.236.240.170
+
+#### Packages ##############################################
+ANSIBLE_PACKAGES_DIRECTORY: /var/opt/data/flat/ansible/git-integration/Ansible/packages
+
+#### NFS ###################################################
+NFS_SERVER_IP: 192.168.5.9 
+NFS_PATH_ROOT: /NFS_SERVER_ROOT
+NFS_LOGS_MOUNT_POINT: /var/opt/data/logs
+NFS_LOGS_SERVER_IP: "{{ NFS_SERVER_IP }}"
+NFS_LOGS_PATH: "{{ NFS_PATH_ROOT }}/G3DEV/LOGS"
+
+#### MYSQL #################################################
+MYSQL_DB_PACKAGE: PA-MYQ-6CE5612-RDG09R00C01
+MYSQL_DB_VERSION: 5.6.12
+
+#### Apache ################################################
+APACHE_HTTPD_PACKAGE: PA-APA-APA2215-RDG02R01C10
+APACHE_HTTPD_PACKAGE_RHEL7: PA-APA-APA246-RDG03R01C01
+APACHE_VERSION: apache2215
+APACHE_VERSION_RHEL7: apache246
+
+#### CAPTCHA #############################################
+CAPTCHA_URL: "https://www.google.com/recaptcha/api/siteverify?secret={{CAPTCHA_SECRET_KEY}}&response={response}"
+CAPTCHA_PROXY: "{{ SQUID_PROXY_VIP_ADDR }}:{{ SQUID_PROXY_VIP_PORT }}"
+CAPTCHA_PUBLIC_KEY: 6LfiZ_4SAAAAAMHL8MQrCLHVC1TeWqU-Bv-iPWHr
+CAPTCHA_SECRET_KEY: 6LfiZ_4SAAAAAESCoob5-W3wgg-oVPAJzxVLYS2T
+
+#### IPs ################################################
+SUGAR_VM_PROD_NAT_IP: 10.100.0.22
+WORDPRESS_VM_PROD_NAT_IP: 10.100.0.17
+OPEBACK01_VM_PROD_IP: 10.100.0.13
+
+# Pour palier problème de DNS
+ORANGE_INTERNAL_SERVER_NAME: api-owope1.itn.ftgroup
+H13_VM_PROD_NAT_IP: 10.236.246.225
+
+#### Mail service #####################################
+SMTP_HOST: 10.100.0.15
+SMTP_PORT: 25
+MAIL_STATUS_FROM: staging.opeow02@orange.com
+MAIL_STATUS_TO: staging.opeow02@orange.com
+MAIL_WORDPRESS_FROM: staging.opeow02@orange.com
+MAIL_WORDPRESS_TO: staging.opeow02@orange.com
+MAIL_SUPPORT_REQUEST_TO: staging.opeow02@orange.com
+MAIL_SUPPORT_EMAIL: staging.opeow02@orange.com
+MAIL_SUPPORT_NAME: Orange Partner team
+SMTP_AUTH: False
+SMTP_USER: ""
+SMTP_PASSWORD: ""
+SMTP_SECURE: ""
+
+#### Backup #####################################
+DEFAULT_BACKUP_DIRECTORY: /var/opt/data/logs/backup
+
+RPPORTAL_PARTNER_SERVER_NAME: partner-owopedev.itn.ftgroup
+RPPORTAL_DEVELOPER_SERVER_NAME: developer-owopedev.itn.ftgroup
+OPE_INTERNAL_SERVER_NAME: ope-internal-owope1.itn.ftgroup
+

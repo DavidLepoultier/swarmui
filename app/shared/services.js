@@ -1,4 +1,16 @@
 angular.module('swarmui.services', ['ngResource'])
+  .factory('Roles', function ContainerFactory($resource) {
+    'use strict';
+    return $resource('/Ansible/ansible_roles.json', {}, {
+        get: {method: 'GET', isArray: true}
+    });
+  })
+  .factory('Playbooks', function ContainerFactory($resource) {
+    'use strict';
+    return $resource('/Ansible/ansible_playbooks.json', {}, {
+        get: {method: 'GET', isArray: true}
+    });
+  })
   .factory('ConsulPrimarySwarm', ['$resource', 'SettingsConsul', function ContainerFactory($resource, Settings) {
     'use strict';
     // Resource for interacting with the docker containers

@@ -1,0 +1,110 @@
+---
+HOSTS:
+#  DVAFIOW002FP01:
+#    group: default
+#    ip_adm: 192.168.6.25
+#    ip_prod: 10.100.0.36
+  DVAFIOW002LB91:
+    group: default
+    ip_adm: 192.168.6.24
+    ip_prod: 10.100.0.51
+  DVAFIOW002LB90:
+    group: default
+    ip_adm: 192.168.6.10
+    ip_prod: 10.100.0.56
+  DVAFIOW002LB11:
+    group: default
+    ip_adm: 192.168.6.15
+    ip_prod: 10.100.0.55
+  DVAFIOW002LB10:
+    group: default
+    ip_adm: 192.168.6.28
+    ip_prod: 10.100.0.47
+  DVAFIOW002LB02:
+    group: default
+    ip_adm: 192.168.6.16
+    ip_prod: 10.100.0.54
+  DVAFIOW002LB01:
+    group: default
+    ip_adm: 192.168.6.14
+    ip_prod: 10.100.0.40
+  DVAFIOW002RP02:
+    group: default
+    ip_adm: 192.168.6.26
+    ip_prod: 10.100.0.53
+  DVAFIOW002RP01:
+    group: default
+    ip_adm: 192.168.6.19
+    ip_prod: 10.100.0.58
+  DVAFIOW002DB03:
+    group: default
+    ip_adm: 192.168.6.20
+    ip_prod: 10.100.0.49
+  DVAFIOW002DB02:
+    group: default
+    ip_adm: 192.168.6.32
+    ip_prod: 10.100.0.50
+  DVAFIOW002BK03:
+    group: default
+    ip_adm: 192.168.6.100
+    ip_prod: 10.100.0.142
+  DVAFIOW002BK02:
+    group: default
+    ip_adm: 192.168.6.101
+    ip_prod: 10.100.0.136
+  DVAFIOW002BK01:
+    group: default
+    ip_adm: 192.168.6.118
+    ip_prod: 10.100.0.139
+  DVAFIOW002AD02:
+    group: default
+    ip_adm: 192.168.6.102
+    ip_prod: 10.100.0.144
+  DVAFIOW002AD01:
+    group: default
+    ip_adm: 192.168.6.111
+    ip_prod: 10.100.0.137
+  DVAFIOW002DP02:
+    group: default
+    ip_adm: 192.168.6.104
+    ip_prod: 10.100.0.130
+  DVAFIOW002DP01:
+    group: default
+    ip_adm: 192.168.6.116
+    ip_prod: 10.100.0.126
+  DVAFIOW002PP01:
+    group: default
+    ip_adm: 192.168.6.29
+    ip_prod: 10.100.0.45
+  DVAFIOW002RP99:
+    group: default
+    ip_adm: 192.168.6.23
+    ip_prod: 10.100.0.46
+  DVAFIOW002AN01:
+    group: default
+    ip_adm: 192.168.6.30
+    ip_prod: 10.100.0.42
+#  DVAFIOW002HP11:
+#    group: default
+#    ip_adm: 127.0.0.1
+#    ip_prod: 127.0.0.1
+#  DVAFIOW002HP09:
+#    group: default
+#    ip_adm: 127.0.0.1
+#    ip_prod: 127.0.0.1
+#  DVAFIOW002HP08:
+#    group: default
+#    ip_adm: 127.0.0.1
+#    ip_prod: 127.0.0.1
+#  DVAFIOW002HP07:
+#    group: default
+#    ip_adm: 127.0.0.1
+#    ip_prod: 127.0.0.1
+#  DVAFIOW002HP11:
+#    group: default
+#    ip_adm: 127.0.0.1
+#    ip_prod: 127.0.0.1
+#  DVAFIOW002HP12:
+#    group: default
+#    ip_adm: 127.0.0.1
+#    ip_prod: 127.0.0.1

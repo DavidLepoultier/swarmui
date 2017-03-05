@@ -1,0 +1,101 @@
+# GLOBAL vars for G3 Portal PreProduction platform on CUBE OPE_01 platform
+---
+ENVIRONMENT: "OPE"
+PLATFORM: "01"
+TYPE: "UA"
+CLOUD: "CB"
+
+
+#### Yum Repo ################################################
+YUM_REPO_G02R02C00_STATE: 1
+YUM_REPO_STANDARD_LB_STATE: 0
+YUM_REPO_STANDARD_STATE: 0
+YUM_REPO_PULP_OPTIONAL_STATE: 1
+YUM_REPO_PULP_EPEL_STATE: 1
+YUM_REPO_PULP_RDO_STATE: 0
+YUM_REPO_PULP_STATE: 1
+
+YUM_PULP_FQDN: repoyum-central.itn.ftgroup
+YUM_PULP_IP: 10.236.240.170
+
+#APTPLATON_SERVER_IP: 10.114.138.51
+#REPOYUMCENTRAL_SERVER_IP: 10.236.240.170
+#PULPMASTER_SERVER_IP: 10.170.226.87
+#ARTIFACTORY_SERVER_IP: 10.170.230.21
+#REPOYUMPROTO_SERVER_IP: 10.171.50.130
+
+# proxy settting for ansible get_url module only and for OPE Cube ONLY
+ansible_proxy_env:
+  http_proxy: "http://{{ SQUID_PROXY_VIP_ADDR }}:{{ SQUID_PROXY_VIP_PORT }}"
+  https_proxy: "http://{{ SQUID_PROXY_VIP_ADDR }}:{{ SQUID_PROXY_VIP_PORT }}"
+internet_proxyaccess: True
+
+#### Packages ##############################################
+ANSIBLE_PACKAGES_DIRECTORY: /var/opt/data/flat/ansible/git-integration/Ansible/packages
+PACKAGES_DIRECTORY: /var/opt/data/flat/ansible/packages
+
+#### DNS ###################################################
+DNS_SERVER_1: 10.236.40.68
+DNS_SERVER_2: 10.114.0.1
+
+#### NTP ###################################################
+NTP_SERVERS: [ "10.236.40.68", "192.168.16.51" ]
+
+#### NFS ###################################################
+NFS_SERVER_IP: 192.168.40.12 
+NFS_PATH_ROOT:
+NFS_LOGS_MOUNT_POINT: /var/opt/data/logs
+NFS_LOGS_SERVER_IP: "{{ NFS_SERVER_IP }}"
+NFS_LOGS_PATH: /UAOP3ALL_LOGS
+
+#### MYSQL #################################################
+MYSQL_DB_PACKAGE: PA-MYQ-6CE5612-RDG09R00C01
+MYSQL_DB_VERSION: 5.6.12
+
+#### CAPTCHA #############################################
+CAPTCHA_URL: "https://www.google.com/recaptcha/api/siteverify?secret={{ CAPTCHA_SECRET_KEY }}&response={response}"
+CAPTCHA_PROXY: "{{ SQUID_PROXY_VIP_ADDR }}:{{ SQUID_PROXY_VIP_PORT }}"
+CAPTCHA_PUBLIC_KEY: 6LfiZ_4SAAAAAMHL8MQrCLHVC1TeWqU-Bv-iPWHr
+CAPTCHA_SECRET_KEY: 6LfiZ_4SAAAAAESCoob5-W3wgg-oVPAJzxVLYS2T
+
+#### Apache ################################################
+APACHE_HTTPD_PACKAGE: PA-APA-APA2215-RDG02R01C10
+APACHE_HTTPD_PACKAGE_RHEL7: PA-APA-APA246-RDG03R01C01
+APACHE_VERSION: apache2215
+APACHE_VERSION_RHEL7: apache246
+
+#### IPs ################################################
+SUGAR_VM_PROD_NAT_IP: 10.117.162.61
+WORDPRESS_VM_PROD_NAT_IP: 10.117.162.71
+OPEBACK01_VM_PROD_IP: 192.168.33.111
+
+# Pour palier problème de DNS
+ORANGE_INTERNAL_SERVER_NAME: api-pp.itn.ftgroup
+H13_VM_PROD_NAT_IP: 10.117.160.230
+
+#### Mail service #####################################
+SMTP_HOST: fed-apps.itn.ftgroup
+SMTP_PORT: 25
+#  WARN about MAIL_FROM value : SMTP "FROM" value must be a known email address in ORANGE AD for FED gateway (created and propagated)
+MAIL_WORDPRESS_FROM: orange.partner@orange.com
+MAIL_WORDPRESS_TO: bounce.orangepartner@orange.com
+MAIL_STATUS_FROM: orange.partner.g3pp@orange.com
+MAIL_STATUS_TO: bounce.orangepartner@orange.com
+MAIL_SUPPORT_REQUEST_TO: orange.partner@orange.com
+MAIL_SUPPORT_EMAIL: orange.partner@orange.com
+MAIL_SUPPORT_NAME: Orange Partner team
+SMTP_AUTH: False
+SMTP_USER: ""
+SMTP_PASSWORD: ""
+SMTP_SECURE: ""
+
+#### Backup #####################################
+DEFAULT_BACKUP_DIRECTORY: /var/opt/data/logs/backup
+
+RPPORTAL_PARTNER_SERVER_NAME: partner-pp.orange.com
+RPPORTAL_DEVELOPER_SERVER_NAME: developer-pp.orange.com
+RPADMIN_ADMIN_PORTAL_SERVER_NAME: admin-ope-pp.itn.ftgroup
+OPE_INTERNAL_SERVER_NAME: ope-internal-pp.itn.ftgroup
+DEVELOPER_PORTAL_SERVER_NAME: "{{ RPPORTAL_DEVELOPER_SERVER_NAME }}"
+PARTNER_PORTAL_SERVER_NAME: "{{ RPPORTAL_PARTNER_SERVER_NAME }}"
+HTACCESS_FILTER: true

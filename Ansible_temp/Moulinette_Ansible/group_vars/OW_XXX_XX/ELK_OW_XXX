@@ -1,0 +1,15 @@
+# NODJS vars
+---
+ELK_START_SERVERS: 1
+
+ELK_HTTP_TRAFFIC_PORT: 9200
+ELK_NODE_TO_NODE_PORT: 9300
+ELK_LOGSTASH_PORT: 9301
+ELK_LOGSTASH_LOGS_DIR: /var/opt/data/locallogs/logstash
+ELK_ELASTICSEARCH_LOGS_DIR: /var/opt/data/locallogs/elasticsearch
+ELK_KIBANA_LOGS_DIR: /var/opt/data/locallogs/kibana
+
+#### NFS ###################################################
+NFS_ELK_MOUNT_POINT: /var/opt/data/flat/elasticsearch
+NFS_ELK_SERVER_IP: "{{ NFS_SERVER_IP }}"
+NFS_ELK_PATH: "{{ NFS_PATH_ROOT }}/INOP3ALL_ELASTIC"

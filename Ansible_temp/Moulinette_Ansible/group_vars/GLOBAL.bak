@@ -1,0 +1,75 @@
+# GLOBAL vars for ALL platforms
+---
+
+APACHE_HTTPD_PACKAGE: PA-APA-APA2215-RDG02R01C03
+PHP_ZEND_PACKAGE: PA-PPH-ZND55R6-RDG02R02C03
+
+PACKAGES_DIRECTORY: /var/opt/data/flat/ansible/packages
+
+MYSQL_DB_PACKAGE: PA-MYQ-6CE5612-RDG09R00C01
+MYSQL_DB_VERSION: 5.6.12
+
+SUGAR_DB_PACKAGE: "{{ MYSQL_DB_PACKAGE }}"
+SUGAR_DB_VERSION: "{{ MYSQL_DB_VERSION }}"
+SUGAR_DB_SERVER_NAME: mysqlsrv
+SUGAR_APACHE_HTTPD_INSTANCE_NAME: sugarhttp
+SUGAR_SUGARDOC_LOCAL_MOUNT_POINT: /var/opt/data/flat/sugardoc
+SUGAR_DATABASE_NAME: sugarcrmdb
+SUGAR_DATABASE_USERNAME: "{{ SUGAR_DATABASE_NAME }}update"
+SUGAR_DATABASE_PASSWORD: "{{ SUGAR_DATABASE_NAME }}update"
+
+WORDPRESS_WWW_LOCAL_MOUNT_POINT: /var/opt/data/flat/www
+WORDPRESS_APACHE_HTTPD_INSTANCE_NAME: wordpresshttpd
+WORDPRESS_DATABASE_PREFIX: wp_
+WORDPRESS_TW_CONSUMER_KEY: 4tucx4bvPomDkuZ4HvQm4x9vE
+WORDPRESS_TW_CONSUMER_SECRET: T603qlkyzpe4qiaV1vWMiBvmzObFCCzyWmhmhpynH59R4Qm3Np
+WORPDRESS_TW_ACCESS_TOKEN: 155697102-Z0mqWgrCVy0P6gqbOJ4vdw4gRakW5wAKF81lw1lN
+WORDPRESS_TW_ACCESS_TOKEN_SECRET: 039oMrzrWGE7RrPQYc4IHZ0LF9eRgRlJYMu2b9pQN6cLX
+
+PARTNER_PORTAL_SERVER_OPTIONAL_PORT: ""
+
+NODE_FRONT_DEV_APPLICATION_DIR: /var/opt/data/flat/node_dev
+NODE_FRONT_DEV_APPLICATION_FILE: dist/proxy/main.js
+NODE_FRONT_ADMIN_APPLICATION_DIR: /var/opt/data/flat/node_admin
+NODE_FRONT_ADMIN_APPLICATION_FILE: dist/proxy/main.js
+NODE_FRONT_PUBLISH_LOCAL_MOUNT_POINT: /var/opt/data/flat/publish
+NODE_FRONT_PREPUBLISH_LOCAL_MOUNT_POINT: /var/opt/data/flat/prepublish
+
+OPEBACK_MYSQL_DB_SERVER_NAME: mydbsrvm53
+OPEBACK_DATABASE_NAME: ope
+OPEBACK_CONTENTS_LOCAL_MOUNT_POINT: /var/opt/data/flat/opebackcontents
+
+ELK_ELASTICSEARCH_STORAGE_LOCAL_MOUNT_POINT: /var/opt/data/flat/elasticsearch
+ELK_LOGSTASH_LOGS_DIR: /var/opt/data/locallogs/logstash
+ELK_ELASTICSEARCH_LOGS_DIR: /var/opt/data/locallogs/elasticsearch
+ELK_KIBANA_LOGS_DIR: /var/opt/data/locallogs/kibana
+
+HAPROXY_CONFIG_DIRECTORY: /etc/haproxy
+
+APTPLATON_SERVER_IP: 10.114.138.51
+REPOYUMCENTRAL_SERVER_IP: 10.236.240.170
+PULPMASTER_SERVER_IP: 10.170.226.87
+ARTIFACTORY_SERVER_IP: 10.170.230.21
+
+EXTERNAL_SQUID_PROXY_IP: 84.39.41.57  # added a external squid HOP for trafic going to api.orange.com (required for PROD)
+EXTERNAL_SQUID_PROXY_PORT: 443
+OPE_API_SERVER_NAME: api.orange.com  # managed in G2 PROD
+
+SOLR_GOROCO: G01R00C03
+SOLR_PACKAGE_NAME: SOLR-4.6.1-G01R00C03
+
+TOMCAT_BASEDIR: /opt/tomcat
+TOMCAT_PACKAGE: apache-tomcat-8.0.28
+TOMCAT_WEBAPPS_DIR: /var/opt/data/flat/tomcat_webapps
+TOMCAT_WORK_DIR: /var/opt/data/flat/tomcat_work
+
+DEFAULT_BACKUP_DIRECTORY: /var/opt/data/logs/backup
+
+
+#########################
+#New : ansible with Git
+#########################
+FRONT_DEV_ARCHIVE_PATH: /images/OPE/{{ OPERelease }}/ope-dev.zip
+FRONT_ADMIN_ARCHIVE_PATH: /images/OPE/{{ OPERelease }}/ope-admin.zip
+OPEBACK_WAR_FILE: /images/OPE/{{ OPERelease }}/ope-back.war
+WORDPRESS_ARCHIVE_PATH: /images/OPE/{{ OPERelease }}/wordpress-app.zip

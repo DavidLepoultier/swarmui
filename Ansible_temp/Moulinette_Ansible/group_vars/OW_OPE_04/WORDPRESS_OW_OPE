@@ -1,0 +1,80 @@
+# WORDPRESS vars
+---
+# WORDPRESS ########################################################################
+WORDPRESS_PORT: 80
+HTTP_START_SERVERS: 10
+PHP_ZEND_PACKAGE: PA-PPH-ZND55R6-RDG02R02C03
+
+WORDPRESS_TW_CONSUMER_KEY: 4tucx4bvPomDkuZ4HvQm4x9vE
+WORDPRESS_TW_CONSUMER_SECRET: T603qlkyzpe4qiaV1vWMiBvmzObFCCzyWmhmhpynH59R4Qm3Np
+WORPDRESS_TW_ACCESS_TOKEN: 155697102-Z0mqWgrCVy0P6gqbOJ4vdw4gRakW5wAKF81lw1lN
+WORDPRESS_TW_ACCESS_TOKEN_SECRET: 039oMrzrWGE7RrPQYc4IHZ0LF9eRgRlJYMu2b9pQN6cLX
+WORDPRESS_TW_API_URL: "https://api.twitter.com/1.1/"
+WORDPRESS_TW_SHARE_URL: "https://twitter.com/intent/tweet?text="
+WORDPRESS_FB_API_URL: "https://graph.facebook.com/"
+WORDPRESS_FB_SHARE_URL: "https://www.facebook.com/sharer.php?u="
+WORDPRESS_IN_API_URL: "https://www.linkedin.com/countserv/count/share"
+WORDPRESS_IN_SHARE_URL: "https://www.linkedin.com/shareArticle?mini=true&url="
+WORDPRESS_GPLUS_SHARE_URL: "https://plus.google.com/share?url="
+WORDPRESS_CAPTCHA_PUBLIC: "{{ CAPTCHA_PUBLIC_KEY }}"
+WORDPRESS_CAPTCHA_SECRET: "{{ CAPTCHA_SECRET_KEY }}"
+WORDPRESS_GA: UA-1234567-7
+
+WORDPRESS_WWW_LOCAL_MOUNT_POINT: /var/opt/data/flat/www
+WORDPRESS_WEBAPPS_DIR: "{{ WORDPRESS_WWW_LOCAL_MOUNT_POINT }}/wordpress"
+WORDPRESS_UPLOADS_DIR: "{{ WORDPRESS_WWW_LOCAL_MOUNT_POINT }}/uploads"
+WORDPRESS_WEBAPPS_VG_NAME: infravg
+WORDPRESS_WEBAPPS_LV_NAME: wordpress_lv
+WORDPRESS_WEBAPPS_LV_SIZE: 1g
+WORDPRESS_UPLOADS_VG_NAME: infravg
+WORDPRESS_UPLOADS_LV_NAME: uploads_lv
+WORDPRESS_UPLOADS_LV_SIZE: 2g
+
+WORDPRESS_ARCHIVE_PATH: "/images/OPE/{{ OPERelease }}/wordpress-app.zip"
+
+#### Apache #####################################################
+APACHE_HTTPD_INSTANCE_NAME: wordpresshttpd
+APACHE_APPLI_TYPE: PHP
+APACHE_INSTANCE_VERSION: G01R00C00
+APACHE_WORKER: N
+APACHE_USE_HTTP: Y
+APACHE_HTTP_PORT: 80
+APACHE_USE_HTTPS: N
+APACHE_HTTPS_PORT: NA
+APACHE_AJP_PORT: NA
+APACHE_SIZE: 100
+APACHE_HTTPD_IF: eth1
+my_apache_hostname: "{{ inventory_hostname }}"
+APACHE_USER: apache
+APACHE_GROUP: apache
+
+# MEMCACHED ########################################################################
+MEMCACHED_PORT: 11211
+
+# WORDPRESSDB ######################################################################
+DATABASE_SERVER_IP: "{{ HOSTS.INOPEOW004CM02.ip_prod }}"
+M36_VM_PROD_IP: "{{ DATABASE_SERVER_IP }}"
+DATABASE_NAME: wordpress
+DATABASE_USERNAME: "{{ DATABASE_NAME }}update"
+DATABASE_PASSWORD: "{{ DATABASE_NAME }}update"
+DATABASE_SERVER_NAME: mydbsrvm36
+DATABASE_MAX_CONNECTIONS: 151
+WORDPRESS_DATABASE_NAME: "{{ DATABASE_NAME }}"
+WORDPRESS_DATABASE_USER_NAME: "{{ DATABASE_USERNAME }}"
+WORDPRESS_DATABASE_PASSWORD: "{{ DATABASE_PASSWORD }}"
+WORDPRESS_DATABASE_PREFIX: wp_
+
+#### NFS ##########################################################################
+NFS_WP_MYSQL_SERVER_IP: "{{ NFS_SERVER_IP }}"
+NFS_WP_MYSQL_DATA_DIR: "/myqdata/{{ DATABASE_SERVER_NAME }}/data"
+NFS_WP_MYSQL_LOG_DIR: "/myqdata/{{ DATABASE_SERVER_NAME }}/log"
+NFS_WP_MYSQL_TMP_DIR: "/myqdata/{{ DATABASE_SERVER_NAME }}/tmp"
+NFS_WP_MYSQL_BACKUP_DIR: /myqdata/backup
+NFS_WP_MYSQL_DATA_PATH: "{{ NFS_PATH_ROOT }}/INOP3ALL_CMSDB_DATA"
+NFS_WP_MYSQL_LOG_PATH: "{{ NFS_PATH_ROOT }}/INOP3ALL_CMSDB_LOG"
+NFS_WP_MYSQL_TMP_PATH: "{{ NFS_PATH_ROOT }}/INOP3ALL_CMSDB_TMP"
+NFS_WP_MYSQL_BACKUP_PATH: "{{ NFS_PATH_ROOT }}/INOP3ALL_CMSDB_BACKUP"
+
+#### NAGIOS #######################################################################
+NAGIOS_SERVICE_WORDPRESSDB: wordpressdb
+SERVICE: "{{ NAGIOS_SERVICE_WORDPRESSDB }}"

@@ -1,0 +1,103 @@
+---
+# etc/host file must resolv "pki-crl.itn.ftgroup" onto M51 Ip
+# For Openwatt in each platform global env,
+### "internet_proxyaccess== True" proxy defined in role is SQUID proxy
+### "pki_proxyaccess" == True and "ansible_proxy_env" are openwatt_proxies
+# For CUBE PROD / PPROD in each platform global env,
+### "internet_proxyaccess== False" as no proxies to fo internet
+### "pki_proxyaccess" == False as access is through RPadmin
+
+- hosts: afi_hosts
+  connection: smart
+  gather_facts: yes
+  roles:
+    - { role: disabled_sudo_tty, tags: disabled_sudo_tty }
+    - { role: install_ca_certificates_pkg, tags: install_ca_certificates_pkg }
+
+# ansible server
+- hosts: ansible
+  roles:
+    - { role: update_ssl_ca_certs_private_root_ca, tags: update_ssl_ca_certs_private_root_ca }
+    - { role: update_ssl_ca_certs_pki_directaccess, tags: update_ssl_ca_certs_pki_directaccess }
+    - { role: update_ssl_ca_certs_public_internet_proxyaccess, when: internet_proxyaccess == True and internet_proxyaccess is defined, tags: update_ssl_ca_certs_public_internet_proxyaccess }
+
+- hosts: rpadmin
+  serial: 1
+  roles:
+    - { role: update_ssl_ca_certs_private_root_ca, tags: update_ssl_ca_certs_private_root_ca }
+    - { role: update_ssl_ca_certs_pki_directaccess, tags: update_ssl_ca_certs_pki_directaccess }
+    - { role: update_ssl_ca_certs_public_internet_proxyaccess, when: internet_proxyaccess == True and internet_proxyaccess is defined, tags: update_ssl_ca_certs_public_internet_proxyaccess }
+    - { role: start_all_apps, tags: update_ssl_ca_certs }
+    
+- hosts: rpportal
+  serial: 1
+  roles:
+    - { role: update_ssl_ca_certs_private_root_ca, tags: update_ssl_ca_certs_private_root_ca }
+    # For PROD/PPROD, fqdn point ro rpadmin
+    # - { role: update_ssl_ca_certs_pki_directaccess, when: pki_proxyaccess == False or pki_proxyaccess is not defined , tags: update_ssl_ca_certs_pki_directaccess }
+    # For Openwatt
+    - { role: update_ssl_ca_certs_pki_proxyaccess, when: pki_proxyaccess == True and pki_proxyaccess is defined , tags: update_ssl_ca_certs_pki_proxyaccess }
+    - { role: update_ssl_ca_certs_public_internet_proxyaccess, tags: update_ssl_ca_certs_public_internet_proxyaccess }
+    - { role: start_all_apps, tags: update_ssl_ca_certs }
+
+- hosts: squid
+  serial: 1
+  roles:
+    - { role: update_ssl_ca_certs_private_root_ca, tags: update_ssl_ca_certs_private_root_ca }
+    - { role: update_ssl_ca_certs_pki_directaccess, tags: update_ssl_ca_certs_pki_directaccess }
+    - { role: update_ssl_ca_certs_public_internet_directaccess, tags: update_ssl_ca_certs_public_internet_directaccess }
+    - { role: start_all_apps, tags: update_ssl_ca_certs }
+    
+#- hosts: haproxy
+#  roles:
+#     - { role: update_ssl_ca_certs_private_root_ca, tags: update_ssl_ca_certs_private_root_ca }
+#     - { role: start_all_apps, tags: update_ssl_ca_certs }
+    
+- hosts: nodejs
+  serial: 1
+  roles:
+    - { role: update_ssl_ca_certs_private_root_ca, tags: update_ssl_ca_certs_private_root_ca update_ssl_ca_certs }
+    - { role: update_ssl_ca_certs_pki_directaccess, tags: update_ssl_ca_certs_pki_directaccess update_ssl_ca_certs }
+    - { role: update_ssl_ca_certs_public_internet_proxyaccess, when: internet_proxyaccess == True and internet_proxyaccess is defined, tags: update_ssl_ca_certs_public_internet_proxyaccess update_ssl_ca_certs }
+    - { role: start_all_apps, tags: update_ssl_ca_certs }
+
+# BackDB
+- hosts: opebackdb
+  roles:
+    - { role: update_ssl_ca_certs_private_root_ca, tags: update_ssl_ca_certs_private_root_ca }
+    - { role: update_ssl_ca_certs_pki_directaccess, tags: update_ssl_ca_certs_pki_directaccess }
+    - { role: update_ssl_ca_certs_public_internet_proxyaccess, when: internet_proxyaccess == True and internet_proxyaccess is defined, tags: update_ssl_ca_certs_public_internet_proxyaccess }
+
+#- hosts: ELK
+#  roles:
+#    - update_ssl_ca_certs tags adminpki
+
+# Back AS 
+- hosts: opeback
+  serial: 1
+  roles:
+    - { role: update_ssl_ca_certs_private_root_ca, tags: update_ssl_ca_certs_private_root_ca update_ssl_ca_certs }
+    - { role: update_ssl_ca_certs_pki_directaccess, tags: update_ssl_ca_certs_pki_directaccess update_ssl_ca_certs }
+    - { role: update_ssl_ca_certs_public_internet_proxyaccess, when: internet_proxyaccess == True and internet_proxyaccess is defined, tags: update_ssl_ca_certs_public_internet_proxyaccess update_ssl_ca_certs }
+    - { role: start_all_apps, tags: update_ssl_ca_certs }
+
+#- hosts: NAGIOS
+#  roles:
+#    - update_ssl_ca_certs tags adminpki
+#
+#- hosts: SUGAR
+#  roles:
+#    - update_ssl_ca_certs tags adminpki 
+#
+#- hosts: WORDPRESS_DB
+#  roles:
+#    - update_ssl_ca_certs tags adminpki
+#
+#- hosts: WORDPRESS_SERVER
+#  roles:
+#    - update_ssl_ca_certs tags adminpki 
+#
+#- hosts: JENKINS
+#  roles:
+#    - update_ssl_ca_certs tags adminpki 
+#    - { role: webserver, port: 5000, tags: [ 'web', 'foo' ] }

@@ -1,0 +1,69 @@
+# Nagios vars
+---
+
+#### Nagios ##################################################
+NAGIOS_ADMIN_PASSWD: "$apr1$UZLpk4E7$0q20Y6pSVuu0iC0tXm4uT/"
+NAGIOS_ADMIN_IP: "{{ HOSTS.INAFIOW001RP99.ip_adm }}"
+NAGIOS_CONF_PREFIX: "afi"
+
+NAGIOS_GUARDIAN_IP: "10.114.58.62"
+
+NAGIOS_HOSTGROUPS:
+  default:
+    alias: Default hostgroup
+  nodejs:
+    alias: NodeJS
+#    hosts: dvafiow002ad01,dvafiow002ad02,dvafiow002pp01,dvafiow002dp01,dvafiow002dp02
+  nagios: 
+    alias: Nagios
+#    hosts: dvafiow002rp99
+  ansible: 
+    alias: Ansible
+#    hosts: dvafiow002an01
+  rpportal: 
+    alias: Portal reverse proxies
+#    hosts: dvafiow002rp01,dvafiow002rp02
+  rpadmin:
+    alias: Admin reverse proxies
+#    hosts: dvafiow002rp99
+  opeback:
+    alias: Backends
+
+NAGIOS_SERVICEGROUPS:
+  system:
+    name: system
+    alias: "System services"
+  mariadb:
+    name: mariadb
+    alias: "Database services"
+  nodejs:
+    name: nodejs
+    alias: "NodeJS services"
+  backend:
+    name: backend
+    alias: "Backend services"
+  haproxy:
+    name: haproxy
+    alias: "haproxy services"
+  infra:
+    name: infra
+    alias: "Infrastructure"
+
+NAGIOS_CONTACTGROUPS:
+  afi-admins:
+    alias: "AFI administrators"
+
+NAGIOS_CONTACTS:
+  david_lepoultier:
+    alias: "David LEPOULTIER"
+    email: "david.lepoultier@orange.com"
+    contactgroups: "afi-admins"
+  francois_leclere:
+    alias: "Francois LECLERE"
+    email: "francois.leclere@orange.com"
+    contactgroups: "afi-admins"
+  laurent_croq:
+    alias: "Laurent CROQ"
+    email: "laurent.croq@orange.com"
+    contactgroups: "afi-admins"
+

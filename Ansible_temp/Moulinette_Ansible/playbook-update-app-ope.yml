@@ -1,0 +1,223 @@
+---
+########################## Download application deliverables ##########################
+- hosts: ansible
+  gather_facts: no
+
+  vars:
+    artiuser: opeuser
+    artipass: opeapi%1
+
+  roles:
+    - { role: download_app_deliverables, tags: ["download_app_deliverables", "DeployQual"] }
+    - { role: download_maintenancepage_deliverable, tags: download_maintenancepage_deliverable }
+
+########################## STOP TRAFFIC ##########################
+
+########################## ACTIVATE MAINTENANCE PAGE ##########################    
+
+# OPE_G3 RPportal Developer and Partner Maintenance Page Activation
+#   use no tags in your ansible-playbook command to impact "developer" and "partner" 
+#   use <--tags developer> to impact "developer" portal only
+#   use <--tags partner> to impact "partner" portal only
+- hosts: rpadmin
+  serial: 1
+  roles:
+    - { role: deploy_rpadmin_maintenancepage, tags: deploy_rpadmin_maintenancepage maintenance, APA_VERSION: "{{ APACHE_VERSION }}" }
+    - { role: activate_rpadmin_maintenancepage, tags: activate_rpadmin_maintenancepage maintenance, APA_VERSION: "{{ APACHE_VERSION }}" }
+
+##DeActivate Admin Portal Service
+#- hosts: haproxy-hp12
+#  roles:
+#    - { role: stop_all_apps, tags: stop_all_apps stop }
+
+
+########################## ACTIVATE MAINTENANCE PAGE ##########################    
+    
+# OPE_G3 RPportal Developer and Partner Maintenance Page Activation
+#   use no tags in your ansible-playbook command to impact "developer" and "partner" 
+#   use <--tags developer> to impact "developer" portal only
+#   use <--tags partner> to impact "partner" portal only
+- hosts: rpportal
+  serial: 1
+  roles:
+    - { role: deploy_rpportal_maintenancepage, tags: deploy_rpportal_maintenancepage maintenance, APA_VERSION: "{{ APACHE_VERSION }}" }
+    - { role: activate_rpportal_maintenancepage, tags: activate_rpportal_maintenancepage maintenance, APA_VERSION: "{{ APACHE_VERSION }}" }
+
+########################## DEACTIVATE SUGER SYNC  ##########################    
+
+- hosts: opeback2
+  gather_facts: no 
+  roles:
+    - { role: deactivate_sugar_sync, tags: deactivate_sugar_sync }
+    
+########################## BACKUP ##########################     
+    
+# backup OPEBACK DB
+- hosts: opebackdb
+  become: yes
+  vars:
+    - database_server: "{{ DATABASE_SERVER_NAME }}"
+    - database_name: "{{ DATABASE_NAME }}"
+  roles:
+    - { role: backup_mysql_db, tags: backup_mysql_db_opeback DeployQual } 
+    
+# backup SUGAR DB    
+- hosts: sugardb
+  become: yes
+  vars: 
+    - database_server: "{{ DATABASE_SERVER_NAME }}"
+    - database_name: "{{ DATABASE_NAME }}"
+  roles:
+    - { role: backup_mysql_db, tags: backup_mysql_db_sugar }
+      
+# backup WORDPRESS DB    
+- hosts: wordpressdb
+  become: yes
+  vars: 
+    - database_server: "{{ DATABASE_SERVER_NAME }}"
+    - database_name: "{{ DATABASE_NAME }}"
+  roles:
+    - { role: backup_mysql_db, tags: backup_mysql_db_wordpress wordpress }
+
+# backup OPEBACK CONTENT
+- hosts: opeback1
+  vars:
+    - component2bck: OPEBACK
+    - app2bck: "{{ OPEBACK_CONTENTS_LOCAL_MOUNT_POINT }}"
+  roles:
+    - { role: backup_content, tags: backup_content_opeback }
+     
+# backup FRONT ADMIN PUBLISH CONTENT
+- hosts: nodejs-admin1
+  vars:
+    - component2bck: FRONT-ADM-PUBLISH
+    - app2bck: "{{ NODE_FRONT_PUBLISH_LOCAL_MOUNT_POINT }}"
+  roles:
+    - { role: backup_content, tags: backup_content_front_adm_publish }
+    
+# backup FRONT ADMIN PREPUBLISH CONTENT
+- hosts: nodejs-admin1
+  vars:
+    - component2bck: FRONT-ADM-PREPUBLISH
+    - app2bck: "{{ NODE_FRONT_PREPUBLISH_LOCAL_MOUNT_POINT }}"
+  roles:
+    - { role: backup_content, tags: backup_content_front_adm_prepublish }
+
+# backup PARTNER CONTENT
+- hosts: wordpress
+  vars:
+    - component2bck: WORDPRESS_UPLOADS
+    - app2bck: "{{ WORDPRESS_UPLOADS_DIR }}"
+  roles:
+    - { role: backup_content, tags: backup_content_partner }
+
+########################## SYSTEM TimeZone Update ##########################
+- hosts: ope_hosts
+  vars:
+    artiuser: opeuser
+    artipass: opeapi%1
+  roles:
+    - { role: update_tzdata, tags: tzdataall }
+
+########################## DEPLOYMENT ##########################
+      
+# Front Dev deployment
+- hosts: nodejs-dev
+  vars:
+    - NODE_APP: "{{ NODE_FRONT_DEV_APPLICATION_DIR }}/{{ NODE_FRONT_DEV_APPLICATION_FILE }}"  
+  roles:
+    - { role: deploy_node_front_dev, tags: deploy_node_front_dev, DeployQual }
+    - { role: hosts_add_FQDN_BB, tags: hosts_add_FQDN_BB hosts_add_FQDN_BB_ope_dev }
+  
+# Front Admin deployment
+- hosts: nodejs-admin
+  vars:
+    - NODE_APP: "{{ NODE_FRONT_ADMIN_APPLICATION_DIR }}/{{ NODE_FRONT_ADMIN_APPLICATION_FILE }}"
+  roles:
+    - { role: deploy_node_front_admin, tags: deploy_node_front_admin, DeployQual }
+    - { role: hosts_add_FQDN_BB, tags: hosts_add_FQDN_BB hosts_add_FQDN_BB_ope_adm }
+
+# OPE BACK update DB
+- hosts: opebackdb
+  become: yes
+  vars:
+    - GOROCO_DIR: "{{ OPERelease }}"
+  vars_files:
+    - "{{ OPEBACK_DBUPDATE_PATH }}{{ OPEBACK_DBUPDATE_FILE }}"
+  roles:
+    - { role: update_DB_opeback, tags: update_DB_opeback DeployQual }
+    
+# OPE back deployment
+- hosts: opeback
+  roles:
+    - { role: deploy_opeback, tags: deploy_opeback, DeployQual }
+    - { role: hosts_add_FQDN_BB, tags: hosts_add_FQDN_BB hosts_add_FQDN_BB_opeback }
+#    - { role: hosts_set_prod_ip_in_first_position, tags: hosts_set_prod_ip_in_first_position }    
+ 
+- hosts: opeback2
+  roles:
+    - { role: backup_OPEBACK_contents_daily, tags: backup_OPEBACK_contents_daily }
+    - { role: configure_crm_synchronize, tags: configure_crm_synchronize }    
+
+# SugarCRMdb patch deployment 
+- hosts: sugardb
+  become: yes
+  roles:
+    - { role: update_sugarcrm_schema_fromaddr_size, tags: update_sugarcrm_schema_fromaddr_size }
+
+# - hosts: sugar
+#   become: yes
+#   roles:
+
+# WordpressDB patch deployment 
+- hosts: wordpressdb
+  become: yes
+  roles:
+    - { role: update_wordpressdb_rights, tags: update_wordpressdb_rights wordpess }
+
+# Wordpress deployment   
+- hosts: wordpress
+  gather_facts: no
+  vars:
+    - forceUpload: false
+    - forceLanguages: false
+  roles:
+    - { role: deploy_wordpress_php, tags: deploy_wordpress_php, DeployQual }
+    - { role: hosts_add_FQDN_BB, tags: hosts_add_FQDN_BB hosts_add_FQDN_BB_wordpress wordpress}
+
+########################## START TRAFFIC ##########################
+#
+##ReActivate Admin Portal Service
+#- hosts: haproxy-hp12
+#  roles:
+#    - { role: start_all_apps, tags: start_all_apps start }    
+#    
+########################## DEACTIVATE MAINTENANCE PAGE ##########################    
+# OPE_G3 RPportal Developer and Partner Maintenance Page deactivation
+#   use no tags in your ansible-playbook command to impact "developer" and "partner" 
+#   use <--tags developer> to impact "developer" portal only
+#   use <--tags partner> to impact "partner" portal only
+- hosts: rpadmin
+  serial: 1
+  gather_facts: no
+  roles:
+    - { role: deactivate_rpadmin_maintenancepage, tags: deactivate_rpadmin_maintenancepage deactive_maintenance, APA_VERSION: "{{ APACHE_VERSION }}" }
+
+
+# OPE_G3 RPportal Developer and Partner Maintenance Page deactivation
+#   use no tags in your ansible-playbook command to impact "developer" and "partner" 
+#   use <--tags developer> to impact "developer" portal only
+#   use <--tags partner> to impact "partner" portal only
+- hosts: rpportal
+  gather_facts: no
+  serial: 1
+  roles:
+    - { role: deactivate_rpportal_maintenancepage, tags: deactivate_rpportal_maintenancepage deactive_maintenance, APA_VERSION: "{{ APACHE_VERSION }}" }
+    
+########################## POST-TASKS ##########################
+    
+# Clean /images/OPE/
+- hosts: ansible
+  gather_facts: no
+  roles:
+    - { role: clean_images_OPE, tags: clean_images_OPE DeployQual }

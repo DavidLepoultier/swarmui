@@ -1,0 +1,28 @@
+# HAPROXY vars
+---
+# HAPROXY ################################################################
+HAPROXY_CONFIG_DIRECTORY: /etc/haproxy
+
+HAPROXYS:
+  rpportal:
+    HA_SERVICE: "rpportal" 
+    VIP_HTTP_DEVELOPER_PORT: 80
+    VIP_HTTPS_DEVELOPER_PORT: 443
+    VIP_HTTP_PARTNER_PORT: 81
+    VIP_HTTPS_PARTNER_PORT: 444
+    VIP_STATS_PORT: 80
+  squid:
+    HA_SERVICE: "squid"
+    VIP_PROXY_OUT_SQUID_PORT: 3128
+  opeback:
+    HA_SERVICE: "opeback"
+    VIP_BACK_PORTAL_PORT: 443
+    VIP_STATS_PORT: 80
+  opedev:
+    HA_SERVICE: "opedev"
+    VIP_DEV_PORTAL_PORT: 80
+    VIP_STATS_PORT: 80
+  opeadm:
+    HA_SERVICE: "opeadm"
+    VIP_ADMIN_PORTAL_PORT: 80
+    VIP_STATS_PORT: 81
