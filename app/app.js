@@ -36,9 +36,13 @@ angular.module('swarmui', [
             templateUrl: 'app/components/image/image.html',
             controller: 'ImageController'
         });
-        $routeProvider.when('/dashboard/containers/', {
+        $routeProvider.when('/dashboard/roles/', {
             templateUrl: 'app/components/dashboardContainers/dashboardContainers.html',
             controller: 'DashboardContainersController'
+        });
+        $routeProvider.when('/:from/roles/:role/:id/', {
+            templateUrl: 'app/components/container/container.html',
+            controller: 'ContainerController'
         });
         $routeProvider.when('/:from/:node/containers/:id/', {
             templateUrl: 'app/components/container/container.html',

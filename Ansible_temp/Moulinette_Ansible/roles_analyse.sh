@@ -1,6 +1,6 @@
 #!/bin/bash
 
-
+cd  ~/orange/OPE/Ansible
 role_hist=""
 filename_hist=""
 type_hist=""
@@ -51,21 +51,21 @@ do
 			printf "]}]}]},"
 		fi
 		type_hist=""
-		printf "{\"$role\":["
+		printf "{\"role\":\"$role\",\"$role\":["
 	fi
 	if [ "$type_hist" != "$type" ];then
 		if [ "$type_hist" != "" ];then
 			printf "]}]},"
 		fi
 		filename_hist=""
-		printf "{\"$type\":["
+		printf "{\"type\":\"$type\",\"$type\":["
 	fi
 	if [ "$filename_hist" != "$filename1" ];then
 		if [ "$filename_hist" != "" ];then
 			printf "]},"
 		fi
 		new_key=""
-		printf "{\"$filename1\":["
+		printf "{\"filename\":\"$filename1\",\"$filename1\":["
 	fi
 	if [ "$new_key" != "" ];then
 		printf ","

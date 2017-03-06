@@ -26,8 +26,35 @@ angular.module('masthead', [])
 
     $scope.roles = function() {
       Roles.get({}, function (d){
+        $rootScope.roles = [];
+        $scope.ansibleRoles = [];
+        $scope.ansibleTypes = [];
+        $scope.ansibleFilenames = [];
+        $scope.ansibleKeys = [];
         $rootScope.numRoles = d.length;
         $rootScope.dataRoles = d;
+        for (var i = 0; i < $rootScope.dataRoles.length; i++) {
+          $scope.ansibleRoles = $rootScope.dataRoles[i];
+          $scope.ansibleNumFiles = 0;
+          $scope.ansibleNumKeys = 0;
+          for (var r = 0; r < $scope.ansibleRoles[$scope.ansibleRoles.role].length; r++) {
+            $scope.ansibleType = $scope.ansibleRoles[$scope.ansibleRoles.role][r];
+            for (var t = 0; t < $scope.ansibleType[$scope.ansibleType.type].length; t++) {
+              $scope.ansibleFilenames = $scope.ansibleType[$scope.ansibleType.type][t];
+              $scope.ansibleNumFiles++;
+              for (var f = 0; f < $scope.ansibleFilenames[$scope.ansibleFilenames.filename].length; f++) {
+                $scope.ansibleKeys = $scope.ansibleFilenames[$scope.ansibleFilenames.filename][f];
+                $scope.ansibleNumKeys = $scope.ansibleNumKeys + $scope.ansibleKeys.keynames.length;
+              }
+            }
+          }
+          $rootScope.roles.push({
+            roleId: i,
+            roleName: $scope.ansibleRoles.role,
+            roleNumFiles: $scope.ansibleNumFiles,
+            roleNumKeys: $scope.ansibleNumKeys
+          });
+        }    
       });    
     };
 
