@@ -3,10 +3,10 @@
   "title": "SwarmUI",
   "name": "swarmui",
   "homepage": "https://github.com/Ptimagos/swarmui",
-  "version": "0.4.0",
+  "version": "0.2.0",
   "repository": {
     "type": "git",
-    "url": "git+ssh://git@github.com/Ptimagos/swarmui.git"
+    "url": "git@github.com:Ptimagos/swarmui.git"
   },
   "bugs": {
     "url": "https://github.com/Ptimagos/swarmui/issues"
@@ -39,11 +39,5 @@
   },
   "scripts": {
     "postinstall": "bower install"
-  },
-  "description": "SwarmUI is a web interface for the Docker and Swarm Remote API. The goal is to provide a pure client side implementation so it is effortless to connect and manage docker. This project is based on [DockerUI](https://github.com/crosbymichael/dockerui) project, and is not complete. This's still under heavy development.",
-  "main": "gruntFile.js",
-  "directories": {
-    "test": "test"
-  },
-  "license": "ISC"
+  }
 }

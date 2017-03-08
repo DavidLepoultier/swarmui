@@ -34,17 +34,45 @@
               <h4>Information :</h4>
               <b>Numbers file with ansible keys : </b>{{ role.roleNumFiles }}
               <br/>
-              <b>Numbers ansible keys : </b>{{ role.roleNumKeys  }}
+              <b>Numbers ansible keys : </b>{{ role.roleNumKeys  }} (with duplicate keys)
+              <br/>
+              <b>Find in ansible playbooks : </b>{{ playbooks.length  }} time (with duplicate keys)
+              <br/>
+              <br/>
             </div>
           </div>
           <uib-tabset active="active">
-            <uib-tab index="0" heading="Info" ng-click="destroyInterval()">
-            <!-- Tabs 1 container info -->
+            <uib-tab index="0" heading="Files">
+              <div class="row">
+                <div class="col-sm-1"></div>
+                <div class="col-sm-12">
+                  <div class="checkbox">
+                    <label>
+                      <input type="checkbox" ng-model="oneAtATime">Open only one at a time
+                    </label>
+                  </div>
+                  <uib-accordion close-others="oneAtATime">
+                    <div uib-accordion-group class="panel-default" heading="{{ file.filename }}" ng-repeat="file in role">
+                      <div class="checkbox">
+                        <label>
+                          <input type="checkbox" ng-model="checked" aria-label="Toggle ngShow">Show duplicate key
+                        </label>
+                      </div>
+                      <div ng-repeat="keys in file.keys" ng-show="checked">
+                        {{ keys.key }}
+                      </div>
+                      <div ng-repeat="keys in file.keys | unique: 'key'" ng-show="!checked">
+                        {{ keys.key }}
+                      </div>
+                    </div>
+                  </uib-accordion>                  
+                </div>
+                <div class="col-sm-1"></div>
+              </div>
+            <!-- Tabs 1 container info 
               <table class="table table-striped no-margin-bottom">
                 <tbody>
                   <tr>
-                    <td class="col-xs-2">Path:</td>
-                    <td class="col-xs-10">{{ container.Path }}</td>
                   </tr>
                   <tr>
                     <td>Args:</td>
@@ -168,7 +196,30 @@
               </table>
             <!-- End Tabs 1 container info -->
             </uib-tab>
-            <uib-tab index="1" heading="Logs" ng-click="getLogs()">
+            <uib-tab index="1" heading="Playbooks">
+              <div class="row">
+                <div class="col-sm-1"></div>
+                <div class="col-sm-12">
+                  <div class="checkbox">
+                    <label>
+                      <input type="checkbox" ng-model="oneAtATime">Open only one at a time
+                    </label>
+                    <label>
+                      <input type="checkbox" ng-model="playchecked" aria-label="Toggle ngShow">Show duplicate playbook
+                    </label>
+                  </div>
+                  <uib-accordion close-others="oneAtATime">
+                    <div uib-accordion-group class="panel-default" heading="{{ playbook.filename }}" ng-repeat="playbook in playbooks" ng-show="playchecked">
+                      {{ playbook.filename }}
+                    </div>
+                    <div uib-accordion-group class="panel-default" heading="{{ playbook.filename }}" ng-repeat="playbook in playbooks | unique: 'filename'" ng-show="!playchecked">
+                      {{ playbook.filename }}
+                    </div>
+                  </uib-accordion>  
+                </div>
+                <div class="col-sm-1"></div>
+              </div>
+              <!-- 
               <div class="row logs">
                   <div class="col-xs-12">
                     <div class="pull-right col-xs-6">
@@ -205,7 +256,9 @@
                     </div>
                   </div>
               </div>
+              -->
             </uib-tab>
+            <!--
             <uib-tab index="2" heading="Top" ng-click="getTop()">
               <div class="containerTop">
                 <div class="form-group col-xs-2">
@@ -227,6 +280,7 @@
                 </table>
               </div>
             </uib-tab>
+            -->
           </uib-tabset>
         </div>
        <!-- Middle Container -->   
