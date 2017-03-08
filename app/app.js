@@ -28,7 +28,7 @@ angular.module('swarmui', [
             templateUrl: 'app/components/dashboardImages/dashboardImages.html',
             controller: 'DashboardImagesController'
         });
-        $routeProvider.when('/:from/images/:id/', {
+        $routeProvider.when('/:from/playbooks/:playbooks', {
             templateUrl: 'app/components/image/image.html',
             controller: 'ImageController'
         });

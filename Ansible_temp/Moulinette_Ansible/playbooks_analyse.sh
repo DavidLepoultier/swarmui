@@ -1,9 +1,10 @@
 #!/bin/bash
+cd /home/ptimagos/orange/OPE/Ansible
 filename_hist=""
 role_hist=""
 new_key=""
 printf "["
-grep -n "role:" playbook-* | while read line
+grep -n "role:" *play*.yml | while read line
 do
 	filename=`echo $line | awk -F":" '{print $1}'`
 	linenumber=`echo $line | awk -F":" '{print $2}'`
