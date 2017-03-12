@@ -60,8 +60,21 @@ angular.module('masthead', [])
 
     $scope.playbooks = function () {
       Playbooks.get({}, function (d){
+        $rootScope.playbooks = [];
+        $scope.ansiblePlaybooks = [];
+        $scope.ansibleHosts = [];
+        $scope.ansibleRoles = [];
+        $scope.ansibleFilenames = [];
         $rootScope.numPlaybooks = d.length;
         $rootScope.dataPlaybooks = d;
+        for (var i = 0; i < $rootScope.dataPlaybooks.length; i++) {
+          $scope.ansiblePlaybooks = $rootScope.dataPlaybooks[i];
+          $rootScope.playbooks.push({
+            playbookId: i,
+            playbookName: $scope.ansiblePlaybooks.filename,
+            playbookNumRoles: $scope.ansiblePlaybooks.roles.length
+          });
+        }    
       });
     };
 

@@ -6,9 +6,9 @@ angular.module('image', [])
 
     switch($routeParams.from){
       case 'dashboard':
-        $scope.fromTo = '/' + $routeParams.from + '/roles/';
-        $scope.returnTo = "to roles list";
-        $scope.dashboard = '3';
+        $scope.fromTo = '/' + $routeParams.from + '/playbooks/';
+        $scope.returnTo = "to playbooks list";
+        $scope.dashboard = '2';
         $scope.dashOn = true;
         break;
       case 'hosts':
@@ -25,18 +25,13 @@ angular.module('image', [])
 
     Playbooks.get({}, function (d){
       var count = 0;
-      $scope.playbooks = [];
-      for (var p = 0; p < d.length; p++) {
-        $scope.anisblePlaybook = d[p].filename;
-        for (var r = 0; r < d[p].roles.length; r++) {
-          $scope.ansiblePlaybookRole = d[p].roles[r].role;
-          if ( $scope.ansiblePlaybookRole === $routeParams.role ){
-            $scope.playbooks.push({
-              filename: $scope.anisblePlaybook,
-              linenumber: d[p].roles[r].linenumber
-            });
-          }
-        }
+      $scope.playbook = [];
+      $scope.playbook.name = ($routeParams.playbook);
+      $scope.playbook.playbookNumRoles = d[$routeParams.id].roles.length;
+      for (var p = 0; p < d[$routeParams.id].roles.length; p++) {
+        $scope.playbook.push({
+          role: d[$routeParams.id].roles[p].role
+        });
       }
     });
 
@@ -48,7 +43,6 @@ angular.module('image', [])
         $scope.ansibleKeys = [];
         $scope.ansibleNumFiles = 0;
         $scope.ansibleNumKeys = 0;
-        $scope.role.name = ($routeParams.role);
         for (var r = 0; r < d[$routeParams.id][$scope.role.name].length; r++) {
           $scope.ansibleType = d[$routeParams.id][$scope.role.name][r];
           for (var t = 0; t < $scope.ansibleType[$scope.ansibleType.type].length; t++) {

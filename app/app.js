@@ -24,11 +24,11 @@ angular.module('swarmui', [
             templateUrl: 'app/components/dashboard/dashboard.html',
             controller: 'DashboardController'
         });
-        $routeProvider.when('/:from/images/', {
+        $routeProvider.when('/:from/playbooks/', {
             templateUrl: 'app/components/dashboardImages/dashboardImages.html',
             controller: 'DashboardImagesController'
         });
-        $routeProvider.when('/:from/playbooks/:playbooks', {
+        $routeProvider.when('/:from/playbooks/:playbook/:id/', {
             templateUrl: 'app/components/image/image.html',
             controller: 'ImageController'
         });

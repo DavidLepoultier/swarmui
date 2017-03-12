@@ -1,169 +1,123 @@
 <div id="wrapper">     
   <!-- Include Sidebar -->
   <div ng-if="dashOn" ng-include="template" ng-controller="WrapperDashboardController"></div>
-  <div ng-if="hostOn" ng-include="template" ng-controller="WrapperHostsController"></div>
   <!-- Main component for a primary marketing message or call to action -->
   <div class="container-fluid">
     <div class="row">
       <!-- Middle Container -->
       <div class="col-xs-12">
-        <h1 class="page-header">Image information</h1>
+        <h1 class="page-header">Playbook information</h1>
         <div class="panel panel-default">
           <div class="panel-heading">
-            <h3 class="panel-title">
-              <span class="col-xs-11" style="margin-top: 5px; font-size: 18px;">{{ RepoTags[0] }}</span>
-              <div class="btn-group">
-                <button type="button" class="btn btn-default dropdown-toggle" style="margin: 0;" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                  Action <span class="caret"></span>
-                </button>
-                <ul class="dropdown-menu">
-                  <li>
-                    <button type="button" class="btn-link btn-block btn-dropdown"
-                      ng-click="image.addTags = true;">Add Tags
-                    </button>
-                  </li>
-                  <li role="separator" class="divider"></li>
-                  <li>
-                    <button type="button" class="btn-link btn-block btn-dropdown"
-                      data-toggle="modal" data-target="#create-modal">Create Container
-                    </button>
-                  </li>
-                  <li>
-                    <button type="button" class="btn-link btn-block btn-dropdown"
-                      ng-click="removeImage(id)"
-                      ng-show="!containerchart">Remove image
-                    </button>
-                  </li>
-                </ul>
-              </div>
-            </h3>
-          </div>
-          <div class="panel-body">
-            <a href="/#{{ from }}"><- Return {{ returnTo }}</a><br/><br/>
-            <div class='col-xs-9 well'>
-              <h4>Global</h4>
-              <b>Id : </b>{{ image.Id }}
-              <br/>
-              <b>Created : </b>{{ image.Created | date: 'medium' }}
-              <br/>
-              <br/>
-              <div ng-if="containerchart">
-                <h4>Containers created:</h4>
-                <canvas id="containers-started-chart" class="linecharte-image">
-                    <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a
-                            href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
-                </canvas>
-              </div>
-            </div>
-            <div class='col-xs-3'>
-              <br/>
-            </div>
-            <div ng-include="template" ng-controller="StartContainerController"></div>
-            <div class="col-xs-12" ng-if="image.addTags">
-              <form class="form-inline" role="form">
-                <fieldset>
-                  <legend>Tag image</legend>
-                  <div class="form-group">
-                    <label>Tag:</label>
-                    <input type="text" placeholder="repo" ng-model="tagInfo.repo" class="form-control">
-                    <input type="text" placeholder="version" ng-model="tagInfo.version" class="form-control">
-                  </div>
-                  <div class="form-group">
-                    <label class="checkbox">
-                      <input type="checkbox" ng-model="tagInfo.force" class="form-control"/> Force?
-                    </label>
-                  </div>
-                  <input type="button" ng-click="addTag()" value="Add Tag" class="btn btn-primary"/>
-                  <button class="btn btn-danger" ng-click="image.addTags = false;">&times;</button>
-                </fieldset>
-              </form>
-              <hr/>
-            </div>
-          </div>
-          
-          <table class="table table-striped">
-              <tbody>
-              <tr>
-                <td class="col-xs-2">Tags:</td>
-                <td class="col-xs10">
-                  <ul class="deco-none">
-                    <li ng-repeat="tag in RepoTags">
-                      <div class="col-xs-12" style="margin: 5px">
-                        <div class="col-xs-1"style="margin-right: 20px;">
-                          <button ng-click="removeImage(tag)" class="btn btn-sm btn-danger">Remove tag</button>
-                        </div>
-                        <div class="col-xs-10" style="margin-top: 5px;">
-                          {{ tag }}
-                        </div>
-                      </div>
+            <div ng-if="!container.edit">
+              <h3 class="panel-title">
+                <span class="col-xs-11" style="margin-top: 5px; font-size: 18px;">{{ playbook.name }}</span>
+                <div class="btn-group">
+                  <button type="button" class="btn btn-default dropdown-toggle" style="margin: 0;" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Action <span class="caret"></span>
+                  </button>
+                  <ul class="dropdown-menu">
+                    <li>
+                      <button type="button" class="btn-link btn-block btn-dropdown"
+                        ng-click=""
+                        ng-show="!container.State.Running">None
+                      </button>
                     </li>
                   </ul>
-                </td>
-              </tr>
-              <tr>
-                  <td>Parent:</td>
-                  <td><a href="#{{ toParent }}{{ image.Parent }}/">{{ image.Parent }}</a></td>
-              </tr>
-              <tr>
-                  <td>Size (Virtual Size):</td>
-                  <td>{{ image.Size|humansize }} ({{ image.VirtualSize|humansize }})</td>
-              </tr>
-
-              <tr>
-                  <td>Hostname:</td>
-                  <td>{{ image.ContainerConfig.Hostname }}</td>
-              </tr>
-              <tr>
-                  <td>User:</td>
-                  <td>{{ image.ContainerConfig.User }}</td>
-              </tr>
-              <tr>
-                  <td>Cmd:</td>
-                  <td>
-                    <div class="well well-large no-margin-bottom">
-                      <ul class="deco-none">
-                        <li>{{ image.ContainerConfig.Cmd }}</li>
-                      </ul>
-                    </div>
-                  </td>
-              </tr>
-              <tr>
-                  <td>Volumes:</td>
-                  <td>
-                    {{ image.ContainerConfig.Volumes }}</td>
-              </tr>
-              <tr>
-                  <td>Volumes from:</td>
-                  <td>
-                    {{ image.ContainerConfig.VolumesFrom }}
-                  </td>
-              </tr>
-              <tr>
-                  <td>Built with:</td>
-                  <td>
-                    <div class="well well-large no-margin-bottom">
-                      <ul class="deco-none">
-                        <li>Docker {{ image.DockerVersion }} on {{ image.Os}}, {{ image.Architecture }}</li>
-                      </ul>
-                    </div>
-                  </td>
-              </tr>
-              <tr>
-                <td>History:</td>
-                <td>
-                  <div class="well well-large no-margin-bottom">
-                    <ul class="deco-none">
-                      <li ng-repeat="change in history | filter:hasContent">
-                        <strong>{{ change.Id }}</strong>: Created: {{ change.Created|getdate1000 }} Created by: {{ change.CreatedBy }}
-                      </li>
-                    </ul>
+                </div>
+              </h3>
+            </div>
+          </div>
+          <div class="panel-body">
+            <a href="/#{{ fromTo }}"><- Return {{ returnTo }}</a><br/><br/>
+            <div class='col-xs-9 well'>
+              <h4>Information :</h4>
+              <b>Numbers roles ansible : </b>{{ playbook.playbookNumRoles }}
+              <br/>
+              <b>Numbers Hosts group : </b>{{ playbook.playbookNumHostsGroup }} (with duplicate keys)
+              <br/>
+              <br/>
+            </div>
+          </div>
+          <uib-tabset active="active">
+            <uib-tab index="0" heading="Roles">
+              <div class="row">
+                <div class="col-sm-1"></div>
+                <div class="col-sm-12">
+                  <div class="checkbox">
+                    <label>
+                      <input type="checkbox" ng-model="oneAtATime">Open only one at a time
+                    </label>
                   </div>
-                </td>
-              </tr>
-              </tbody>
-          </table>          
+                  <uib-accordion close-others="oneAtATime">
+                    <div uib-accordion-group class="panel-default" heading="{{ role.role }}" ng-repeat="role in playbook">
+                      <div class="checkbox">
+                        <label>
+                          <input type="checkbox" ng-model="checked" aria-label="Toggle ngShow">Show duplicate key
+                        </label>
+                      </div>
+                      <div ng-repeat="keys in file.keys" ng-show="checked">
+                        {{ keys.key }}
+                      </div>
+                      <div ng-repeat="keys in file.keys | unique: 'key'" ng-show="!checked">
+                        {{ keys.key }}
+                      </div>
+                    </div>
+                  </uib-accordion>                  
+                </div>
+                <div class="col-sm-1"></div>
+              </div>
+            </uib-tab>
+            <uib-tab index="1" heading="Hosts Group">
+              <div class="row">
+                <div class="col-sm-1"></div>
+                <div class="col-sm-12">
+                  <div class="checkbox">
+                    <label>
+                      <input type="checkbox" ng-model="oneAtATime">Open only one at a time
+                    </label>
+                    <label>
+                      <input type="checkbox" ng-model="playchecked" aria-label="Toggle ngShow">Show duplicate playbook
+                    </label>
+                  </div>
+                  <uib-accordion close-others="oneAtATime">
+                    <div uib-accordion-group class="panel-default" heading="{{ playbook.filename }}" ng-repeat="playbook in playbooks" ng-show="playchecked">
+                      {{ playbook.filename }}
+                    </div>
+                    <div uib-accordion-group class="panel-default" heading="{{ playbook.filename }}" ng-repeat="playbook in playbooks | unique: 'filename'" ng-show="!playchecked">
+                      {{ playbook.filename }}
+                    </div>
+                  </uib-accordion>  
+                </div>
+                <div class="col-sm-1"></div>
+              </div>
+            </uib-tab>
+            <!--
+            <uib-tab index="2" heading="Top" ng-click="getTop()">
+              <div class="containerTop">
+                <div class="form-group col-xs-2">
+                    <input type="text" class="form-control" placeholder="[options] (aux)" ng-model="ps_args">
+                </div>
+                <button type="button" class="btn btn-default" ng-click="getTop()">Submit</button>
+
+                <table class="table table-striped">
+                    <thead>
+                    <tr>
+                        <th ng-repeat="title in containerTop.Titles">{{title}}</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr ng-repeat="processInfos in containerTop.Processes">
+                        <td ng-repeat="processInfo in processInfos track by $index">{{processInfo}}</td>
+                    </tr>
+                    </tbody>
+                </table>
+              </div>
+            </uib-tab>
+            -->
+          </uib-tabset>
         </div>
-        <!-- Middle Container -->   
+       <!-- Middle Container -->   
       </div>
     </div>
   </div>
