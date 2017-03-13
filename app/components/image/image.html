@@ -51,17 +51,26 @@
                   </div>
                   <uib-accordion close-others="oneAtATime">
                     <div uib-accordion-group class="panel-default" heading="{{ role.role }}" ng-repeat="role in playbook">
-                      <div class="checkbox">
-                        <label>
-                          <input type="checkbox" ng-model="checked" aria-label="Toggle ngShow">Show duplicate key
-                        </label>
-                      </div>
-                      <div ng-repeat="keys in file.keys" ng-show="checked">
-                        {{ keys.key }}
-                      </div>
-                      <div ng-repeat="keys in file.keys | unique: 'key'" ng-show="!checked">
-                        {{ keys.key }}
-                      </div>
+                        <div class="checkbox">
+                          <label>
+                            <input type="checkbox" ng-model="oneAtATimeRole">Open only one at a time
+                          </label>
+                        </div>
+                        <uib-accordion close-others="oneAtATimeRole">
+                          <div uib-accordion-group class="panel-default" heading="{{ file.file }}" ng-repeat="file in role.files">
+                            <div class="checkbox">
+                              <label>
+                                <input type="checkbox" ng-model="checked" aria-label="Toggle ngShow">Show duplicate key
+                              </label>
+                            </div>
+                            <div ng-repeat="key in file.keys" ng-show="checked">
+                              {{ key.keyname }}
+                            </div>
+                            <div ng-repeat="key in file.keys | unique: 'keyname'" ng-show="!checked">
+                              {{ key.keyname }}
+                            </div>
+                          </div>
+                        </uib-accordion>
                     </div>
                   </uib-accordion>                  
                 </div>

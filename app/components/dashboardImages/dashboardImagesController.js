@@ -3,6 +3,8 @@ angular.module('dashboardImages', [])
   function ($scope, $rootScope, $routeParams, Settings, Messages, ViewSpinner) {
 
     $rootScope.$emit("CallPlaybooks", {});
+    $rootScope.$emit("CallRoles", {});
+
 
     $scope.predicate = 'Playbooks';
     $scope.reverse = false;
