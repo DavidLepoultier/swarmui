@@ -83,4 +83,4 @@ angular.module('swarmui', [
     .constant('DOCKER_ENDPOINT', 'swarmuiapi')
     .constant('DOCKERREPO_ENDPOINT', 'swarmuiapirepo')
     .constant('DOCKER_PORT', '') // Docker port, leave as an empty string if no port is requred.  If you have a port, prefix it with a ':' i.e. :4243
-    .constant('UI_VERSION', '0.2.0');
+    .constant('UI_VERSION', '0.4.0');
