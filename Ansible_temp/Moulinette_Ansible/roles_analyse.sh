@@ -6,7 +6,7 @@ filename_hist=""
 type_hist=""
 nwe_key=""
 printf "["
-grep -nR "{{" roles/* | grep -v sql | grep -v "README.md" | grep -v item | grep -v "\- name" | while read line
+grep -nR "{{" roles/* | grep -v ".sql:" | grep -v "README.md" | grep -v item | grep -v "\- name" | while read line
 do
 	filename=`echo $line | awk -F":" '{print $1}'`
 	linenumber=`echo $line | awk -F":" '{print $2}'`
